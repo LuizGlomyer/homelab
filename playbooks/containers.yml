@@ -1,0 +1,68 @@
+- name: Deploy Portainer on Raspberry Pi
+  hosts: servers
+  become: true
+  tasks:
+  - name: Create Portainer data volume
+    docker_volume:
+      name: portainer_data
+
+  - name: Run Portainer container
+    docker_container:
+      name: portainer
+      image: portainer/portainer-ce:latest
+      state: started
+      restart_policy: always
+      container_default_behavior: compatibility
+      ports:
+      - "8000:8000" # Edge Agent
+      - "9443:9443" # Web UI
+      volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+- name: Deploy Uptime Kuma on Raspberry Pi
+  hosts: servers
+  become: true
+  vars:
+    uptime_kuma_image: louislam/uptime-kuma:1
+    uptime_kuma_port: "3001"
+    uptime_kuma_volume: uptime-kuma
+
+  tasks:
+  - name: Create Uptime Kuma volume
+    docker_volume:
+      name: "{{ uptime_kuma_volume }}"
+
+  - name: Run Uptime Kuma container
+    docker_container:
+      name: uptime-kuma
+      image: "{{ uptime_kuma_image }}"
+      state: started
+      restart_policy: always
+      ports:
+        - "{{ uptime_kuma_port }}:3001"
+      volumes:
+        - "{{ uptime_kuma_volume }}:/app/data"
+      container_default_behavior: compatibility
+
+- name: Deploy Glances monitoring container
+  hosts: servers
+  become: true
+  vars:
+    glances_image: nicolargo/glances:latest-full
+    glances_port: 61208
+
+  tasks:
+    - name: Run Glances container
+      docker_container:
+        name: glances
+        image: "{{ glances_image }}"
+        state: started
+        restart_policy: always
+        command: glances -w
+        ports:
+          - "{{ glances_port }}:61208"
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+        pid_mode: host
+        container_default_behavior: compatibility
