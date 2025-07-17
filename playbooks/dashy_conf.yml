@@ -97,8 +97,16 @@ sections:
         url: http://raspberrypi.local:61208
         target: newtab
         id: 3_517_glances
+      - &ref_4
+        title: OliveTin
+        description: run shell commands
+        icon: hl-olivetin
+        url: http://raspberrypi.local:1337
+        target: newtab
+        id: 4_517_olivetin
     filteredItems:
       - *ref_0
       - *ref_1
       - *ref_2
       - *ref_3
+      - *ref_4

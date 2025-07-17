@@ -1,0 +1,13 @@
+actions:
+  - title: "Hello world!"
+    shell: echo 'Hello World!'
+
+  - title: Ping the Internet
+    shell: ping google.com -c 3
+    icon: 📡
+    popupOnStart: execution-dialog
+    timeout: 20
+
+  - title: Reboot
+    icon: reboot
+    shell: sudo reboot
