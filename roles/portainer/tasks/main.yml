@@ -1,0 +1,17 @@
+- name: Create Portainer volume
+  community.docker.docker_volume:
+    name: "{{ portainer_volume_name }}"
+
+- name: Run Portainer container
+  community.docker.docker_container:
+    name: "{{ portainer_container_name }}"
+    image: "{{ portainer_image }}"
+    state: started
+    restart_policy: always
+    container_default_behavior: compatibility
+    ports:
+      - "{{ portainer_edge_agent_port }}:8000"
+      - "{{ portainer_web_port }}:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - "{{ portainer_volume_name }}:/data"

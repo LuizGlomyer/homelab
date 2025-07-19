@@ -1,0 +1,5 @@
+- name: Configure Pi-hole container
+  ansible.builtin.include_tasks: pihole.yml
+
+- name: Configure unbound container
+  ansible.builtin.include_tasks: unbound.yml

@@ -1,0 +1,10 @@
+- name: Run Unbound container
+  community.docker.docker_container:
+    name: "{{ pihole_unbound_container_name }}"
+    image: "{{ pihole_unbound_image }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ pihole_unbound_port }}:53/udp"
+      - "{{ pihole_unbound_port }}:53/tcp"
+    container_default_behavior: compatibility

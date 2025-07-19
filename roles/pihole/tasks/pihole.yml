@@ -1,0 +1,24 @@
+- name: Create Pi-hole config volume
+  community.docker.docker_volume:
+    name: pihole_etc
+
+- name: Run Pi-hole container
+  community.docker.docker_container:
+    name: "{{ pihole_container_name }}"
+    image: "{{ pihole_image }}"
+    state: started
+    restart_policy: always
+    container_default_behavior: compatibility
+    network_mode: host
+    env:
+      TZ: "America/Manaus"
+      FTLCONF_webserver_api_password: "test"
+      FTLCONF_dns_upstreams: "{{ pihole_dns_server }}"
+    volumes:
+      - /opt/pihole:/etc/pihole
+    capabilities:
+      - NET_ADMIN
+      # Required if you are using Pi-hole as your NTP client to be able to set the host's system time
+      # - SYS_TIME
+      # Optional, if Pi-hole should get some more processing time
+      # - SYS_NICE

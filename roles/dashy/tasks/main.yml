@@ -1,0 +1,42 @@
+- name: Ensure Dashy config directory exists
+  ansible.builtin.file:
+    path: "{{ dashy_config_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy Dashy config file
+  ansible.builtin.copy:
+    src: dashy_conf.yml
+    dest: "{{ dashy_config_dir }}/{{ dashy_config_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy Dashy background image
+  ansible.builtin.copy:
+    src: bg.jpg
+    dest: "{{ dashy_config_dir }}/{{ dashy_background_image }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Run Dashy container
+  community.docker.docker_container:
+    name: "{{ dashy_container_name }}"
+    image: "{{ dashy_image }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ dashy_web_port }}:8080"
+    volumes:
+      - "{{ dashy_config_dir }}/{{ dashy_config_file }}:/app/user-data/conf.yml"
+      - "{{ dashy_config_dir }}/{{ dashy_background_image }}:/app/public/bg.jpg"
+    env:
+      NODE_ENV: production
+    container_default_behavior: compatibility
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

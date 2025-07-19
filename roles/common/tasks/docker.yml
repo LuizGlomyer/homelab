@@ -1,0 +1,27 @@
+- name: Add Docker GPG key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+
+- name: Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: deb [arch=arm64] https://download.docker.com/linux/debian bookworm stable
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name: docker-ce
+    state: latest
+
+- name: Ensure Docker service is enabled and started
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Add user to docker group
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: true
+
+- name: Reconnect to refresh user groups
+  ansible.builtin.meta: reset_connection

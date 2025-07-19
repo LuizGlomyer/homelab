@@ -1,0 +1,15 @@
+- name: Set up system
+  hosts: servers
+  become: true
+  roles:
+    - role: common
+    - role: olivetin
+
+- name: Set up containerized services
+  hosts: servers
+  roles:
+    - role: dashy
+    - role: pihole
+    - role: glances
+    - role: portainer
+    - role: uptime_kuma

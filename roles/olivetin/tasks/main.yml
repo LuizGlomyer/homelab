@@ -1,0 +1,29 @@
+- name: Download OliveTin .deb package
+  ansible.builtin.get_url:
+    url: "{{ olivetin_deb_url }}"
+    dest: "{{ olivetin_deb_path }}"
+    mode: '0644'
+
+- name: Ensure config directory exists
+  ansible.builtin.file:
+    path: /etc/OliveTin
+    state: directory
+    mode: '0755'
+
+- name: Upload OliveTin config file
+  ansible.builtin.copy:
+    src: ./config.yml
+    dest: /etc/OliveTin/config.yaml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Install OliveTin
+  ansible.builtin.apt:
+    deb: "{{ olivetin_deb_path }}"
+
+- name: Ensure OliveTin service is started and enabled
+  ansible.builtin.systemd:
+    name: OliveTin
+    enabled: true
+    state: started

@@ -1,0 +1,22 @@
+- name: Get system architecture
+  ansible.builtin.command: uname -m
+  register: arch_output
+  changed_when: false
+
+- name: Set architecture mapping
+  ansible.builtin.set_fact:
+    arch_map:
+      armv7l: armhf
+      aarch64: arm64
+      x86_64: amd64
+
+- name: Set normalized system architecture
+  ansible.builtin.set_fact:
+    system_arch: "{{ arch_map[arch_output.stdout] | default(arch_output.stdout) }}"
+
+
+- name: Install needed apt packages
+  ansible.builtin.include_tasks: apt.yml
+
+- name: Include Docker installation tasks
+  ansible.builtin.include_tasks: docker.yml

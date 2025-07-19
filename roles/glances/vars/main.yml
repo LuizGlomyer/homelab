@@ -1,0 +1,3 @@
+glances_container_name: glances
+glances_image: nicolargo/glances:latest
+glances_web_port: 61208
