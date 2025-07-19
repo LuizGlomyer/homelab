@@ -71,7 +71,7 @@ sections:
         target: newtab
         tags:
           - network
-        id: 0_517_pihole
+        id: 0_404_pihole
       - &ref_1
         title: Portainer
         description: container management
@@ -80,7 +80,7 @@ sections:
         target: newtab
         tags:
           - network
-        id: 1_517_portainer
+        id: 1_404_portainer
       - &ref_2
         title: Uptime Kuma
         description: services monitor
@@ -89,24 +89,32 @@ sections:
         target: newtab
         tags:
           - network
-        id: 2_517_uptimekuma
+        id: 2_404_uptimekuma
       - &ref_3
         title: Glances
         description: system processes & device status
         icon: hl-glances
         url: http://raspberrypi.local:61208
         target: newtab
-        id: 3_517_glances
+        id: 3_404_glances
       - &ref_4
         title: OliveTin
         description: run shell commands
         icon: hl-olivetin
         url: http://raspberrypi.local:1337
         target: newtab
-        id: 4_517_olivetin
+        id: 4_404_olivetin
+      - &ref_5
+        title: MeTube
+        description: download videos with yt-dlp
+        icon: hl-metube
+        url: http://raspberrypi.local:8081/
+        target: newtab
+        id: 5_404_metube
     filteredItems:
       - *ref_0
       - *ref_1
       - *ref_2
       - *ref_3
       - *ref_4
+      - *ref_5

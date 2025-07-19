@@ -1,0 +1,25 @@
+- name: Ensure MeTube download directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ metube_download_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Run MeTube container
+  community.docker.docker_container:
+    name: "{{ metube_container_name }}"
+    image: "{{ metube_image }}"
+    state: started
+    restart_policy: always
+    ports:
+      - "{{ metube_web_port }}:8081"
+    volumes:
+      - "{{ metube_download_path }}:/downloads"
+      # - /path/to/cookies:/cookies
+    env:
+      # filenames of the downloaded videos
+      OUTPUT_TEMPLATE: "%(title)s.%(ext)s"
+      # playlists will be downloaded only if the url strictly points to a playlist
+      DEFAULT_OPTION_PLAYLIST_STRICT_MODE: "true"
+      # YTDL_OPTIONS: {"cookiefile":"/cookies/cookies.txt"}
+    container_default_behavior: compatibility

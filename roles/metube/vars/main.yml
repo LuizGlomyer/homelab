@@ -1,0 +1,4 @@
+metube_container_name: metube
+metube_image: ghcr.io/alexta69/metube:latest
+metube_web_port: 8081
+metube_download_path: /opt/metube/downloads
