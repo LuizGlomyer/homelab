@@ -3,13 +3,25 @@
   become: true
   roles:
     - role: common
+      tags: common
+
     - role: olivetin
+      tags: olivetin
 
 - name: Set up containerized services
   hosts: servers
   roles:
     - role: dashy
+      tags: dashy
+
     - role: pihole
+      tags: pihole
+
     - role: glances
+      tags: glances
+
     - role: portainer
+      tags: portainer
+
     - role: uptime_kuma
+      tags: uptime_kuma

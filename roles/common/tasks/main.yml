@@ -16,7 +16,15 @@
 
 
 - name: Install needed apt packages
-  ansible.builtin.include_tasks: apt.yml
+  ansible.builtin.include_tasks:
+    file: apt.yml
+    apply:
+      tags: apt
+  tags: apt
 
 - name: Include Docker installation tasks
-  ansible.builtin.include_tasks: docker.yml
+  ansible.builtin.include_tasks:
+    file: docker.yml
+    apply:
+      tags: docker
+  tags: docker
