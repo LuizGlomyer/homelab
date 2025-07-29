@@ -26,4 +26,4 @@
   ansible.builtin.systemd:
     name: OliveTin
     enabled: true
-    state: started
+    state: restarted

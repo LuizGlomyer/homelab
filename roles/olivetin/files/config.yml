@@ -1,3 +1,22 @@
+authRequireGuestsToLogin: true
+
+accessControlLists:
+  - name: admins
+    matchUsergroups:
+      - admins
+    permissions:
+      view: true
+      exec: true
+      logs: true
+    addToEveryAction: true
+
+authLocalUsers:
+  enabled: true
+  users:
+    - username: admin
+      usergroup: admins
+      password: $argon2id$v=19$m=65536,t=4,p=4$ijI11+Nxlt8/X2yx7xHzfA$zWiweNUxDEC2ugaNnh3Zkk/HEyIDvbyuaMwtxbkGX1A
+
 actions:
   - title: "Hello world!"
     shell: echo 'Hello World!'
@@ -11,3 +30,7 @@ actions:
   - title: Reboot
     icon: reboot
     shell: sudo reboot
+  
+  - title: Shutdown
+    icon: ⏹
+    shell: sudo shutdown now
