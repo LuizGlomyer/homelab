@@ -10,6 +10,18 @@
     restart_policy: always
     container_default_behavior: compatibility
     network_mode: host
+    # ports:
+    #   # DNS Ports
+    #   # - "53:53/tcp"
+    #   # - "53:53/udp"
+    #   # Default HTTP Port
+    #   - "{{ pihole_web_port }}:80/tcp"
+    #   # Default HTTPs Port. FTL will generate a self-signed certificate
+    #   - "{{ pihole_port_ssl }}:443/tcp"
+      # Uncomment the below if using Pi-hole as your DHCP Server
+      # - "67:67/udp"
+      # Uncomment the line below if you are using Pi-hole as your NTP server
+      # - "123:123/udp"
     env:
       TZ: "America/Manaus"
       FTLCONF_webserver_api_password: "test"

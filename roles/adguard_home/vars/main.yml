@@ -1,0 +1,4 @@
+adguard_home_container_name: adguardhome
+adguard_home_image: adguard/adguardhome
+adguard_home_conf_dir: /opt/adguard/conf
+adguard_home_work_dir: /opt/adguard/work
