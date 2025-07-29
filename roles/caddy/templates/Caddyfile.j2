@@ -1,0 +1,39 @@
+{
+  local_certs
+  # no auto_https off, let it default to "on"
+}
+
+192.168.0.88 {
+  root * /srv/public
+  file_server
+}
+
+olivetin.lan {
+  reverse_proxy localhost:1337
+  tls internal
+}
+
+adguard.lan {
+  reverse_proxy localhost:3000
+  tls internal
+}
+
+dashy.lan {
+  reverse_proxy localhost:9080
+  tls internal
+}
+
+dashy.xyz {
+  reverse_proxy localhost:9080
+  tls internal
+}
+
+glances.lan {
+  reverse_proxy localhost:61208
+  tls internal
+}
+
+metube.lan {
+  reverse_proxy localhost:8081
+  tls internal
+}

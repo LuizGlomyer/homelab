@@ -1,0 +1,127 @@
+- name: Create caddy group
+  ansible.builtin.group:
+    name: caddy
+    system: true
+
+- name: Create caddy user with proper home
+  ansible.builtin.user:
+    name: caddy
+    system: true
+    group: caddy
+    create_home: true
+    home: /var/lib/caddy
+    shell: /usr/sbin/nologin
+    comment: "Caddy web server"
+
+- name: Download Caddy
+  ansible.builtin.get_url:
+    url: "{{ caddy_download_url }}"
+    dest: /tmp/caddy.tar.gz
+    mode: '0644'
+
+- name: Extract Caddy archive
+  ansible.builtin.unarchive:
+    src: /tmp/caddy.tar.gz
+    dest: /tmp/
+    remote_src: true
+
+- name: Move Caddy binary to /usr/local/bin
+  ansible.builtin.copy:
+    src: /tmp/caddy
+    dest: /usr/bin/caddy
+    mode: '0755'
+    remote_src: true
+
+- name: Ensure Caddy is executable
+  ansible.builtin.file:
+    path: "{{ caddy_bin_path }}"
+    mode: '0755'
+
+- name: Ensure data dir exists
+  ansible.builtin.file:
+    path: /var/lib/caddy
+    state: directory
+    owner: caddy
+    group: caddy
+    mode: '0755'
+
+- name: Create Caddy config directory
+  ansible.builtin.file:
+    path: /etc/caddy
+    state: directory
+    mode: '0755'
+
+- name: Upload Caddyfile
+  ansible.builtin.template:
+    src: Caddyfile.j2
+    dest: "{{ caddy_config_path }}"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Upload systemd service file
+  ansible.builtin.copy:
+    src: caddy.service
+    dest: /etc/systemd/system/caddy.service
+    owner: root
+    group: root
+    mode: '0644'
+
+# note: the service will likely fail on the first run but will generate the cert
+- name: Ensure Caddy is started so it generates the root cert
+  ansible.builtin.service:
+    name: caddy
+    state: started
+    enabled: true
+
+- name: Check if Caddy root certificate exists
+  ansible.builtin.stat:
+    path: /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt
+  register: caddy_cert
+
+- name: Ensure /usr/local/share/ca-certificates exists
+  become: true
+  ansible.builtin.file:
+    path: /usr/local/share/ca-certificates
+    state: directory
+    mode: '0755'
+
+- name: Copy Caddy root CA certificate to system trusted store
+  become: true
+  ansible.builtin.copy:
+    src: /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt
+    dest: /usr/local/share/ca-certificates/Caddy_Local.crt
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: true
+
+- name: Ensure public folder exists
+  ansible.builtin.file:
+    path: /srv/public
+    state: directory
+    mode: '0755'
+
+- name: Copy Caddy root CA certificate to public folder
+  ansible.builtin.copy:
+    src: /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt
+    dest: /srv/public/root.crt
+    mode: '0644'
+    remote_src: true
+
+- name: Update trusted certificates
+  become: true
+  ansible.builtin.command: update-ca-certificates
+  changed_when: true
+
+- name: Validate Caddy configuration
+  ansible.builtin.command: caddy validate --config /etc/caddy/Caddyfile
+  register: caddy_validate
+  failed_when: caddy_validate.rc != 0
+  changed_when: false
+
+- name: Reload Caddy service
+  ansible.builtin.systemd:
+    name: caddy
+    state: reloaded
+    daemon_reload: true
