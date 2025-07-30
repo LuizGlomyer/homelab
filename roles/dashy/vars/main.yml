@@ -1,6 +1,5 @@
 dashy_container_name: dashy
 dashy_image: lissy93/dashy:latest
-dashy_web_port: 9080
 dashy_config_dir: /opt/dashy
 dashy_config_file: conf.yml
 dashy_background_image: bg.jpg

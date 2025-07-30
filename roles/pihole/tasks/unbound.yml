@@ -2,7 +2,7 @@
   community.docker.docker_container:
     name: "{{ pihole_unbound_container_name }}"
     image: "{{ pihole_unbound_image }}"
-    state: started
+    state: stopped
     restart_policy: always
     ports:
       - "{{ pihole_unbound_port }}:53/udp"

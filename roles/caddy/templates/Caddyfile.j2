@@ -1,11 +1,30 @@
 {
   local_certs
-  # no auto_https off, let it default to "on"
 }
 
-192.168.0.88 {
+localhost, raspberrypi.local {
   root * /srv/public
   file_server
+}
+
+adguard.lan {
+  reverse_proxy localhost:{{ adguard_home_web_port }}
+  tls internal
+}
+
+dashy.lan {
+  reverse_proxy localhost:{{ dashy_web_port }}
+  tls internal
+}
+
+glances.lan {
+  reverse_proxy localhost:{{ glances_web_port }}
+  tls internal
+}
+
+metube.lan {
+  reverse_proxy localhost:{{ metube_web_port }}
+  tls internal
 }
 
 olivetin.lan {
@@ -13,27 +32,18 @@ olivetin.lan {
   tls internal
 }
 
-adguard.lan {
-  reverse_proxy localhost:3000
+portainer.lan {
+  reverse_proxy https://localhost:{{ portainer_web_port }} {
+    transport http {
+      # Portainer uses a self-signed cert on 9443, and Caddy can't verify it
+      # but this redirects to localhost, its reasonable & safe for internal LAN use
+      tls_insecure_skip_verify
+    }
+  }
   tls internal
 }
 
-dashy.lan {
-  reverse_proxy localhost:9080
-  tls internal
-}
-
-dashy.xyz {
-  reverse_proxy localhost:9080
-  tls internal
-}
-
-glances.lan {
-  reverse_proxy localhost:61208
-  tls internal
-}
-
-metube.lan {
-  reverse_proxy localhost:8081
+uptime-kuma.lan {
+  reverse_proxy localhost:{{ uptime_kuma_web_port }}
   tls internal
 }

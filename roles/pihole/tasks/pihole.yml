@@ -6,7 +6,7 @@
   community.docker.docker_container:
     name: "{{ pihole_container_name }}"
     image: "{{ pihole_image }}"
-    state: started
+    state: stopped
     restart_policy: always
     container_default_behavior: compatibility
     network_mode: host

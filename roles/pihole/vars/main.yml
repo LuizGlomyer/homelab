@@ -1,7 +1,6 @@
 pihole_container_name: pihole
 pihole_image: pihole/pihole:2025.06.2
 pihole_dns_server: 127.0.0.1#5335 # unbound DNS
-pihole_web_port: 8070
 pihole_port_ssl: 4433
 # pihole_dns_server: "1.1.1.1;1.0.0.1" # Cloudflare DNS
 
