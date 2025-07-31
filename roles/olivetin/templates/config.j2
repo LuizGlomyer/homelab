@@ -15,7 +15,7 @@ authLocalUsers:
   users:
     - username: admin
       usergroup: admins
-      password: $argon2id$v=19$m=65536,t=4,p=4$ijI11+Nxlt8/X2yx7xHzfA$zWiweNUxDEC2ugaNnh3Zkk/HEyIDvbyuaMwtxbkGX1A
+      password: "{{ olivetin_password_hash }}"
 
 actions:
   - title: "Hello world!"

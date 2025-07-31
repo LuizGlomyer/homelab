@@ -4,20 +4,6 @@
     dest: "{{ olivetin_deb_path }}"
     mode: '0644'
 
-- name: Ensure config directory exists
-  ansible.builtin.file:
-    path: /etc/OliveTin
-    state: directory
-    mode: '0755'
-
-- name: Upload OliveTin config file
-  ansible.builtin.copy:
-    src: ./config.yml
-    dest: /etc/OliveTin/config.yaml
-    owner: root
-    group: root
-    mode: '0644'
-
 - name: Install OliveTin
   ansible.builtin.apt:
     deb: "{{ olivetin_deb_path }}"
@@ -27,3 +13,38 @@
     name: OliveTin
     enabled: true
     state: restarted
+
+- name: Generate hashed OliveTin password via OliveTin API
+  ansible.builtin.uri:
+    url: "http://localhost:1337/api/PasswordHash"
+    method: POST
+    body_format: json
+    headers:
+      Content-Type: application/json
+    body:
+      password: "{{ olivetin_user_password }}"
+    return_content: true
+  register: hash_response
+
+
+- name: Show generated OliveTin password hash
+  ansible.builtin.debug:
+    msg: "{{ hash_response.content }}"
+
+- name: Extract clean OliveTin password hash
+  ansible.builtin.set_fact:
+    olivetin_password_hash: "{{ hash_response.content.split(': ', 1)[1] }}"
+
+- name: Ensure config directory exists
+  ansible.builtin.file:
+    path: /etc/OliveTin
+    state: directory
+    mode: '0755'
+
+- name: Upload OliveTin config file
+  ansible.builtin.template:
+    src: ./config.j2
+    dest: /etc/OliveTin/config.yaml
+    owner: root
+    group: root
+    mode: '0644'
