@@ -21,6 +21,9 @@
     - role: dashy
       tags: dashy
 
+    - role: file_browser
+      tags: file_browser
+
     - role: glances
       tags: glances
 

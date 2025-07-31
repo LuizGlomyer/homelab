@@ -1,0 +1,21 @@
+- name: Create Docker volumes for File Browser
+  community.docker.docker_volume:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "{{ file_browser_volume_database }}"
+    - "{{ file_browser_volume_config }}"
+
+- name: Run File Browser container
+  community.docker.docker_container:
+    name: "{{ file_browser_container_name }}"
+    image: "{{ file_browser_image }}"
+    state: started
+    container_default_behavior: compatibility
+    restart_policy: unless-stopped
+    published_ports:
+      - "{{ file_browser_web_port }}:80"
+    volumes:
+      - "{{ file_browser_volume_data }}:/srv"
+      - "{{ file_browser_volume_database }}:/database"
+      - "{{ file_browser_volume_config }}:/config"

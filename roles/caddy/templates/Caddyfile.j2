@@ -22,6 +22,11 @@ glances.lan {
   tls internal
 }
 
+file-browser.lan {
+  reverse_proxy localhost:{{ file_browser_web_port }}
+  tls internal
+}
+
 metube.lan {
   reverse_proxy localhost:{{ metube_web_port }}
   tls internal
@@ -44,7 +49,7 @@ portainer.lan {
 }
 
 stirling-pdf.lan {
-  reverse_proxy localhost:7000
+  reverse_proxy localhost:{{ stirling_pdf_web_port }}
   tls internal
 }
 

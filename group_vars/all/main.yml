@@ -1,10 +1,12 @@
 # Services ports
 adguard_home_web_port: 3000
 dashy_web_port: 9080
+file_browser_web_port: 4000
 glances_web_port: 61208
 metube_web_port: 8081
 pihole_web_port: 8070
 portainer_web_port: 9443
+stirling_pdf_web_port: 7000
 uptime_kuma_web_port: 3001
 
 # Vault passwords
