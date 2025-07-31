@@ -5,6 +5,7 @@
     mode: '0755'
 
 - name: Copy Dashy config file
+  become: true
   ansible.builtin.copy:
     src: dashy_conf.yml
     dest: "{{ dashy_config_dir }}/{{ dashy_config_file }}"
@@ -25,6 +26,7 @@
     name: "{{ dashy_container_name }}"
     image: "{{ dashy_image }}"
     state: started
+    restart: true
     restart_policy: always
     ports:
       - "{{ dashy_web_port }}:8080"

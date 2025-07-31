@@ -111,6 +111,20 @@ sections:
         url: http://raspberrypi.local:8081/
         target: newtab
         id: 5_404_metube
+      - &ref_6
+        title: Caddy certificate
+        description: install to enable HTTPS
+        icon: hl-caddy
+        url: http://192.168.0.88/root.crt
+        target: sametab
+        id: 6_404_caddycertificate
+      - &ref_7
+        title: AdGuard Home
+        description: ad blocker & DNS resolver
+        icon: hl-adguard-home
+        url: http://raspberrypi.local:3000
+        target: sametab
+        id: 7_404_adguardhome
     filteredItems:
       - *ref_0
       - *ref_1
@@ -118,3 +132,5 @@ sections:
       - *ref_3
       - *ref_4
       - *ref_5
+      - *ref_6
+      - *ref_7

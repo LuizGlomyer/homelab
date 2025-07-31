@@ -17,8 +17,8 @@
     - role: dashy
       tags: dashy
 
-    - role: pihole
-      tags: pihole
+    # - role: pihole
+    #   tags: pihole
 
     - role: adguard_home
       tags: adguard_home
