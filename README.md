@@ -15,6 +15,7 @@ Multiple services are defined using Ansible roles, most are containerized but th
 | OliveTin     | GUI for running shell commands                   | Host      |
 | Pi-hole      | Ad blocker & DNS resolver                        | Container |
 | Portainer    | Container management                             | Container |
+| Stirling PDF | Local operations on .pdf files                   | Container |
 | Uptime Kuma  | Online services monitor                          | Container |
 
 # Dependencies
@@ -52,8 +53,8 @@ Upon booting the Raspberry, run ```sudo raspi-config``` and enable VNC to allow 
 There are multiple Ansible roles, one for each service and one named [common](/roles/common/tasks/main.yml) that lays the groundwork installing packages and Docker. Each role can be ran individually by using tags (configured as their own name).
 
 ```bash
-ansible-playbook ./playbooks/main.yml \
---user pi
+ansible-playbook playbooks/main.yml \
+--user pi \
 --ask-pass \
 --ask-become-pass \
 --vault-password-file group_vars/all/vault_pass.txt \

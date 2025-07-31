@@ -1,0 +1,32 @@
+- name: Ensure Stirling PDF data directories exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ stirling_pdf_data_dir }}/trainingData"
+    - "{{ stirling_pdf_data_dir }}/extraConfigs"
+    - "{{ stirling_pdf_data_dir }}/customFiles"
+    - "{{ stirling_pdf_data_dir }}/logs"
+    - "{{ stirling_pdf_data_dir }}/pipeline"
+
+- name: Run Stirling PDF container
+  community.docker.docker_container:
+    name: "{{ stirling_pdf_container_name }}"
+    image: "{{ stirling_pdf_image }}"
+    state: started
+    restart_policy: always
+    container_default_behavior: compatibility
+    published_ports:
+      - "{{ stirling_pdf_web_port }}:8080"
+    volumes:
+      - "{{ stirling_pdf_data_dir }}/trainingData:/usr/share/tessdata"
+      - "{{ stirling_pdf_data_dir }}/extraConfigs:/configs"
+      - "{{ stirling_pdf_data_dir }}/customFiles:/customFiles/"
+      - "{{ stirling_pdf_data_dir }}/logs:/logs/"
+      - "{{ stirling_pdf_data_dir }}/pipeline:/pipeline/"
+    env:
+      # to tell docker to download security jar (required as false for auth login and pro features)
+      DISABLE_ADDITIONAL_FEATURES: "false"
+      LANGS: "en_GB"

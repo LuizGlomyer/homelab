@@ -26,7 +26,6 @@
     return_content: true
   register: hash_response
 
-
 - name: Show generated OliveTin password hash
   ansible.builtin.debug:
     msg: "{{ hash_response.content }}"

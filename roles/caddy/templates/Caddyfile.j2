@@ -43,6 +43,11 @@ portainer.lan {
   tls internal
 }
 
+stirling-pdf.lan {
+  reverse_proxy localhost:7000
+  tls internal
+}
+
 uptime-kuma.lan {
   reverse_proxy localhost:{{ uptime_kuma_web_port }}
   tls internal

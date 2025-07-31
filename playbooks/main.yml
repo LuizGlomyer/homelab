@@ -5,32 +5,36 @@
     - role: common
       tags: common
 
+    - role: caddy
+      tags: caddy
+
     - role: olivetin
       tags: olivetin
 
-    - role: caddy
-      tags: caddy
 
 - name: Set up containerized services
   hosts: servers
   roles:
-    - role: dashy
-      tags: dashy
-
-    # - role: pihole
-    #   tags: pihole
-
     - role: adguard_home
       tags: adguard_home
+
+    - role: dashy
+      tags: dashy
 
     - role: glances
       tags: glances
 
+    - role: metube
+      tags: metube
+
+    # - role: pihole
+    #   tags: pihole
+
     - role: portainer
       tags: portainer
 
+    - role: stirling_pdf
+      tags: stirling_pdf
+
     - role: uptime_kuma
       tags: uptime_kuma
-
-    - role: metube
-      tags: metube
