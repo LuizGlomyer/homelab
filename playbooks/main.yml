@@ -30,6 +30,9 @@
     - role: metube
       tags: metube
 
+    - role: navidrome
+      tags: navidrome
+
     # - role: pihole
     #   tags: pihole
 

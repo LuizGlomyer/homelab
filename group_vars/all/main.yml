@@ -3,6 +3,7 @@ adguard_home_web_port: 3000
 dashy_web_port: 9080
 file_browser_web_port: 4000
 glances_web_port: 61208
+navidrome_web_port: 9700
 metube_web_port: 8081
 pihole_web_port: 8070
 portainer_web_port: 9443

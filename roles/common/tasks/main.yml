@@ -14,6 +14,20 @@
   ansible.builtin.set_fact:
     system_arch: "{{ arch_map[arch_output.stdout] | default(arch_output.stdout) }}"
 
+- name: Get UID of target user
+  ansible.builtin.command: id -u pi
+  register: uid
+  changed_when: false
+
+- name: Get GID of target user
+  ansible.builtin.command: id -g pi
+  register: gid
+  changed_when: false
+
+- name: Set UID/GID facts
+  ansible.builtin.set_fact:
+    user_uid: "{{ uid.stdout }}"
+    user_gid: "{{ gid.stdout }}"
 
 - name: Install needed apt packages
   ansible.builtin.include_tasks:

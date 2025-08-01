@@ -27,6 +27,11 @@ file-browser.lan {
   tls internal
 }
 
+navidrome.lan {
+  reverse_proxy localhost:{{ navidrome_web_port }}
+  tls internal
+}
+
 metube.lan {
   reverse_proxy localhost:{{ metube_web_port }}
   tls internal

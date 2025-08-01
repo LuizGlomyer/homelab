@@ -1,0 +1,29 @@
+- name: Include common role
+  ansible.builtin.include_role:
+    name: common
+
+- name: Ensure Navidrome data directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ navidrome_data_dir }}"
+    state: directory
+    owner: "{{ user_uid }}"
+    group: "{{ user_gid }}"
+    mode: '0755'
+
+- name: Run Navidrome container
+  community.docker.docker_container:
+    name: "{{ navidrome_container_name }}"
+    image: "{{ navidrome_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    published_ports:
+      - "{{ navidrome_web_port }}:4533"
+    user: "{{ user_uid }}:{{ user_gid }}"
+    volumes:
+      - "{{ navidrome_data_dir }}:/data"
+      - "{{ navidrome_music_dir }}:/music:ro"
+    env:
+      # Optional: put your config options customization here. Examples:
+      # ND_LOGLEVEL: debug

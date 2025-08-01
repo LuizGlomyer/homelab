@@ -1,0 +1,5 @@
+navidrome_image: deluan/navidrome:latest
+navidrome_container_name: navidrome
+
+navidrome_data_dir: /opt/navidrome/data
+navidrome_music_dir: /media/pi/Externo 1/Music
