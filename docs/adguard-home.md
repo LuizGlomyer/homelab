@@ -47,6 +47,6 @@ https://raw.githubusercontent.com/zangadoprojets/pi-hole-blocklist/main/Telemetr
 
 # Useful links
 
-https://github.com/AdguardTeam/AdGuardHome
-https://github.com/AdguardTeam/Adguardhome/wiki/Configuration
-https://hub.docker.com/r/adguard/adguardhome#configuration
+- https://github.com/AdguardTeam/AdGuardHome
+- https://github.com/AdguardTeam/Adguardhome/wiki/Configuration
+- https://hub.docker.com/r/adguard/adguardhome#configuration

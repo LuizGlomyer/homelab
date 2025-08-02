@@ -4,4 +4,4 @@ As this uses yt-dlp, to download age restricted videos you will have to pass coo
 
 # Useful links
 
-https://github.com/alexta69/metube
+- https://github.com/alexta69/metube

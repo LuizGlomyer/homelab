@@ -4,8 +4,8 @@ Note: password is generated when running the container for the first time. If fo
 
 # Useful Links
 
-https://filebrowser.org/configuration.html
-https://github.com/filebrowser/filebrowser
+- https://filebrowser.org/configuration.html
+- https://github.com/filebrowser/filebrowser
 
 
 

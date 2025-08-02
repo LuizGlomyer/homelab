@@ -13,7 +13,7 @@ dig pi-hole.net @127.0.0.1 -p 5335
 
 # Useful links
 
-https://github.com/pi-hole/pi-hole
-https://docs.pi-hole.net/docker/
-https://docs.pi-hole.net/guides/dns/unbound/
-https://docs.pi-hole.net/docker/configuration/
+- https://github.com/pi-hole/pi-hole
+- https://docs.pi-hole.net/docker/
+- https://docs.pi-hole.net/guides/dns/unbound/
+- https://docs.pi-hole.net/docker/configuration/
