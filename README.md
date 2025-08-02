@@ -8,15 +8,17 @@ Multiple services are defined using Ansible roles, most are containerized but th
 
 | Adguard Home | Ad blocker & DNS resolver                        | Type      |
 |--------------|--------------------------------------------------|-----------|
-| Caddy        | Certificate Authority and HTTPS server           | Host      |
-| Dashy        | Webpage for quick access to the network services | Container |
-| Glances      | System processes & device status monitor         | Container |
-| MeTube       | GUI for downloading videos with yt-dlp           | Container |
-| OliveTin     | GUI for running shell commands                   | Host      |
-| Pi-hole      | Ad blocker & DNS resolver                        | Container |
-| Portainer    | Container management                             | Container |
-| Stirling PDF | Local operations on .pdf files                   | Container |
-| Uptime Kuma  | Online services monitor                          | Container |
+| [Caddy](docs/caddy.md)        | Certificate Authority and HTTPS server           | Host      |
+| [Dashy](docs/dashy.md)        | Webpage for quick access to the network services | Container |
+| [File Browser](docs/file-browser.md) | Storage access from the browser                     | Container |
+| [Glances](docs/glances.md)      | System processes & device status monitor         | Container |
+| [Navidrome](docs/navidrome.md)    | Powerful music stream server                     | Container |
+| [MeTube](docs/metube.md)       | GUI for downloading videos with yt-dlp           | Container |
+| [OliveTin](docs/olivetin.md)     | GUI for running shell commands                   | Host      |
+| [Pi-hole](docs/pihole.md)      | Ad blocker & DNS resolver                        | Container |
+| [Portainer](docs/portainer.md)    | Container management                             | Container |
+| [Stirling PDF](docs/stirling-pdf.md) | Local operations on .pdf files                   | Container |
+| [Uptime Kuma](docs/uptime-kuma.md)  | Online services monitor                          | Container |
 
 # Dependencies
 
@@ -50,7 +52,7 @@ Upon booting the Raspberry, run ```sudo raspi-config``` and enable VNC to allow 
 
 # Running the playbooks
 
-There are multiple Ansible roles, one for each service and one named [common](/roles/common/tasks/main.yml) that lays the groundwork installing packages and Docker. Each role can be ran individually by using tags (configured as their own name).
+There are multiple Ansible roles, one for each service and one named [common](/roles/common/tasks/main.yml) that lays the groundwork installing packages and Docker. For simplicity containerized roles don't depend on Docker in their task files, so you must run common at least once to ensure that Docker is properly installed. Aside from that, each role can be ran individually by using tags (configured as their own name).
 
 ```bash
 ansible-playbook playbooks/main.yml \
@@ -58,5 +60,6 @@ ansible-playbook playbooks/main.yml \
 --ask-pass \
 --ask-become-pass \
 --vault-password-file group_vars/all/vault_pass.txt \
---tags common # Optional but useful!
+--tags navidrome \
+--skip-tags apt,docker # quite handy to save time if the role depends on common
 ```
