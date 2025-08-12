@@ -41,7 +41,11 @@ Secrets are managed with Ansible vault. What needs to be done is the following:
 
 ```bash
 ansible-vault encrypt group_vars/all/vault \
---vault-password-file group_vars/vault_pass.txt
+--vault-password-file group_vars/all/vault_pass.txt
+
+# For later decryption
+ansible-vault decrypt group_vars/all/vault.yml \
+--vault-password-file group_vars/all/vault_pass.txt
 ``` 
 
 ## Raspberry Pi server

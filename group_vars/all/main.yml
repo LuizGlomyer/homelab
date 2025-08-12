@@ -12,3 +12,5 @@ uptime_kuma_web_port: 3001
 
 # Vault passwords
 olivetin_user_password: "{{ vault_olivetin_user_password }}" 
+navidrome_lastfm_api_key: "{{ vault_lastfm_api_key }}"
+navidrome_lastfm_shared_secret: "{{ vault_lastfm_shared_secret }}"
