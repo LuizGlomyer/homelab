@@ -1,6 +1,6 @@
 file_browser_image: filebrowser/filebrowser
 file_browser_container_name: file-browser
 
-file_browser_volume_data: "/media/pi/Externo 1"
+file_browser_volume_data: "/opt/file-browser/"
 file_browser_volume_database: filebrowser_database
 file_browser_volume_config: filebrowser_config
