@@ -1,5 +1,5 @@
 {
-  local_certs
+  acme_dns duckdns {{ duckdns_token }}
 }
 
 localhost, raspberrypi.local {
@@ -7,9 +7,19 @@ localhost, raspberrypi.local {
   file_server
 }
 
+
+adguard.glomyer.duckdns.org {
+  reverse_proxy localhost:{{ adguard_home_web_port }}
+}
+
 adguard.lan {
   reverse_proxy localhost:{{ adguard_home_web_port }}
   tls internal
+}
+
+
+dashy.glomyer.duckdns.org {
+  reverse_proxy localhost:{{ dashy_web_port }}
 }
 
 dashy.lan {
@@ -17,9 +27,19 @@ dashy.lan {
   tls internal
 }
 
+
+glances.glomyer.duckdns.org {
+  reverse_proxy localhost:{{ glances_web_port }}
+}
+
 glances.lan {
   reverse_proxy localhost:{{ glances_web_port }}
   tls internal
+}
+
+
+file-browser.glomyer.duckdns.org {
+  reverse_proxy localhost:{{ file_browser_web_port }}
 }
 
 file-browser.lan {
@@ -27,9 +47,19 @@ file-browser.lan {
   tls internal
 }
 
+
+navidrome.glomyer.duckdns.org {
+  reverse_proxy localhost:{{ navidrome_web_port }}
+}
+
 navidrome.lan {
   reverse_proxy localhost:{{ navidrome_web_port }}
   tls internal
+}
+
+
+metube.glomyer.duckdns.org {
+  reverse_proxy localhost:{{ metube_web_port }}
 }
 
 metube.lan {
@@ -37,25 +67,51 @@ metube.lan {
   tls internal
 }
 
+
+olivetin.glomyer.duckdns.org {
+  reverse_proxy localhost:1337
+}
+
 olivetin.lan {
   reverse_proxy localhost:1337
   tls internal
+}
+
+
+portainer.glomyer.duckdns.org  {
+  reverse_proxy https://localhost:{{ portainer_web_port }} {
+    transport http {
+      # Portainer uses a self-signed cert on port 9443 and Caddy can't verify its validity
+      # but as this redirects to localhost its reasonable & safe for internal LAN use
+      tls_insecure_skip_verify
+    }
+  }
 }
 
 portainer.lan {
   reverse_proxy https://localhost:{{ portainer_web_port }} {
     transport http {
       # Portainer uses a self-signed cert on 9443, and Caddy can't verify it
-      # but this redirects to localhost, its reasonable & safe for internal LAN use
+      # but as this redirects to localhost its reasonable & safe for internal LAN use
       tls_insecure_skip_verify
     }
   }
   tls internal
 }
 
+
+stirling-pdf.glomyer.duckdns.org {
+  reverse_proxy localhost:{{ stirling_pdf_web_port }}
+}
+
 stirling-pdf.lan {
   reverse_proxy localhost:{{ stirling_pdf_web_port }}
   tls internal
+}
+
+
+uptime-kuma.glomyer.duckdns.org {
+  reverse_proxy localhost:{{ uptime_kuma_web_port }}
 }
 
 uptime-kuma.lan {

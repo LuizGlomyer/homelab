@@ -13,29 +13,28 @@
     shell: /usr/sbin/nologin
     comment: "Caddy web server"
 
-- name: Download Caddy
+- name: Install xcaddy
   ansible.builtin.get_url:
-    url: "{{ caddy_download_url }}"
-    dest: /tmp/caddy.tar.gz
-    mode: '0644'
+    url: "https://github.com/caddyserver/xcaddy/releases/latest/download/xcaddy_0.4.5_linux_arm64.tar.gz"
+    dest: /tmp/xcaddy.tar.gz
+    mode: '0755'
 
-- name: Extract Caddy archive
+- name: Extract xcaddy
   ansible.builtin.unarchive:
-    src: /tmp/caddy.tar.gz
+    src: /tmp/xcaddy.tar.gz
     dest: /tmp/
     remote_src: true
 
-- name: Move Caddy binary to /usr/local/bin
-  ansible.builtin.copy:
-    src: /tmp/caddy
-    dest: /usr/bin/caddy
-    mode: '0755'
-    remote_src: true
-
-- name: Ensure Caddy is executable
-  ansible.builtin.file:
-    path: "{{ caddy_bin_path }}"
-    mode: '0755'
+- name: Build Caddy with DuckDNS plugin
+  ansible.builtin.command: >
+    /tmp/xcaddy build
+    --with github.com/caddy-dns/duckdns
+    --output /usr/bin/caddy
+  args:
+    creates: /tmp/caddy
+    chdir: /tmp
+  environment:
+    PATH: "/usr/local/go/bin:{{ ansible_env.PATH }}"
 
 - name: Ensure data dir exists
   ansible.builtin.file:
