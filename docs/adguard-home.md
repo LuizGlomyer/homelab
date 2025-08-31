@@ -1,6 +1,6 @@
 # Adguard Home
 
-Upon the first login you have to add the lists to Adguard's filters. Other useful thing to do is adding custom DNS rules (/#dns_rewrites), the same domains configured in the [Caddyfile](../roles/caddy/templates/Caddyfile.j2).
+Upon the first login you have to add the lists to Adguard's filters. Other useful thing to do is adding custom DNS rules (/#dns_rewrites), the same domains configured in the [Caddyfile](../roles/caddy/templates/Caddyfile.j2). Beware: some browsers can't understand certain TLDs so they opt to make a search instead. So, if you need to go to a .lan page or something you need to type the url fully, including the HTTP protocol.
 
 ## Configuring clients
 
@@ -32,7 +32,7 @@ ipconfig /flushdns
 resolvectl flush-caches
 ```
 
-I had some issues with Android, not all ads are blocked because of DNS leakage. From what I've researched, Android has a internal IPv6 server that cannot be overridden. I have yet to test further this issue in other devices. Nevertheless, you have to disable Private DNS, search your configs and disable it.
+I had some issues with Android, not all ads are blocked because of DNS leakage. From what I've researched Android has an internal IPv6 server that cannot be overridden. I have yet to test this issue further on other devices. Nevertheless, you have to disable Private DNS, search your configs and disable it.
 
 
 ## Lists I'm currently using

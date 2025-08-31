@@ -1,6 +1,6 @@
 # Navidrome
 
-The container is configured to use Last.fm credentials. The generate the required keys, see the external integrations link below.
+The container is configured to use Last.fm credentials. To generate the required keys check the link below about external integrations.
 
 # Useful links
 

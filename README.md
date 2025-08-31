@@ -6,19 +6,20 @@ Currently I have only one node acting as a server, a Raspberry Pi 4 with [Raspbe
 
 Multiple services are defined using Ansible roles, most are containerized but there are host services as well.
 
-| Adguard Home | Ad blocker & DNS resolver                        | Type      |
-|--------------|--------------------------------------------------|-----------|
-| [Caddy](docs/caddy.md)        | Certificate Authority and HTTPS server           | Host      |
-| [Dashy](docs/dashy.md)        | Webpage for quick access to the network services | Container |
-| [File Browser](docs/file-browser.md) | Storage access from the browser                     | Container |
-| [Glances](docs/glances.md)      | System processes & device status monitor         | Container |
-| [Navidrome](docs/navidrome.md)    | Powerful music stream server                     | Container |
-| [MeTube](docs/metube.md)       | GUI for downloading videos with yt-dlp           | Container |
-| [OliveTin](docs/olivetin.md)     | GUI for running shell commands                   | Host      |
-| [Pi-hole](docs/pihole.md)      | Ad blocker & DNS resolver                        | Container |
-| [Portainer](docs/portainer.md)    | Container management                             | Container |
-| [Stirling PDF](docs/stirling-pdf.md) | Local operations on .pdf files                   | Container |
-| [Uptime Kuma](docs/uptime-kuma.md)  | Online services monitor                          | Container |
+| Service                               | Description                                      | Type      |
+|---------------------------------------|--------------------------------------------------|-----------|
+| [Adguard Home](docs/adguard-home.md)  | Ad blocker & DNS resolver                        | Container |
+| [Caddy](docs/caddy.md)                | Reverse proxy and Certificate Authority          | Host      |
+| [Dashy](docs/dashy.md)                | Webpage for quick access to the network services | Container |
+| [File Browser](docs/file-browser.md)  | Storage access from the browser                  | Container |
+| [Glances](docs/glances.md)            | System processes & device status monitor         | Container |
+| [Navidrome](docs/navidrome.md)        | Powerful music stream server                     | Container |
+| [MeTube](docs/metube.md)              | GUI for downloading videos with yt-dlp           | Container |
+| [OliveTin](docs/olivetin.md)          | GUI for running shell commands                   | Host      |
+| [Pi-hole](docs/pihole.md)             | Ad blocker & DNS resolver                        | Container |
+| [Portainer](docs/portainer.md)        | Container management                             | Container |
+| [Stirling PDF](docs/stirling-pdf.md)  | Local operations on .pdf files                   | Container |
+| [Uptime Kuma](docs/uptime-kuma.md)    | Online services monitor                          | Container |
 
 # Dependencies
 
