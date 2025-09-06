@@ -3,3 +3,26 @@ caddy_download_url: "https://github.com/caddyserver/caddy/releases/download/v{{ 
 caddy_bin_path: "/usr/local/bin/caddy"
 caddy_config_path: "/etc/caddy/Caddyfile"
 caddy_data_dir: "/var/lib/caddy"
+
+caddy_services:
+  - name: adguard
+    port: "{{ adguard_home_web_port }}"
+  - name: dashy
+    port: "{{ dashy_web_port }}"
+  - name: glances
+    port: "{{ glances_web_port }}"
+  - name: file-browser
+    port: "{{ file_browser_web_port }}"
+  - name: navidrome
+    port: "{{ navidrome_web_port }}"
+  - name: metube
+    port: "{{ metube_web_port }}"
+  - name: olivetin
+    port: 1337
+  - name: portainer
+    port: "{{ portainer_web_port }}"
+    tls_insecure_skip_verify: true # needs TLS passthrough + skip verify
+  - name: stirling-pdf
+    port: "{{ stirling_pdf_web_port }}"
+  - name: uptime-kuma
+    port: "{{ uptime_kuma_web_port }}"

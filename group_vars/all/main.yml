@@ -14,7 +14,9 @@ uptime_kuma_web_port: 3001
 olivetin_user_password: "{{ vault_olivetin_user_password }}" 
 navidrome_lastfm_api_key: "{{ vault_lastfm_api_key }}"
 navidrome_lastfm_shared_secret: "{{ vault_lastfm_shared_secret }}"
+cloudflare_token: "{{ vault_cloudflare_token }}"
 duckdns_token: "{{ vault_duckdns_token }}"
+dns_email: "{{ vault_dns_email }}"
 
 # Hosts IPs
 main_host_ip: "192.168.0.88"

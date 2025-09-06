@@ -25,9 +25,10 @@
     dest: /tmp/
     remote_src: true
 
-- name: Build Caddy with DuckDNS plugin
+- name: Build Caddy with DNS plugins
   ansible.builtin.command: >
     /tmp/xcaddy build
+    --with github.com/caddy-dns/cloudflare
     --with github.com/caddy-dns/duckdns
     --output /usr/bin/caddy
   args:
