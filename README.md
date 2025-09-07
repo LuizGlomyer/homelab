@@ -1,6 +1,6 @@
 # homelab
 
-This repository is my home server setup. I'm mainly using Ansible to do provisining and configuration management, it is quite handy to centralize changes on my network.
+This repository is my home server setup. I'm mainly using Ansible to do provisioning and configuration management, it is quite handy to centralize changes on my network.
 
 Currently I have only one node acting as a server, a Raspberry Pi 4 with [Raspberry Pi OS](https://www.raspberrypi.com/software/), thus some configurations make use of arm64 binaries and Debian based utilities, such as apt.
 

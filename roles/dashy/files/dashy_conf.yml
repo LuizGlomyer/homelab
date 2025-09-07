@@ -57,74 +57,79 @@ sections:
   - name: Apps
     icon: fas fa-network-wired
     displayData:
-      sortBy: default
+      sortBy: most-used
       rows: 1
-      cols: 1
+      cols: 2
       collapsed: false
       hideForGuests: false
     items:
       - &ref_0
-        title: Pi-hole
-        description: ad blocker
-        icon: hl-pi-hole
-        url: http://raspberrypi.local/admin
+        title: MeTube
+        description: download videos with yt-dlp
+        icon: hl-metube
+        url: https://raspberrypi.local:8081/
         target: newtab
-        tags:
-          - network
-        id: 0_404_pihole
+        id: 0_404_metube
       - &ref_1
+        title: OliveTin
+        description: run shell commands
+        icon: hl-olivetin
+        url: https://raspberrypi.local:1337
+        target: newtab
+        id: 1_404_olivetin
+      - &ref_2
         title: Portainer
-        description: container management
+        description: container manager
         icon: hl-portainer
         url: https://raspberrypi.local:9443
         target: newtab
         tags:
           - network
-        id: 1_404_portainer
-      - &ref_2
+        id: 2_404_portainer
+      - &ref_3
         title: Uptime Kuma
         description: services monitor
         icon: hl-uptime-kuma
-        url: http://raspberrypi.local:3001
+        url: https://raspberrypi.local:3001
         target: newtab
         tags:
           - network
-        id: 2_404_uptimekuma
-      - &ref_3
+        id: 3_404_uptimekuma
+      - &ref_4
         title: Glances
         description: system processes & device status
         icon: hl-glances
-        url: http://raspberrypi.local:61208
+        url: https://raspberrypi.local:61208
         target: newtab
-        id: 3_404_glances
-      - &ref_4
-        title: OliveTin
-        description: run shell commands
-        icon: hl-olivetin
-        url: http://raspberrypi.local:1337
-        target: newtab
-        id: 4_404_olivetin
+        id: 4_404_glances
       - &ref_5
-        title: MeTube
-        description: download videos with yt-dlp
-        icon: hl-metube
-        url: http://raspberrypi.local:8081/
+        title: Stirling PDF
+        description: pdf operations
+        icon: hl-stirling-pdf
+        url: https://raspberry.local:7000
         target: newtab
-        id: 5_404_metube
+        id: 5_404_stirlingpdf
       - &ref_6
-        title: Caddy certificate
-        description: install to enable HTTPS
-        icon: hl-caddy
-        url: http://192.168.0.88/root.crt
-        target: sametab
-        id: 6_404_caddycertificate
+        title: Dashy
+        description: homepage
+        icon: hl-dashy
+        url: https://raspberrypi.local:9080
+        target: newtab
+        id: 6_404_dashy
       - &ref_7
+        title: Navidrome
+        description: music server
+        icon: hl-navidrome
+        url: https://raspberrypi.local:9700
+        target: newtab
+        id: 7_404_navidrome
+      - &ref_8
         title: AdGuard Home
-        description: ad blocker & DNS resolver
+        description: ad blocker and DNS server
         icon: hl-adguard-home
-        url: http://raspberrypi.local:3000
-        target: sametab
-        id: 7_404_adguardhome
+        url: https://raspberrypi.local:3000
+        target: newtab
+        id: 8_404_adguardhome
     filteredItems:
       - *ref_0
       - *ref_1
@@ -134,3 +139,22 @@ sections:
       - *ref_5
       - *ref_6
       - *ref_7
+      - *ref_8
+  - name: Local certificate
+    icon: fas fa-network-wired
+    displayData:
+      sortBy: default
+      rows: 1
+      cols: 1
+      collapsed: false
+      hideForGuests: false
+    items:
+      - &ref_9
+        title: Caddy certificate
+        description: install to enable HTTPS
+        icon: hl-caddy
+        url: http://192.168.0.88/root.crt
+        target: sametab
+        id: 0_1678_caddycertificate
+    filteredItems:
+      - *ref_9
