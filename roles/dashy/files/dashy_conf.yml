@@ -1,11 +1,11 @@
 pageInfo:
-  title: Home apps
-  description: Glomyer
+  title: Local Network
+  description: Home servers
   navLinks:
     - title: GitHub
-      path: https://github.com/Lissy93/dashy
-    - title: Documentation
-      path: https://dashy.to/docs
+      path: https://github.com/LuizGlomyer
+    - title: LinkedIn
+      path: https://linkedin.com/in/luiz-glomyer
 appConfig:
   backgroundImg: bg.jpg
   showSplashScreen: false
@@ -54,7 +54,7 @@ appConfig:
   disableSmartSort: false
   enableErrorReporting: false
 sections:
-  - name: Apps
+  - name: Apps (glomyer.dev)
     icon: fas fa-network-wired
     displayData:
       sortBy: most-used
@@ -67,69 +67,76 @@ sections:
         title: MeTube
         description: download videos with yt-dlp
         icon: hl-metube
-        url: https://raspberrypi.local:8081/
+        url: https://metube.glomyer.dev
         target: newtab
-        id: 0_404_metube
+        id: 0_1392_metube
       - &ref_1
         title: OliveTin
         description: run shell commands
         icon: hl-olivetin
-        url: https://raspberrypi.local:1337
+        url: https://olivetin.glomyer.dev
         target: newtab
-        id: 1_404_olivetin
+        id: 1_1392_olivetin
       - &ref_2
         title: Portainer
         description: container manager
         icon: hl-portainer
-        url: https://raspberrypi.local:9443
+        url: https://portainer.glomyer.dev
         target: newtab
         tags:
           - network
-        id: 2_404_portainer
+        id: 2_1392_portainer
       - &ref_3
         title: Uptime Kuma
         description: services monitor
         icon: hl-uptime-kuma
-        url: https://raspberrypi.local:3001
+        url: https://uptime-kuma.glomyer.dev
         target: newtab
         tags:
           - network
-        id: 3_404_uptimekuma
+        id: 3_1392_uptimekuma
       - &ref_4
         title: Glances
         description: system processes & device status
         icon: hl-glances
-        url: https://raspberrypi.local:61208
+        url: https://glances.glomyer.dev
         target: newtab
-        id: 4_404_glances
+        id: 4_1392_glances
       - &ref_5
         title: Stirling PDF
         description: pdf operations
         icon: hl-stirling-pdf
-        url: https://raspberry.local:7000
+        url: https://stirling-pdf.glomyer.dev
         target: newtab
-        id: 5_404_stirlingpdf
+        id: 5_1392_stirlingpdf
       - &ref_6
         title: Dashy
         description: homepage
         icon: hl-dashy
-        url: https://raspberrypi.local:9080
+        url: https://dashy.glomyer.dev
         target: newtab
-        id: 6_404_dashy
+        id: 6_1392_dashy
       - &ref_7
         title: Navidrome
         description: music server
         icon: hl-navidrome
-        url: https://raspberrypi.local:9700
+        url: https://navidrome.glomyer.dev
         target: newtab
-        id: 7_404_navidrome
+        id: 7_1392_navidrome
       - &ref_8
         title: AdGuard Home
         description: ad blocker and DNS server
         icon: hl-adguard-home
-        url: https://raspberrypi.local:3000
+        url: https://adguard.glomyer.dev
         target: newtab
-        id: 8_404_adguardhome
+        id: 8_1392_adguardhome
+      - &ref_9
+        title: File Browser
+        description: upload and download
+        icon: hl-filebrowser
+        url: https://file-browser.glomyer.dev
+        target: newtab
+        id: 9_1392_filebrowser
     filteredItems:
       - *ref_0
       - *ref_1
@@ -140,8 +147,9 @@ sections:
       - *ref_6
       - *ref_7
       - *ref_8
+      - *ref_9
   - name: Local certificate
-    icon: fas fa-network-wired
+    icon: fas fa-certificate
     displayData:
       sortBy: default
       rows: 1
@@ -149,7 +157,7 @@ sections:
       collapsed: false
       hideForGuests: false
     items:
-      - &ref_9
+      - &ref_10
         title: Caddy certificate
         description: install to enable HTTPS
         icon: hl-caddy
@@ -157,4 +165,98 @@ sections:
         target: sametab
         id: 0_1678_caddycertificate
     filteredItems:
-      - *ref_9
+      - *ref_10
+  - name: Apps (local HTTP)
+    icon: fas fa-network-wired
+    displayData:
+      sortBy: alphabetical
+      rows: 1
+      cols: 2
+      collapsed: true
+      hideForGuests: false
+    items:
+      - &ref_11
+        title: File Browser
+        description: upload and download
+        icon: hl-filebrowser
+        url: http://raspberrypi.local:4000
+        target: newtab
+        id: 0_1649_filebrowser
+      - &ref_12
+        title: MeTube
+        description: download videos with yt-dlp
+        icon: hl-metube
+        url: http://raspberrypi.local:8081
+        target: newtab
+        id: 1_1649_metube
+      - &ref_13
+        title: OliveTin
+        description: run shell commands
+        icon: hl-olivetin
+        url: http://raspberrypi.local:1337
+        target: newtab
+        id: 2_1649_olivetin
+      - &ref_14
+        title: Portainer
+        description: container manager
+        icon: hl-portainer
+        url: http://raspberrypi.local:9443
+        target: newtab
+        tags:
+          - network
+        id: 3_1649_portainer
+      - &ref_15
+        title: Uptime Kuma
+        description: services monitor
+        icon: hl-uptime-kuma
+        url: http://raspberrypi.local:3001
+        target: newtab
+        tags:
+          - network
+        id: 4_1649_uptimekuma
+      - &ref_16
+        title: Glances
+        description: system processes & device status
+        icon: hl-glances
+        url: http://raspberrypi.local:61208
+        target: newtab
+        id: 5_1649_glances
+      - &ref_17
+        title: Stirling PDF
+        description: pdf operations
+        icon: hl-stirling-pdf
+        url: http://raspberrypi.local:7000
+        target: newtab
+        id: 6_1649_stirlingpdf
+      - &ref_18
+        title: Dashy
+        description: homepage
+        icon: hl-dashy
+        url: http://raspberrypi.local:9080
+        target: newtab
+        id: 7_1649_dashy
+      - &ref_19
+        title: Navidrome
+        description: music server
+        icon: hl-navidrome
+        url: http://raspberrypi.local:9700
+        target: newtab
+        id: 8_1649_navidrome
+      - &ref_20
+        title: AdGuard Home
+        description: ad blocker and DNS server
+        icon: hl-adguard-home
+        url: http://raspberrypi.local:3000
+        target: newtab
+        id: 9_1649_adguardhome
+    filteredItems:
+      - *ref_11
+      - *ref_12
+      - *ref_13
+      - *ref_14
+      - *ref_15
+      - *ref_16
+      - *ref_17
+      - *ref_18
+      - *ref_19
+      - *ref_20

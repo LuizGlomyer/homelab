@@ -5,6 +5,7 @@ file_browser_web_port: 4000
 glances_web_port: 61208
 navidrome_web_port: 9700
 metube_web_port: 8081
+olivetin_port: 1337 # This is a fixed port
 pihole_web_port: 8070
 portainer_web_port: 9443
 stirling_pdf_web_port: 7000

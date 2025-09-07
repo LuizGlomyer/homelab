@@ -18,7 +18,7 @@ caddy_services:
   - name: metube
     port: "{{ metube_web_port }}"
   - name: olivetin
-    port: 1337
+    port: "{{ olivetin_port }}"
   - name: portainer
     port: "{{ portainer_web_port }}"
     tls_insecure_skip_verify: true # needs TLS passthrough + skip verify

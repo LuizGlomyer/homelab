@@ -16,7 +16,7 @@
 
 - name: Generate hashed OliveTin password via OliveTin API
   ansible.builtin.uri:
-    url: "http://localhost:1337/api/PasswordHash"
+    url: "http://localhost:{{ olivetin_port }}/api/PasswordHash"
     method: POST
     body_format: json
     headers:
