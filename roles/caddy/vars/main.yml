@@ -26,3 +26,5 @@ caddy_services:
     port: "{{ stirling_pdf_web_port }}"
   - name: uptime-kuma
     port: "{{ uptime_kuma_web_port }}"
+  - name: vaultwarden
+    port: "{{ vaultwarden_web_port }}"

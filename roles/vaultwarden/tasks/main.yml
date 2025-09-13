@@ -1,0 +1,30 @@
+- name: Ensure Vaultwarden data directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ vaultwarden_data_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Generate Argon2 hash for admin token
+  ansible.builtin.shell: |
+    echo -n "{{ vaultwarden_admin_token }}" | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4
+  register: vaultwarden_admin_token_hash
+  changed_when: false
+  no_log: true
+
+- name: Run Vaultwarden container
+  community.docker.docker_container:
+    name: "{{ vaultwarden_container_name }}"
+    image: "{{ vaultwarden_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    published_ports:
+      - "{{ vaultwarden_web_port }}:80"
+    volumes:
+      - "{{ vaultwarden_data_dir }}:/data"
+    env:
+      DOMAIN: "{{ vaultwarden_domain }}"
+      SIGNUPS_ALLOWED: "{{ vaultwarden_signups_allowed }}"
+      WEBSOCKET_ENABLED: "true"
+      ADMIN_TOKEN: "{{ vaultwarden_admin_token_hash.stdout }}"

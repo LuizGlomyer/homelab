@@ -44,3 +44,6 @@
 
     - role: uptime_kuma
       tags: uptime_kuma
+
+    - role: vaultwarden
+      tags: vaultwarden

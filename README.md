@@ -20,12 +20,14 @@ Multiple services are defined using Ansible roles, most are containerized but th
 | [Portainer](docs/portainer.md)        | Container management                             | Container |
 | [Stirling PDF](docs/stirling-pdf.md)  | Local operations on .pdf files                   | Container |
 | [Uptime Kuma](docs/uptime-kuma.md)    | Online services monitor                          | Container |
+| [Vaultwarden](docs/vaultwarden.md)    | Self-hosted Bitwarden compatible password manager | Container |
 
 # Dependencies
 
 Aside from Ansible, you might need some other software on your controller node (your machine).
 
 - sshpass
+- community.docker (Ansible collection)
 - [Ansible-lint](https://ansible.readthedocs.io/projects/lint/installing/#installing-the-latest-version)
 
 

@@ -13,5 +13,6 @@
       'python3-docker',
       'python3-pip',
       'python3-setuptools',
+      'argon2',
     ]
     state: present
