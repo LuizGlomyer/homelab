@@ -1,5 +1,7 @@
 # Stirling PDF
 
+Web-based PDF toolkit offering many operations (merge, split, compress, OCR, convert, reorder, sign) running entirely on your server.
+
 This application is quite resource intensive even when idle, taking 14% of my Raspberry Pi's RAM.
 
 # Useful links

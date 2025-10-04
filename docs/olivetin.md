@@ -1,5 +1,7 @@
 # OliveTin
 
+Lightweight web UI to execute predefined shell commands and scripts from a browser. Ideal for quick, safe maintenance actions on the server with simple YAML-defined buttons and optional authentication.
+
 # Useful links
 
 - https://github.com/OliveTin/OliveTin
