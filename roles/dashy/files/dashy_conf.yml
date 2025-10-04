@@ -137,6 +137,13 @@ sections:
         url: https://file-browser.glomyer.dev
         target: newtab
         id: 9_1392_filebrowser
+      - &ref_10
+        title: Vikunja
+        description: to-do list and project management
+        icon: hl-vikunja
+        url: https://vikunja.glomyer.dev
+        target: newtab
+        id: 10_1392_vikunja
     filteredItems:
       - *ref_0
       - *ref_1
@@ -148,6 +155,7 @@ sections:
       - *ref_7
       - *ref_8
       - *ref_9
+      - *ref_10
   - name: Local certificate
     icon: fas fa-certificate
     displayData:
@@ -157,7 +165,7 @@ sections:
       collapsed: false
       hideForGuests: false
     items:
-      - &ref_10
+      - &ref_11
         title: Caddy certificate
         description: install to enable HTTPS
         icon: hl-caddy
@@ -165,7 +173,7 @@ sections:
         target: sametab
         id: 0_1678_caddycertificate
     filteredItems:
-      - *ref_10
+      - *ref_11
   - name: Apps (local HTTP)
     icon: fas fa-network-wired
     displayData:
@@ -175,28 +183,28 @@ sections:
       collapsed: true
       hideForGuests: false
     items:
-      - &ref_11
+      - &ref_12
         title: File Browser
         description: upload and download
         icon: hl-filebrowser
         url: http://raspberrypi.local:4000
         target: newtab
         id: 0_1649_filebrowser
-      - &ref_12
+      - &ref_13
         title: MeTube
         description: download videos with yt-dlp
         icon: hl-metube
         url: http://raspberrypi.local:8081
         target: newtab
         id: 1_1649_metube
-      - &ref_13
+      - &ref_14
         title: OliveTin
         description: run shell commands
         icon: hl-olivetin
         url: http://raspberrypi.local:1337
         target: newtab
         id: 2_1649_olivetin
-      - &ref_14
+      - &ref_15
         title: Portainer
         description: container manager
         icon: hl-portainer
@@ -205,7 +213,7 @@ sections:
         tags:
           - network
         id: 3_1649_portainer
-      - &ref_15
+      - &ref_16
         title: Uptime Kuma
         description: services monitor
         icon: hl-uptime-kuma
@@ -214,43 +222,49 @@ sections:
         tags:
           - network
         id: 4_1649_uptimekuma
-      - &ref_16
+      - &ref_17
         title: Glances
         description: system processes & device status
         icon: hl-glances
         url: http://raspberrypi.local:61208
         target: newtab
         id: 5_1649_glances
-      - &ref_17
+      - &ref_18
         title: Stirling PDF
         description: pdf operations
         icon: hl-stirling-pdf
         url: http://raspberrypi.local:7000
         target: newtab
         id: 6_1649_stirlingpdf
-      - &ref_18
+      - &ref_19
         title: Dashy
         description: homepage
         icon: hl-dashy
         url: http://raspberrypi.local:9080
         target: newtab
         id: 7_1649_dashy
-      - &ref_19
+      - &ref_20
         title: Navidrome
         description: music server
         icon: hl-navidrome
         url: http://raspberrypi.local:9700
         target: newtab
         id: 8_1649_navidrome
-      - &ref_20
+      - &ref_21
         title: AdGuard Home
         description: ad blocker and DNS server
         icon: hl-adguard-home
         url: http://raspberrypi.local:3000
         target: newtab
         id: 9_1649_adguardhome
+      - &ref_22
+        title: Vikunja
+        description: to-do list and project management
+        icon: hl-vikunja
+        url: http://raspberrypi.local:3456
+        target: newtab
+        id: 10_1649_vikunja
     filteredItems:
-      - *ref_11
       - *ref_12
       - *ref_13
       - *ref_14
@@ -260,3 +274,5 @@ sections:
       - *ref_18
       - *ref_19
       - *ref_20
+      - *ref_21
+      - *ref_22

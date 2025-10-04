@@ -6,6 +6,19 @@ Currently I have only one node acting as a server, a Raspberry Pi 4 with [Raspbe
 
 Multiple services are defined using Ansible roles, most are containerized but there are host services as well.
 
+## Homepage Dashboard
+
+![Dashy homepage](docs/images/dashy.png)
+
+[Dashy](docs/dashy.md) serves as the central homepage and dashboard for accessing all homelab services. It provides:
+
+- **Organized service links**: All services grouped into logical sections (HTTPS domains, local HTTP access, certificates)
+- **Dual access methods**: Each service accessible via both secure HTTPS domains and direct local HTTP ports
+- **Visual interface**: Clean, modern interface with service icons and descriptions
+- **Quick access**: Single point of entry to navigate to any service in the homelab
+
+The dashboard is automatically deployed via Ansible and includes links to all configured services. When adding new services, both the HTTPS (domain-based) and HTTP (direct port) access methods are added to maintain consistency and flexibility.
+
 | Service                               | Description                                      | Type      |
 |---------------------------------------|--------------------------------------------------|-----------|
 | [Adguard Home](docs/adguard-home.md)  | Ad blocker & DNS resolver                        | Container |

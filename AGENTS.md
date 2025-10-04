@@ -108,6 +108,13 @@ All containerized services follow this pattern:
 - **Static files**: Used for simple configuration files (Dashy config)
 - **Template naming**: `{config_name}.j2` pattern
 
+### Dashy Configuration Management
+- **Homepage configuration**: `roles/dashy/files/dashy_conf.yml` defines the homepage layout and service links
+- **Service sections**: Organized into multiple sections (HTTPS domains, local HTTP, certificates)
+- **Dual access patterns**: Each service listed with both domain-based HTTPS and local HTTP access
+- **Manual maintenance**: New services must be manually added to both sections when added to the homelab
+- **Service structure**: Each service entry includes title, description, icon, URL, and unique ID
+
 ### Configuration File Locations
 - **Service configs**: Typically in `/opt/{service}/` or `/etc/{service}/`
 - **Systemd services**: `/etc/systemd/system/{service}.service`
@@ -235,9 +242,10 @@ When adding new services to this homelab:
 4. **Configure reverse proxy**: Add service to `caddy_services` list in Caddy vars
 5. **Create documentation**: Add `docs/{service-name}.md` with service details
 6. **Update README**: Add service entry to the main services table
-7. **Redeploy Caddy**: After adding a new service, redeploy Caddy to update the reverse proxy configuration:
+7. **Update Dashy homepage**: Add service entries to both HTTPS and local HTTP sections in `roles/dashy/files/dashy_conf.yml`
+8. **Redeploy Caddy and Dashy**: After adding a new service, redeploy Caddy and Dashy to update their configurations:
    ```bash
-   ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt --tags caddy
+   ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt --tags caddy,dashy
    ```
 
 This ensures consistency with established patterns and maintains the cohesive architecture of the homelab setup.
