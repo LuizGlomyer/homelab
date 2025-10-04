@@ -1,0 +1,49 @@
+- name: Include common role
+  ansible.builtin.include_role:
+    name: common
+
+- name: Ensure Vikunja data directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ vikunja_data_dir }}"
+    state: directory
+    owner: "{{ user_uid }}"
+    group: "{{ user_gid }}"
+    mode: '0755'
+
+- name: Ensure Vikunja files directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ vikunja_files_dir }}"
+    state: directory
+    owner: "{{ user_uid }}"
+    group: "{{ user_gid }}"
+    mode: '0755'
+
+- name: Ensure Vikunja cache directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ vikunja_data_dir }}/cache"
+    state: directory
+    owner: "{{ user_uid }}"
+    group: "{{ user_gid }}"
+    mode: '0755'
+
+- name: Run Vikunja container
+  community.docker.docker_container:
+    name: "{{ vikunja_container_name }}"
+    image: "{{ vikunja_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    published_ports:
+      - "{{ vikunja_web_port }}:3456"
+    user: "{{ user_uid }}:{{ user_gid }}"
+    volumes:
+      - "{{ vikunja_files_dir }}:/app/vikunja/files"
+      - "{{ vikunja_data_dir }}:/db"
+      - "{{ vikunja_data_dir }}/cache:/.cache"
+    env:
+      VIKUNJA_SERVICE_PUBLICURL: "https://vikunja.glomyer.dev"
+      VIKUNJA_CORS_ENABLE: "false"
+

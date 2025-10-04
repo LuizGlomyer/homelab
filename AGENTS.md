@@ -235,5 +235,9 @@ When adding new services to this homelab:
 4. **Configure reverse proxy**: Add service to `caddy_services` list in Caddy vars
 5. **Create documentation**: Add `docs/{service-name}.md` with service details
 6. **Update README**: Add service entry to the main services table
+7. **Redeploy Caddy**: After adding a new service, redeploy Caddy to update the reverse proxy configuration:
+   ```bash
+   ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt --tags caddy
+   ```
 
 This ensures consistency with established patterns and maintains the cohesive architecture of the homelab setup.

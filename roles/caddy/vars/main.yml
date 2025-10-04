@@ -28,3 +28,5 @@ caddy_services:
     port: "{{ uptime_kuma_web_port }}"
   - name: vaultwarden
     port: "{{ vaultwarden_web_port }}"
+  - name: vikunja
+    port: "{{ vikunja_web_port }}"

@@ -47,3 +47,6 @@
 
     - role: vaultwarden
       tags: vaultwarden
+
+    - role: vikunja
+      tags: vikunja
