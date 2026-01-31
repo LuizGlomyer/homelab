@@ -1,6 +1,6 @@
 .ansible/
-group_vars/all/vault_pass.txt
-group_vars/all/vault.yml
+ansible/group_vars/all/vault_pass.txt
+ansible/group_vars/all/vault.yml
 
 # Local .terraform directories
 .terraform/
