@@ -1,0 +1,6 @@
+- name: Create Proxmox cloud-init template
+  hosts: mainserver
+  gather_facts: false
+
+  roles:
+    - proxmox_template
