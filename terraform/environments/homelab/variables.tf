@@ -15,3 +15,22 @@ variable "pve_password" {
   type        = string
   sensitive   = true
 }
+
+
+variable "pve_node_name" {
+  description = "Name of the Proxmox node"
+  type        = string
+  default     = "pve"
+}
+
+variable "vm_hostname" {
+  description = "Hostsname of the Debian VM"
+  type        = string
+  default     = "homelab-debian-01"
+}
+
+variable "vm_username" {
+  description = "Username for the VM"
+  type        = string
+  default     = "glomyer"
+}

@@ -1,15 +1,15 @@
 resource "proxmox_virtual_environment_file" "cloudinit" {
   content_type = "snippets"
   datastore_id = "local"
-  node_name    = "pve"
+  node_name    = var.pve_node_name
 
   source_raw {
     file_name = "debian-cloudinit.yaml"
     data = templatefile(
       "${path.module}/../../cloud-init/debian.yaml.tpl",
       {
-        hostname = "debian-test-01"
-        user     = "glomyer"
+        hostname = var.vm_hostname
+        user     = var.vm_username
         ssh_key  = file(var.ssh_public_key_path)
       }
     )
@@ -17,11 +17,13 @@ resource "proxmox_virtual_environment_file" "cloudinit" {
 }
 
 
-resource "proxmox_virtual_environment_vm" "vm" {
-  node_name = "pve"
-  name      = "debian-test-01"
+resource "proxmox_virtual_environment_vm" "debian" {
+  node_name = var.pve_node_name
+  name      = var.vm_hostname
   vm_id     = 200
 
+  started                              = true
+  machine                              = "q35"
   stop_on_destroy                      = true
   purge_on_destroy                     = true
   delete_unreferenced_disks_on_destroy = true
@@ -36,7 +38,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   cpu {
-    cores = 2
+    cores = 4
   }
 
   memory {
@@ -55,11 +57,6 @@ resource "proxmox_virtual_environment_vm" "vm" {
 
   initialization {
     user_data_file_id = proxmox_virtual_environment_file.cloudinit.id
-
-    user_account {
-      username = "glomyer"
-      keys     = [file(var.ssh_public_key_path)]
-    }
 
     ip_config {
       ipv4 {

@@ -1,5 +1,5 @@
 - name: Set up system
-  hosts: servers
+  hosts: raspberry
   become: true
   roles:
     - role: common
@@ -13,7 +13,7 @@
 
 
 - name: Set up containerized services
-  hosts: servers
+  hosts: raspberry
   roles:
     - role: adguard_home
       tags: adguard_home
