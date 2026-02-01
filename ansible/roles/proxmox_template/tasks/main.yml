@@ -11,74 +11,9 @@
     state: directory
     mode: "0755"
 
-# 2. Download cloud image
-- name: Check if cloud image exists
-  stat:
-    path: "{{ template.img_path }}"
-  register: img_stat
-
-- name: Download cloud image
-  get_url:
-    url: "{{ template.img_url }}"
-    dest: "{{ template.img_path }}"
-    mode: "0644"
-  when: not img_stat.stat.exists
-
-# 3. Create VM (if missing)
-- name: Check if VM exists
-  command: "qm status {{ template.id }}"
-  register: vm_status
-  failed_when: false
-  changed_when: false
-
-- name: Create VM
-  command: >
-    qm create {{ template.id }}
-    --name {{ template.name }}
-    --memory {{ template.memory }}
-    --cores {{ template.cores }}
-    --net0 virtio,bridge={{ template.bridge }}
-    --scsihw {{ template.scsihw }}
-  when: "'status:' not in vm_status.stdout"
-
-# 4. Import disk
-- name: Read VM config
-  command: "qm config {{ template.id }}"
-  register: vm_config
-  changed_when: false
-
-- name: Import disk if missing
-  command: >
-    qm importdisk {{ template.id }}
-    {{ template.img_path }}
-    {{ template.storage }}
-  when: "'scsi0:' not in vm_config.stdout"
-
-- name: Attach disk
-  command: >
-    qm set {{ template.id }}
-    --scsi0 {{ template.storage }}:vm-{{ template.id }}-disk-0
-  when: "'scsi0:' not in vm_config.stdout"
-
-# 5. Enable Cloud-Init
-- name: Attach cloud-init drive
-  command: >
-    qm set {{ template.id }} --ide2 {{ template.storage }}:cloudinit
-  when: "'ide2:' not in vm_config.stdout"
-
-# 6. Enable guest agent + serial
-- name: Enable QEMU Guest Agent
-  command: "qm set {{ template.id }} --agent 1"
-  when: "'agent: 1' not in vm_config.stdout"
-
-- name: Ensure serial console
-  command: "qm set {{ template.id }} --serial0 socket --vga serial0"
-
-# 7. Set boot order
-- name: Ensure boot order
-  command: "qm set {{ template.id }} --boot order=scsi0"
-
-# 8. Convert to template
-- name: Convert VM to template
-  command: "qm template {{ template.id }}"
-  when: "'template:' not in vm_config.stdout"
+# 2. Process templates
+- name: Process each template
+  include_tasks: process_template.yml
+  with_items: "{{ templates }}"
+  loop_control:
+    loop_var: template

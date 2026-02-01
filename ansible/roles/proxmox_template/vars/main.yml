@@ -1,10 +1,20 @@
-template:
-  id: 9000
-  name: debian-13-cloudinit
-  memory: 1024
-  cores: 1
-  bridge: vmbr0
-  scsihw: virtio-scsi-pci
-  storage: local-lvm
-  img_url: https://cdimage.debian.org/images/cloud/trixie-backports/20251129-2311/debian-13-backports-generic-amd64-20251129-2311.qcow2
-  img_path: /var/lib/vz/template/iso/debian-13_qcow2.img
+templates:
+  - id: 9000
+    name: debian-12-cloudinit
+    memory: 1024
+    cores: 1
+    bridge: vmbr0
+    scsihw: virtio-scsi-pci
+    storage: local-lvm
+    img_url: https://cdimage.debian.org/images/cloud/bookworm-backports/20260129-2372/debian-12-backports-generic-amd64-20260129-2372.qcow2
+    img_path: /var/lib/vz/template/iso/debian-12-backports-generic-amd64-20260129-2372_qcow2.img
+
+  - id: 9001
+    name: debian-13-cloudinit
+    memory: 1024
+    cores: 1
+    bridge: vmbr0
+    scsihw: virtio-scsi-pci
+    storage: local-lvm
+    img_url: https://cdimage.debian.org/images/cloud/trixie-backports/20251129-2311/debian-13-backports-generic-amd64-20251129-2311.qcow2
+    img_path: /var/lib/vz/template/iso/debian-13-backports-generic-amd64-20251129-2311_qcow2.img
