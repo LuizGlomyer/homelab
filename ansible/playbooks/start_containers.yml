@@ -1,38 +1,38 @@
 - name: Set up containerized services
-  hosts: raspberry
+  hosts: [raspberry]
   roles:
-    - role: adguard_home
+    - role: containers/adguard_home
       tags: adguard_home
 
-    - role: dashy
+    - role: containers/dashy
       tags: dashy
 
-    - role: file_browser
+    - role: containers/file_browser
       tags: file_browser
 
-    - role: glances
+    - role: containers/glances
       tags: glances
 
-    - role: metube
+    - role: containers/metube
       tags: metube
 
-    - role: navidrome
+    - role: containers/navidrome
       tags: navidrome
 
-    # - role: pihole
+    # - role: containers/pihole
     #   tags: pihole
 
-    - role: portainer
+    - role: containers/portainer
       tags: portainer
 
-    - role: stirling_pdf
+    - role: containers/stirling_pdf
       tags: stirling_pdf
 
-    - role: uptime_kuma
+    - role: containers/uptime_kuma
       tags: uptime_kuma
 
-    - role: vaultwarden
+    - role: containers/vaultwarden
       tags: vaultwarden
 
-    - role: vikunja
+    - role: containers/vikunja
       tags: vikunja

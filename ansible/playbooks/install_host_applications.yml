@@ -1,12 +1,12 @@
 - name: Install host applications
-  hosts: raspberry
+  hosts: [raspberry]
   become: true
   roles:
     - role: common
       tags: common
 
-    - role: caddy
+    - role: services/caddy
       tags: caddy
 
-    - role: olivetin
+    - role: services/olivetin
       tags: olivetin
