@@ -32,5 +32,5 @@ variable "vm_hostname" {
 variable "vm_username" {
   description = "Username for the VM"
   type        = string
-  default     = "glomyer"
+  default     = "ansible"
 }

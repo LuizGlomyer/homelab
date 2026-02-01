@@ -15,12 +15,12 @@
     system_arch: "{{ arch_map[arch_output.stdout] | default(arch_output.stdout) }}"
 
 - name: Get UID of target user
-  ansible.builtin.command: id -u pi
+  ansible.builtin.command: id -u {{ ansible_user }}
   register: uid
   changed_when: false
 
 - name: Get GID of target user
-  ansible.builtin.command: id -g pi
+  ansible.builtin.command: id -g {{ ansible_user }}
   register: gid
   changed_when: false
 
@@ -28,17 +28,3 @@
   ansible.builtin.set_fact:
     user_uid: "{{ uid.stdout }}"
     user_gid: "{{ gid.stdout }}"
-
-- name: Install needed apt packages
-  ansible.builtin.include_tasks:
-    file: apt.yml
-    apply:
-      tags: apt
-  tags: apt
-
-- name: Include Docker installation tasks
-  ansible.builtin.include_tasks:
-    file: docker.yml
-    apply:
-      tags: docker
-  tags: docker

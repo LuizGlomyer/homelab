@@ -1,0 +1,6 @@
+- name: Install Docker
+  hosts: [vms]
+  become: true
+  roles:
+    - role: install_docker
+      tags: install_docker

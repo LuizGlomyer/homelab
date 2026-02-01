@@ -1,17 +1,3 @@
-- name: Set up system
-  hosts: raspberry
-  become: true
-  roles:
-    - role: common
-      tags: common
-
-    - role: caddy
-      tags: caddy
-
-    - role: olivetin
-      tags: olivetin
-
-
 - name: Set up containerized services
   hosts: raspberry
   roles:

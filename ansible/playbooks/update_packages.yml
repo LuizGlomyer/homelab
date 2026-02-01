@@ -1,0 +1,6 @@
+- name: Set up system
+  hosts: [raspberry, mainserver]
+  become: true
+  roles:
+    - role: update_packages
+      tags: update_packages
