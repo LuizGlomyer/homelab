@@ -1,10 +1,14 @@
+- name: Debug system architecture
+  ansible.builtin.debug:
+    msg: "System architecture: {{ system_arch }}"
+
 - name: Add Docker GPG key
   ansible.builtin.apt_key:
-    url: https://download.docker.com/linux/debian/gpg
+    url: "{{ docker_gpg_url }}"
 
 - name: Add Docker repository
   ansible.builtin.apt_repository:
-    repo: deb [arch=arm64] https://download.docker.com/linux/debian bookworm stable
+    repo: "deb [arch={{ system_arch }}] {{ docker_repo_url }} {{ docker_debian_version }} stable"
 
 - name: Install Docker
   ansible.builtin.apt:
