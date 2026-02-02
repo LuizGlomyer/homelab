@@ -1,19 +1,50 @@
-- name: Debug system architecture
-  ansible.builtin.debug:
-    msg: "System architecture: {{ system_arch }}"
+- name: Create APT keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
 
-- name: Add Docker GPG key
-  ansible.builtin.apt_key:
+- name: Download Docker GPG key
+  ansible.builtin.get_url:
     url: "{{ docker_gpg_url }}"
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+  become: true
+
+- name: Convert Docker GPG key to keyring format
+  ansible.builtin.command:
+    cmd: >
+      gpg --batch --yes --dearmor
+      --output /etc/apt/keyrings/docker.gpg
+      /etc/apt/keyrings/docker.asc
+  become: true
+
+- name: Ensure Docker GPG key permissions
+  ansible.builtin.file:
+    path: /etc/apt/keyrings/docker.gpg
+    mode: '0644'
+  become: true
+
 
 - name: Add Docker repository
   ansible.builtin.apt_repository:
-    repo: "deb [arch={{ system_arch }}] {{ docker_repo_url }} {{ docker_debian_version }} stable"
+    repo: >
+      deb [arch={{ system_arch }}
+      signed-by=/etc/apt/keyrings/docker.gpg]
+      {{ docker_repo_url }}
+      {{ docker_debian_version }} stable
+    state: present
+    filename: docker
 
-- name: Install Docker
+- name: Install Docker Engine
   ansible.builtin.apt:
-    name: docker-ce
-    state: latest
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+    update_cache: true
 
 - name: Ensure Docker service is enabled and started
   ansible.builtin.service:
