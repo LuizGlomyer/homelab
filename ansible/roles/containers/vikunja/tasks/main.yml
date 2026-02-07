@@ -1,7 +1,3 @@
-- name: Include common role
-  ansible.builtin.include_role:
-    name: common
-
 - name: Ensure Vikunja data directory exists
   become: true
   ansible.builtin.file:

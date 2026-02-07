@@ -74,7 +74,7 @@ resource "proxmox_virtual_environment_vm" "debian12" {
   }
 
   memory {
-    dedicated = 2048
+    dedicated = 4096
   }
 
   network_device {

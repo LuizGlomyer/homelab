@@ -14,6 +14,7 @@ packages:
   - qemu-guest-agent
   - net-tools
   - curl
+  - htop
 
 runcmd:
   - systemctl enable --now qemu-guest-agent

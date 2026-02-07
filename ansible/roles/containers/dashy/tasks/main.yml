@@ -1,4 +1,5 @@
 - name: Ensure Dashy config directory exists
+  become: true
   ansible.builtin.file:
     path: "{{ dashy_config_dir }}"
     state: directory
@@ -14,6 +15,7 @@
     mode: '0644'
 
 - name: Copy Dashy background image
+  become: true
   ansible.builtin.copy:
     src: bg.jpg
     dest: "{{ dashy_config_dir }}/{{ dashy_background_image }}"

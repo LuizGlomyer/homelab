@@ -1,6 +1,9 @@
 - name: Set up containerized services
   hosts: [raspberry]
   roles:
+    - role: extract_metadata
+      tags: extract_metadata
+
     - role: containers/adguard_home
       tags: adguard_home
 

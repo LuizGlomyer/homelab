@@ -2,8 +2,8 @@
   hosts: [raspberry]
   become: true
   roles:
-    - role: common
-      tags: common
+    - role: extract_metadata
+      tags: extract_metadata
 
     - role: services/caddy
       tags: caddy

@@ -1,3 +1,3 @@
 olivetin_version: 2025.7.29
-olivetin_deb_url: https://github.com/OliveTin/OliveTin/releases/download/{{ olivetin_version }}/OliveTin_linux_arm64.deb
-olivetin_deb_path: "/tmp/olivetin.deb"
+olivetin_deb_url: https://github.com/OliveTin/OliveTin/releases/download/{{ olivetin_version }}/OliveTin_linux_{{ system_arch }}.deb
+olivetin_deb_path: "/tmp/olivetin_{{ olivetin_version }}_{{ system_arch }}.deb"
