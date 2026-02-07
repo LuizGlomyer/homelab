@@ -1,3 +1,6 @@
 docker_gpg_url: https://download.docker.com/linux/debian/gpg
 docker_repo_url: https://download.docker.com/linux/debian
 docker_debian_version: bookworm
+# Prefers the pinned version, but does not downgrade automatically
+# if the installed version is more recent
+docker_pin_priority: 900

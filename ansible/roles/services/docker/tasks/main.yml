@@ -3,14 +3,12 @@
     path: /etc/apt/keyrings
     state: directory
     mode: '0755'
-  become: true
 
 - name: Download Docker GPG key
   ansible.builtin.get_url:
     url: "{{ docker_gpg_url }}"
     dest: /etc/apt/keyrings/docker.asc
     mode: '0644'
-  become: true
 
 - name: Convert Docker GPG key to keyring format
   ansible.builtin.command:
@@ -18,13 +16,11 @@
       gpg --batch --yes --dearmor
       --output /etc/apt/keyrings/docker.gpg
       /etc/apt/keyrings/docker.asc
-  become: true
 
 - name: Ensure Docker GPG key permissions
   ansible.builtin.file:
     path: /etc/apt/keyrings/docker.gpg
     mode: '0644'
-  become: true
 
 
 - name: Add Docker repository
@@ -36,6 +32,25 @@
       {{ docker_debian_version }} stable
     state: present
     filename: docker
+
+- name: Pin Docker packages to specific versions
+  ansible.builtin.copy:
+    dest: /etc/apt/preferences.d/docker
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      Package: docker-ce
+      Pin: version 5:29.2.0-1~debian.12~bookworm
+      Pin-Priority: {{ docker_pin_priority }}
+
+      Package: docker-ce-cli
+      Pin: version 5:29.2.0-1~debian.12~bookworm
+      Pin-Priority: {{ docker_pin_priority }}
+
+      Package: containerd.io
+      Pin: version 2.2.1-1~debian.12~bookworm
+      Pin-Priority: {{ docker_pin_priority }}
 
 - name: Install Docker Engine
   ansible.builtin.apt:

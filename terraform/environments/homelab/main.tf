@@ -15,9 +15,9 @@ variable "VMs" {
       template_id = 9000
     }
 
-    debian12-02 = {
+    debian13-01 = {
       vm_id       = 201
-      hostname    = "debian12-02"
+      hostname    = "debian13-01"
       ipv4        = "192.168.0.201/24"
       template_id = 9001
     }
