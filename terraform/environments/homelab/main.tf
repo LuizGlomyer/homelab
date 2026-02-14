@@ -17,9 +17,9 @@ variable "VMs" {
 
     debian13-01 = {
       vm_id       = 201
-      hostname    = "debian13-01"
+      hostname    = "nas-01"
       ipv4        = "192.168.0.201/24"
-      template_id = 9001
+      template_id = 9000
     }
   }
 }
@@ -47,7 +47,7 @@ resource "proxmox_virtual_environment_file" "cloudinit" {
 }
 
 
-resource "proxmox_virtual_environment_vm" "debian12" {
+resource "proxmox_virtual_environment_vm" "debian_vms" {
   for_each = var.VMs
 
   node_name = var.pve_node_name

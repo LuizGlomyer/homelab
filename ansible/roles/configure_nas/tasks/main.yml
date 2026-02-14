@@ -1,0 +1,82 @@
+- name: Ensure storage mountpoint exists
+  file:
+    path: /mnt/storage
+    state: directory
+    mode: "0755"
+
+# Mounts even after reboot
+- name: Mount storage disk
+  mount:
+    path: /mnt/storage
+    src: UUID={{ storage_uuid }}
+    fstype: ext4
+    opts: defaults,nofail
+    state: mounted
+
+- name: Install packages
+  apt:
+    name:
+      - samba
+      - samba-client
+      - acl
+      - python3-pexpect
+    state: present
+    update_cache: yes
+
+- name: Create groups
+  group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ nas_groups }}"
+
+- name: Create users
+  user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups }}"
+    append: yes
+  loop: "{{ nas_users }}"
+  when: nas_users | length > 0
+
+- name: Set Samba passwords
+  ansible.builtin.expect:
+    command: smbpasswd -a {{ item.name }}
+    responses:
+      New SMB password: "{{ item.password }}"
+      Retype new SMB password: "{{ item.password }}"
+  loop: "{{ nas_users }}"
+  no_log: true
+
+- name: Create share directories
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: root
+    group: "{{ item.admin_group }}"
+    mode: "2770"
+  loop: "{{ nas_shares }}"
+
+- name: Apply ACL admin
+  command: >
+    setfacl -m g:{{ item.admin_group }}:rwx {{ item.path }}
+  loop: "{{ nas_shares }}"
+
+- name: Apply ACL reader
+  command: >
+    setfacl -m g:{{ item.reader_group }}:rx {{ item.path }}
+  loop: "{{ nas_shares }}"
+
+- name: Default ACL admin
+  command: >
+    setfacl -d -m g:{{ item.admin_group }}:rwx {{ item.path }}
+  loop: "{{ nas_shares }}"
+
+- name: Default ACL reader
+  command: >
+    setfacl -d -m g:{{ item.reader_group }}:rx {{ item.path }}
+  loop: "{{ nas_shares }}"
+
+- name: Deploy smb.conf
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+  notify: restart samba

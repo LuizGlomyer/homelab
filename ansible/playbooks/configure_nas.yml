@@ -1,0 +1,6 @@
+- name: Configure NAS
+  hosts: [192.168.0.201]
+  become: true
+  roles:
+    - role: configure_nas
+      tags: configure_nas

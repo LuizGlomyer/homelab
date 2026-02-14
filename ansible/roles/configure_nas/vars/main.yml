@@ -1,0 +1,38 @@
+nas_mount: /mnt/storage
+storage_uuid: "257d85bc-003d-46df-8405-0e6135a0c94f"
+
+nas_groups:
+  - nas_admins
+  - nas_readers
+
+nas_users:
+  - name: glomyer
+    password: "{{ vault_nas_password }}"
+    groups:
+      - nas_admins
+  - name: teste
+    password: "123"
+    groups:
+      - nas_admins
+  - name: reader
+    password: "123"
+    groups:
+      - nas_readers
+
+nas_shares:
+  - name: root
+    path: /mnt/storage/
+    admin_group: nas_admins
+    reader_group: nas_readers
+  - name: media
+    path: /mnt/storage/media
+    admin_group: nas_admins
+    reader_group: nas_readers
+  - name: videos
+    path: /mnt/storage/videos
+    admin_group: nas_admins
+    reader_group: nas_readers
+  - name: music
+    path: /mnt/storage/music
+    admin_group: nas_admins
+    reader_group: nas_readers
