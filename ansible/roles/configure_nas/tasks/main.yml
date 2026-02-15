@@ -1,81 +1,148 @@
-- name: Ensure storage mountpoint exists
-  file:
-    path: /mnt/storage
-    state: directory
-    mode: "0755"
-
-# Mounts even after reboot
-- name: Mount storage disk
-  mount:
-    path: /mnt/storage
-    src: UUID={{ storage_uuid }}
-    fstype: ext4
-    opts: defaults,nofail
-    state: mounted
-
-- name: Install packages
+- name: Install needed packages
   apt:
     name:
       - samba
       - samba-client
+      - wsdd
       - acl
       - python3-pexpect
     state: present
     update_cache: yes
 
-- name: Create groups
+
+# Group creation
+- name: Create admin group
+  group:
+    name: "{{ nas_admin_group }}"
+    state: present
+
+- name: Create domain groups
   group:
     name: "{{ item }}"
     state: present
-  loop: "{{ nas_groups }}"
+  loop: "{{ nas_domain_groups }}"
 
-- name: Create users
-  user:
-    name: "{{ item.name }}"
-    groups: "{{ item.groups }}"
-    append: yes
-  loop: "{{ nas_users }}"
-  when: nas_users | length > 0
 
-- name: Set Samba passwords
-  ansible.builtin.expect:
-    command: smbpasswd -a {{ item.name }}
-    responses:
-      New SMB password: "{{ item.password }}"
-      Retype new SMB password: "{{ item.password }}"
-  loop: "{{ nas_users }}"
-  no_log: true
+# Share folders creation
+- name: Create NAS mountpoint
+  file:
+    path: "{{ nas_root }}"
+    state: directory
+    owner: root
+    group: "{{ nas_admin_group }}"
+    mode: "2770"
+
+# Mounts even after reboot
+- name: Mount storage disk
+  mount:
+    path: "{{ nas_root }}"
+    src: UUID={{ storage_uuid }}
+    fstype: ext4
+    opts: defaults,nofail
+    state: mounted
 
 - name: Create share directories
   file:
     path: "{{ item.path }}"
     state: directory
     owner: root
-    group: "{{ item.admin_group }}"
+    group: "{{ nas_admin_group }}"
     mode: "2770"
   loop: "{{ nas_shares }}"
 
-- name: Apply ACL admin
-  command: >
-    setfacl -m g:{{ item.admin_group }}:rwx {{ item.path }}
-  loop: "{{ nas_shares }}"
+ 
+# Users creation
+- name: Create admin user
+  user:
+    name: "{{ nas_admin_user }}"
+    group: "{{ nas_admin_group }}"
+    shell: /bin/bash
 
-- name: Apply ACL reader
-  command: >
-    setfacl -m g:{{ item.reader_group }}:rx {{ item.path }}
-  loop: "{{ nas_shares }}"
+- name: Set admin samba password
+  ansible.builtin.expect:
+    command: smbpasswd -a {{ nas_admin_user }}
+    responses:
+      New SMB password: "{{ vault_nas_admin_password }}"
+      Retype new SMB password: "{{ vault_nas_admin_password }}"
+  no_log: true
 
-- name: Default ACL admin
-  command: >
-    setfacl -d -m g:{{ item.admin_group }}:rwx {{ item.path }}
-  loop: "{{ nas_shares }}"
+- name: Create service users
+  user:
+    name: "{{ item.name }}"
+    group: "{{ item.domain_group }}"
+    shell: /usr/sbin/nologin
+    create_home: no
+  loop: "{{ nas_services }}"
 
-- name: Default ACL reader
-  command: >
-    setfacl -d -m g:{{ item.reader_group }}:rx {{ item.path }}
-  loop: "{{ nas_shares }}"
+- name: Set service users samba passwords
+  ansible.builtin.expect:
+    command: smbpasswd -a {{ item.name }}
+    responses:
+      New SMB password: "{{ item.password }}"
+      Retype new SMB password: "{{ item.password }}"
+  loop: "{{ nas_services }}"
+  no_log: true
 
-- name: Deploy smb.conf
+
+# Apply ACL to users
+- name: Admin ACL recursive
+  ansible.posix.acl:
+    path: "{{ nas_root }}"
+    entity: "{{ nas_admin_group }}"
+    etype: group
+    permissions: rwx
+    recursive: yes
+    state: present
+
+- name: Default admin ACL
+  ansible.posix.acl:
+    path: "{{ nas_root }}"
+    entity: "{{ nas_admin_group }}"
+    etype: group
+    permissions: rwx
+    default: yes
+    recursive: yes
+    state: present
+
+- name: Allow domain groups to traverse NAS root
+  ansible.posix.acl:
+    path: "{{ nas_root }}"
+    entity: "{{ item }}"
+    etype: group
+    permissions: --x
+    state: present
+  loop: "{{ nas_domain_groups }}"
+
+- name: Grant domain group read access
+  ansible.posix.acl:
+    path: "{{ item.path }}"
+    entity: "{{ item.domain_group }}"
+    etype: group
+    permissions: r-x
+    state: present
+  loop: "{{ nas_shares }}"
+  when: item.domain_group is defined
+
+- name: Default domain group ACL
+  ansible.posix.acl:
+    path: "{{ item.path }}"
+    entity: "{{ item.domain_group }}"
+    etype: group
+    permissions: r-x
+    default: yes
+    state: present
+  loop: "{{ nas_shares }}"
+  when: item.domain_group is defined
+
+
+# Start services
+- name: Enable wsdd service
+  ansible.builtin.service:
+    name: wsdd
+    enabled: true
+    state: started
+
+- name: Deploy Samba config
   template:
     src: smb.conf.j2
     dest: /etc/samba/smb.conf

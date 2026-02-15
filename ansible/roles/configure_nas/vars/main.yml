@@ -1,38 +1,33 @@
-nas_mount: /mnt/storage
 storage_uuid: "257d85bc-003d-46df-8405-0e6135a0c94f"
+nas_root: /mnt/storage
 
-nas_groups:
-  - nas_admins
-  - nas_readers
+nas_admin_user: glomyer
+nas_admin_group: nas_admins
+nas_storage_share: storage
 
-nas_users:
-  - name: glomyer
-    password: "{{ vault_nas_password }}"
-    groups:
-      - nas_admins
-  - name: teste
-    password: "123"
-    groups:
-      - nas_admins
-  - name: reader
-    password: "123"
-    groups:
-      - nas_readers
+# Domain groups
+nas_domain_groups:
+  - media_music_ro
+  - media_videos_ro
+
+nas_services:
+  - name: navidrome
+    password: "{{ vault_navidrome_password }}"
+    share: music
+    domain_group: media_music_ro
+
+  - name: jellyfin
+    password: "{{ vault_jellyfin_password }}"
+    share: videos
+    domain_group: media_videos_ro
 
 nas_shares:
-  - name: root
-    path: /mnt/storage/
-    admin_group: nas_admins
-    reader_group: nas_readers
-  - name: media
-    path: /mnt/storage/media
-    admin_group: nas_admins
-    reader_group: nas_readers
-  - name: videos
-    path: /mnt/storage/videos
-    admin_group: nas_admins
-    reader_group: nas_readers
   - name: music
-    path: /mnt/storage/music
-    admin_group: nas_admins
-    reader_group: nas_readers
+    path: "{{ nas_root }}/music"
+    domain_group: media_music_ro
+    read_only: true
+
+  - name: videos
+    path: "{{ nas_root }}/videos"
+    domain_group: media_videos_ro
+    read_only: true

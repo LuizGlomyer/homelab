@@ -1,6 +1,9 @@
 [global]
    workgroup = WORKGROUP
    server role = standalone server
+   netbios name = NAS-01
+   server string = Homelab NAS
+
    security = user
    passdb backend = tdbsam
    map to guest = never
@@ -23,17 +26,24 @@
    load printers = no
    disable spoolss = yes
 
+[{{ nas_storage_share }}]
+   path = {{ nas_root }}
+   browseable = yes
+   read only = no
+   valid users = {{ nas_admin_user }}
 
 {% for share in nas_shares %}
 [{{ share.name }}]
    path = {{ share.path }}
    browseable = yes
-   read only = no
+   read only = {{ 'yes' if share.read_only | default(true) else 'no' }}
    guest ok = no
 
    create mask = 0660
    directory mask = 2770
+   valid users = @{{ share.domain_group }} {{ nas_admin_user }}
 
+   # NTFS ACL support
    vfs objects = acl_xattr recycle
 
    recycle:repository = .recycle/%U
