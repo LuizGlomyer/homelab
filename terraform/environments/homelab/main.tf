@@ -15,7 +15,7 @@ variable "VMs" {
       template_id = 9000
     }
 
-    debian13-01 = {
+    nas-01 = {
       vm_id       = 201
       hostname    = "nas-01"
       ipv4        = "192.168.0.201/24"

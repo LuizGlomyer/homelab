@@ -1,5 +1,5 @@
 - name: Install host applications
-  hosts: [raspberry]
+  hosts: [RaspberryPi]
   become: true
   roles:
     - role: extract_metadata

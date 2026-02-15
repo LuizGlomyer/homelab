@@ -1,5 +1,5 @@
 - name: Install Docker
-  hosts: [VMs]
+  hosts: [ServicesHost]
   become: true
   roles:
     - role: extract_metadata

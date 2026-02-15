@@ -1,5 +1,5 @@
 - name: Set up system
-  hosts: [raspberry, VMs]
+  hosts: [RaspberryPi, VMs]
   become: true
   roles:
     - role: update_packages

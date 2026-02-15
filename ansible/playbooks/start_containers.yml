@@ -1,11 +1,8 @@
 - name: Set up containerized services
-  hosts: [raspberry]
+  hosts: [ServicesHost]
   roles:
     - role: extract_metadata
       tags: extract_metadata
-
-    - role: containers/adguard_home
-      tags: adguard_home
 
     - role: containers/dashy
       tags: dashy
@@ -22,9 +19,6 @@
     - role: containers/navidrome
       tags: navidrome
 
-    # - role: containers/pihole
-    #   tags: pihole
-
     - role: containers/portainer
       tags: portainer
 
@@ -39,3 +33,22 @@
 
     - role: containers/vikunja
       tags: vikunja
+
+
+- name: Set up containerized services
+  hosts: [RaspberryPi]
+  roles:
+    - role: extract_metadata
+      tags: extract_metadata
+
+    - role: containers/adguard_home
+      tags: adguard_home
+    
+    - role: containers/glances
+      tags: glances
+
+    # - role: containers/pihole
+    #   tags: pihole
+
+    - role: containers/portainer
+      tags: portainer
