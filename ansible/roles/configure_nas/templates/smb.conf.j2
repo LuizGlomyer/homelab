@@ -26,6 +26,15 @@
    load printers = no
    disable spoolss = yes
 
+   # NTFS ACL support
+   vfs objects = acl_xattr recycle
+
+   recycle:repository = .recycle/%U
+   recycle:keeptree = yes
+   recycle:versions = yes
+   recycle:touch = yes
+   recycle:maxsize = 0
+
 [{{ nas_storage_share }}]
    path = {{ nas_root }}
    browseable = yes
@@ -42,13 +51,4 @@
    create mask = 0660
    directory mask = 2770
    valid users = @{{ share.domain_group }} {{ nas_admin_user }}
-
-   # NTFS ACL support
-   vfs objects = acl_xattr recycle
-
-   recycle:repository = .recycle/%U
-   recycle:keeptree = yes
-   recycle:versions = yes
-   recycle:touch = yes
-   recycle:maxsize = 0
 {% endfor %}

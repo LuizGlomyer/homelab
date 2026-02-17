@@ -1,0 +1,14 @@
+smb_server: 192.168.0.201
+
+smb_mounts:
+  - name: music
+    remote_share: music
+    mount_point: /mnt/music
+    username: navidrome
+    password: "{{ vault_nas_navidrome_password }}"
+
+  - name: videos
+    remote_share: videos
+    mount_point: /mnt/videos
+    username: jellyfin
+    password: "{{ vault_nas_jellyfin_password }}"

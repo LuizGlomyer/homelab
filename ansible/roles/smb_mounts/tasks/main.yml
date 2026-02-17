@@ -1,0 +1,31 @@
+- name: Install CIFS utilities
+  ansible.builtin.apt:
+    name: cifs-utils
+    state: present
+
+- name: Create mount points
+  ansible.builtin.file:
+    path: "{{ item.mount_point }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ smb_mounts }}"
+
+- name: Create SMB credential files
+  ansible.builtin.copy:
+    dest: "/root/.smbcredentials-{{ item.name }}"
+    content: |
+      username={{ item.username }}
+      password={{ item.password }}
+    owner: root
+    group: root
+    mode: '0600'
+  loop: "{{ smb_mounts }}"
+
+- name: Mount SMB shares
+  ansible.builtin.mount:
+    path: "{{ item.mount_point }}"
+    src: "//{{ smb_server }}/{{ item.remote_share }}"
+    fstype: cifs
+    opts: "credentials=/root/.smbcredentials-{{ item.name }},vers=3.0,iocharset=utf8,_netdev,noperm"
+    state: mounted
+  loop: "{{ smb_mounts }}"

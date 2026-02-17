@@ -3,12 +3,13 @@
   roles:
     - role: extract_metadata
       tags: extract_metadata
+    
+    - role: smb_mounts
+      tags: smb_mounts
+      become: true
 
     - role: containers/dashy
       tags: dashy
-
-    - role: containers/file_browser
-      tags: file_browser
 
     - role: containers/glances
       tags: glances
@@ -44,6 +45,9 @@
     - role: containers/adguard_home
       tags: adguard_home
     
+    - role: containers/file_browser
+      tags: file_browser
+
     - role: containers/glances
       tags: glances
 

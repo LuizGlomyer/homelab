@@ -12,12 +12,12 @@ nas_domain_groups:
 
 nas_services:
   - name: navidrome
-    password: "{{ vault_navidrome_password }}"
+    password: "{{ vault_nas_navidrome_password }}"
     share: music
     domain_group: media_music_ro
 
   - name: jellyfin
-    password: "{{ vault_jellyfin_password }}"
+    password: "{{ vault_nas_jellyfin_password }}"
     share: videos
     domain_group: media_videos_ro
 
