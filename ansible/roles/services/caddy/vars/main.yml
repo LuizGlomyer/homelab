@@ -4,21 +4,28 @@ caddy_bin_path: "/usr/local/bin/caddy"
 caddy_config_path: "/etc/caddy/Caddyfile"
 caddy_data_dir: "/var/lib/caddy"
 
-caddy_services:
+caddy_services_raspberry:
   - name: adguard
     port: "{{ adguard_home_web_port }}"
-  - name: dashy
-    port: "{{ dashy_web_port }}"
   - name: glances
     port: "{{ glances_web_port }}"
   - name: file-browser
     port: "{{ file_browser_web_port }}"
+  - name: olivetin
+    port: "{{ olivetin_port }}"
+  - name: portainer
+    port: "{{ portainer_web_port }}"
+    tls_insecure_skip_verify: true # needs TLS passthrough + skip verify
+
+caddy_services_vm:
+  - name: dashy
+    port: "{{ dashy_web_port }}"
+  - name: glances
+    port: "{{ glances_web_port }}"
   - name: navidrome
     port: "{{ navidrome_web_port }}"
   - name: metube
     port: "{{ metube_web_port }}"
-  - name: olivetin
-    port: "{{ olivetin_port }}"
   - name: portainer
     port: "{{ portainer_web_port }}"
     tls_insecure_skip_verify: true # needs TLS passthrough + skip verify

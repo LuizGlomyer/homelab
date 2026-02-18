@@ -9,11 +9,11 @@
   }
 }
 
-(duckdns-cert) {
-  tls {
-    dns duckdns {{ duckdns_token }}
-  }
-}
+#(duckdns-cert) {
+#  tls {
+#    dns duckdns {{ duckdns_token }}
+#  }
+#}
 
 (internal-cert) {
   tls internal
@@ -26,22 +26,17 @@ localhost, raspberrypi.local {
 }
 
 # --- Public root landing pages ---
-glomyer.dev, *.glomyer.dev {
+cert.glomyer.dev {
     import cloudflare-cert
     root * /srv/public
     file_server
 }
 
-glomyer.duckdns.org, *.glomyer.duckdns.org {
-    import duckdns-cert
-    root * /srv/public
-    file_server
-}
+# --- Raspberry Pi Services (looped) ---
+{% for svc in caddy_services_raspberry %}
+{{ svc.name }}.edge.glomyer.dev {
+  import cloudflare-cert
 
-
-# --- Services (looped) ---
-{% for svc in caddy_services %}
-{{ svc.name }}.glomyer.dev, {{ svc.name }}.glomyer.duckdns.org {
   {% if svc.tls_insecure_skip_verify | default(false) %}
   reverse_proxy https://localhost:{{ svc.port }} {
     transport http {
@@ -53,18 +48,38 @@ glomyer.duckdns.org, *.glomyer.duckdns.org {
   {% endif %}
 }
 
-{{ svc.name }}.lan {
-  import internal-cert
+
+### Internal certificate example
+#{{ svc.name }}.lan {
+#  import internal-cert
+#  {% if svc.tls_insecure_skip_verify | default(false) %}
+#  reverse_proxy https://localhost:{{ svc.port }} {
+#    transport http {
+#      tls_insecure_skip_verify
+#    }
+#  }
+#  {% else %}
+#  reverse_proxy localhost:{{ svc.port }}
+#  {% endif %}
+#}
+
+{% endfor %}
+
+
+# --- VM Services (looped) ---
+{% for svc in caddy_services_vm %}
+{{ svc.name }}.glomyer.dev {
+  import cloudflare-cert
+
   {% if svc.tls_insecure_skip_verify | default(false) %}
-  reverse_proxy https://localhost:{{ svc.port }} {
+  reverse_proxy https://192.168.0.200:{{ svc.port }} {
     transport http {
       tls_insecure_skip_verify
     }
   }
   {% else %}
-  reverse_proxy localhost:{{ svc.port }}
+  reverse_proxy 192.168.0.200:{{ svc.port }}
   {% endif %}
 }
-
 
 {% endfor %}
