@@ -1,4 +1,4 @@
-smb_server: 192.168.0.201
+smb_server: "{{ nas_host_ip }}"
 
 smb_mounts:
   - name: music

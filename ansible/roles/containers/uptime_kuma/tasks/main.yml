@@ -14,4 +14,4 @@
       - "{{ uptime_kuma_volume_name }}:/app/data"
     container_default_behavior: compatibility
     dns_servers:
-      - "{{ dns_host_ip }}"
+      - "{{ raspberry_host_ip }}"

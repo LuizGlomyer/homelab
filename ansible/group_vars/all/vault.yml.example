@@ -1,7 +1,16 @@
-vault_olivetin_user_password: "your_secrets_here"
-vault_lastfm_api_key: "you_api_key_here"
-vault_lastfm_shared_secret: "your_shared_secret_here"
-vault_cloudflare_token: "your_token_here"
-vault_duckdns_token: "your_token_here"
-vault_dns_email: "your_email_here"
-vault_vaultwarden_admin_token: "your_admin_token_here"
+# Hosts credentials and secrets
+vault_nas_admin_password: "your_credentials"
+vault_nas_navidrome_password: "your_credentials"
+vault_nas_jellyfin_password: "your_credentials"
+
+
+# Services credentials and secrets
+vault_caddy_cloudflare_token: "your_credentials"
+vault_caddy_duckdns_token: "your_credentials"
+vault_caddy_dns_email: "your_credentials"
+
+vault_navidrome_lastfm_api_key: "your_credentials"
+vault_navidrome_lastfm_shared_secret: "your_credentials"
+
+vault_olivetin_user_password: "your_credentials"
+vault_vaultwarden_admin_token: "your_credentials"
