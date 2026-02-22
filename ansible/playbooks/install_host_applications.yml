@@ -1,12 +1,32 @@
 - name: Install host applications
   hosts: [RaspberryPi]
+  tags: RaspberryPi
   become: true
   roles:
     - role: extract_metadata
       tags: extract_metadata
 
+    - role: services/golang
+      tags: golang
+
     - role: services/caddy
       tags: caddy
+      caddyfile: edge.Caddyfile.j2
 
     - role: services/olivetin
       tags: olivetin
+
+- name: Install host applications
+  hosts: [ServicesHost]
+  tags: ServicesHost
+  become: true
+  roles:
+    - role: extract_metadata
+      tags: extract_metadata
+
+    - role: services/golang
+      tags: golang
+
+    - role: services/caddy
+      tags: caddy
+      caddyfile: services.Caddyfile.j2

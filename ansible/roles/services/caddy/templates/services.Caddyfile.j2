@@ -1,0 +1,61 @@
+(tls-mtls) {
+  tls /etc/caddy/mtls/services-server.crt /etc/caddy/mtls/services-server.key {
+    client_auth {
+      mode require_and_verify
+      trust_pool file /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt
+    }
+  }
+}
+
+#################################
+#   --- Internal Services ---   #
+#################################
+
+dashy.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ dashy_web_port }}
+}
+
+glances.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ glances_web_port }}
+}
+
+navidrome.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ navidrome_web_port }}
+}
+
+metube.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ metube_web_port }}
+}
+
+portainer.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy https://localhost:{{ portainer_web_port }} {
+    transport http {
+      tls_insecure_skip_verify
+    }
+  }
+}
+
+stirling-pdf.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ stirling_pdf_web_port }}
+}
+
+uptime-kuma.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ uptime_kuma_web_port }}
+}
+
+vaultwarden.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ vaultwarden_web_port }}
+}
+
+vikunja.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ vikunja_web_port }}
+}

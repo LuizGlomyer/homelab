@@ -2,9 +2,25 @@
   email {{ vault_caddy_dns_email }}
 }
 
-# --- Reusable TLS blocks ---
+
+#################################
+#  --- Reusable TLS blocks ---  #
+#################################
+
 (internal-cert) {
   tls internal
+}
+
+(mtls_backend) {
+  reverse_proxy https://{{ services_host_ip }} {
+    header_up Host {args[0]}.internal.glomyer.dev
+    transport http {
+      tls
+      tls_server_name {args[0]}.internal.glomyer.dev
+      tls_trust_pool file /etc/caddy/mtls/services-ca.crt
+      tls_client_auth /etc/caddy/mtls/raspberry-client.crt /etc/caddy/mtls/raspberry-client.key
+    }
+  }
 }
 
 (cloudflare-cert) {
@@ -20,22 +36,10 @@
 #}
 
 
-# --- Local HTTP ---
-localhost, raspberrypi.local {
-  root * /srv/public
-  file_server
-}
-
-cert.glomyer.dev {
-    import cloudflare-cert
-    root * /srv/public
-    file_server
-}
-
-
 #################################
 # --- Raspberry Pi Services --- #
 #################################
+
 adguard.edge.glomyer.dev {
   import cloudflare-cert
   reverse_proxy localhost:{{ adguard_home_web_port }}
@@ -66,56 +70,66 @@ portainer.edge.glomyer.dev {
 }
 
 
+# --- Local HTTP ---
+cert.glomyer.dev {
+    import cloudflare-cert
+    root * /srv/public
+    file_server
+}
+
+localhost, raspberrypi.local {
+  root * /srv/public
+  file_server
+}
+
+
 #################################
 #      --- VM Services ---      #
 #################################
+
 dashy.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy {{ services_host_ip }}:{{ dashy_web_port }}
+  import mtls_backend dashy
 }
 
 glances.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy {{ services_host_ip }}:{{ glances_web_port }}
+  import mtls_backend glances
 }
 
 navidrome.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy {{ services_host_ip }}:{{ navidrome_web_port }}
+  import mtls_backend navidrome
 }
 
 metube.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy {{ services_host_ip }}:{{ metube_web_port }}
+  import mtls_backend metube
 }
 
 portainer.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy https://{{ services_host_ip }}:{{ portainer_web_port }} {
-    transport http {
-      tls_insecure_skip_verify
-    }
-  }
+  import mtls_backend portainer
 }
 
 stirling-pdf.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy {{ services_host_ip }}:{{ stirling_pdf_web_port }}
+  import mtls_backend stirling-pdf
 }
 
 uptime-kuma.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy {{ services_host_ip }}:{{ uptime_kuma_web_port }}
+  import mtls_backend uptime-kuma
 }
 
 vaultwarden.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy {{ services_host_ip }}:{{ vaultwarden_web_port }}
+  import mtls_backend vaultwarden
 }
 
 vikunja.glomyer.dev {
   import cloudflare-cert
-  reverse_proxy {{ services_host_ip }}:{{ vikunja_web_port }}
+  import mtls_backend vikunja
 }
 
 

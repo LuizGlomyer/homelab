@@ -1,29 +1,32 @@
 - name: Create caddy group
   ansible.builtin.group:
-    name: caddy
+    name: "{{ caddy_group }}"
     system: true
 
 - name: Create caddy user with proper home
   ansible.builtin.user:
-    name: caddy
+    name: "{{ caddy_user }}"
     system: true
-    group: caddy
+    group: "{{ caddy_group }}"
     create_home: true
     home: /var/lib/caddy
     shell: /usr/sbin/nologin
     comment: "Caddy web server"
 
-- name: Install xcaddy
+- name: Download xcaddy archive
   ansible.builtin.get_url:
-    url: "https://github.com/caddyserver/xcaddy/releases/latest/download/xcaddy_0.4.5_linux_arm64.tar.gz"
+    url: "{{ xcaddy_download_url }}"
     dest: /tmp/xcaddy.tar.gz
-    mode: '0755'
+    mode: '0644'
+  register: xcaddy_download
 
 - name: Extract xcaddy
   ansible.builtin.unarchive:
     src: /tmp/xcaddy.tar.gz
     dest: /tmp/
     remote_src: true
+  args:
+    creates: /tmp/xcaddy
 
 - name: Build Caddy with DNS plugins
   ansible.builtin.command: >
@@ -32,18 +35,33 @@
     --with github.com/caddy-dns/duckdns
     --output /usr/bin/caddy
   args:
-    creates: /tmp/caddy
     chdir: /tmp
+    creates: /usr/bin/caddy
   environment:
-    PATH: "/usr/local/go/bin:{{ ansible_env.PATH }}"
+    PATH: "/usr/local/go/bin:{{ ansible_facts['env']['PATH'] }}"
 
-- name: Ensure data dir exists
+- name: Ensure Caddy directories exist
   ansible.builtin.file:
-    path: /var/lib/caddy
+    path: "{{ item }}"
     state: directory
-    owner: caddy
-    group: caddy
-    mode: '0755'
+    owner: "{{ caddy_user }}"
+    group: "{{ caddy_group }}"
+    mode: "0750"
+  loop:
+    - /var/lib/caddy
+    - /etc/caddy/mtls
+
+- name: Ensure Caddy directories exist with correct ownership
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ caddy_user }}"
+    group: "{{ caddy_group }}"
+    mode: "0750"
+    recurse: true
+  loop:
+    - /var/lib/caddy
+    - /etc/caddy/mtls
 
 - name: Create Caddy config directory
   ansible.builtin.file:
@@ -53,11 +71,17 @@
 
 - name: Upload Caddyfile
   ansible.builtin.template:
-    src: Caddyfile.j2
-    dest: "{{ caddy_config_path }}"
+    src: "{{ caddyfile }}"
+    dest: /etc/caddy/Caddyfile
     owner: root
     group: root
     mode: '0644'
+  
+- name: Validate Caddy configuration
+  ansible.builtin.command: caddy validate --config /etc/caddy/Caddyfile
+  register: caddy_validate
+  failed_when: caddy_validate.rc != 0
+  changed_when: false
 
 - name: Upload systemd service file
   ansible.builtin.copy:
@@ -67,7 +91,6 @@
     group: root
     mode: '0644'
 
-# note: the service will likely fail on the first run but will generate the cert
 - name: Ensure Caddy is started so it generates the root cert
   ansible.builtin.service:
     name: caddy
@@ -80,14 +103,12 @@
   register: caddy_cert
 
 - name: Ensure /usr/local/share/ca-certificates exists
-  become: true
   ansible.builtin.file:
     path: /usr/local/share/ca-certificates
     state: directory
     mode: '0755'
 
 - name: Copy Caddy root CA certificate to system trusted store
-  become: true
   ansible.builtin.copy:
     src: /var/lib/caddy/.local/share/caddy/pki/authorities/local/root.crt
     dest: /usr/local/share/ca-certificates/Caddy_Local.crt
@@ -110,15 +131,8 @@
     remote_src: true
 
 - name: Update trusted certificates
-  become: true
   ansible.builtin.command: update-ca-certificates
   changed_when: true
-
-- name: Validate Caddy configuration
-  ansible.builtin.command: caddy validate --config /etc/caddy/Caddyfile
-  register: caddy_validate
-  failed_when: caddy_validate.rc != 0
-  changed_when: false
 
 - name: Reload Caddy service
   ansible.builtin.systemd:
