@@ -3,4 +3,3 @@ vaultwarden_container_name: vaultwarden
 vaultwarden_data_dir: /opt/vaultwarden/data
 vaultwarden_domain: "https://vaultwarden.glomyer.dev"
 vaultwarden_signups_allowed: "true"
-

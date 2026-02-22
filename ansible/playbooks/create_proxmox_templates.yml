@@ -5,4 +5,3 @@
   roles:
     - role: proxmox_template
       tags: proxmox_template
-

@@ -1,2 +1,5 @@
 skip_list:
   - '403' # Package installs should not use latest.
+  - role-name # Avoid using paths when importing roles. (services/docker)
+  - var-naming[no-role-prefix] # Variables names from within roles should use caddy_ as a prefix
+  - yaml[trailing-spaces]

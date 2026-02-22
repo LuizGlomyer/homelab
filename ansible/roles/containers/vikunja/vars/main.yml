@@ -3,4 +3,3 @@ vikunja_container_name: vikunja
 
 vikunja_data_dir: /opt/vikunja/data
 vikunja_files_dir: /opt/vikunja/files
-

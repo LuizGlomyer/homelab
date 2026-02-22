@@ -16,6 +16,7 @@
       gpg --batch --yes --dearmor
       --output /etc/apt/keyrings/docker.gpg
       /etc/apt/keyrings/docker.asc
+    creates: /etc/apt/keyrings/docker.gpg
 
 - name: Ensure Docker GPG key permissions
   ansible.builtin.file:

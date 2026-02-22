@@ -7,7 +7,11 @@
 
 - name: Generate Argon2 hash for admin token
   ansible.builtin.shell: |
-    echo -n "{{ vault_vaultwarden_admin_token }}" | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4
+    set -o pipefail
+    echo -n "{{ vault_vaultwarden_admin_token }}" \
+      | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4
+  args:
+    executable: /bin/bash
   register: vaultwarden_admin_token_hash
   changed_when: false
   no_log: true

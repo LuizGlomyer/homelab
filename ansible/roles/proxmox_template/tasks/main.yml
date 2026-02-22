@@ -1,19 +1,19 @@
 # 1. Ensure directories
 - name: Ensure snippets directory exists
-  file:
+  ansible.builtin.file:
     path: /var/lib/vz/snippets
     state: directory
     mode: "0755"
 
 - name: Ensure cloud image directory exists
-  file:
+  ansible.builtin.file:
     path: /var/lib/vz/template/iso
     state: directory
     mode: "0755"
 
 # 2. Process templates
 - name: Process each template
-  include_tasks: process_template.yml
+  ansible.builtin.include_tasks: process_template.yml
   with_items: "{{ templates }}"
   loop_control:
     loop_var: template

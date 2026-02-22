@@ -1,11 +1,11 @@
 # Download cloud image
 - name: Check if cloud image exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ template.img_path }}"
   register: img_stat
 
 - name: Download cloud image
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ template.img_url }}"
     dest: "{{ template.img_path }}"
     mode: "0644"
@@ -13,13 +13,13 @@
 
 # Create VM (if missing)
 - name: Check if VM exists
-  command: "qm status {{ template.id }}"
+  ansible.builtin.command: "qm status {{ template.id }}"
   register: vm_status
   failed_when: false
   changed_when: false
 
 - name: Create VM
-  command: >
+  ansible.builtin.command: >
     qm create {{ template.id }}
     --name {{ template.name }}
     --memory {{ template.memory }}
@@ -27,45 +27,53 @@
     --net0 virtio,bridge={{ template.bridge }}
     --scsihw {{ template.scsihw }}
   when: "'status:' not in vm_status.stdout"
+  changed_when: true
 
 # Import disk
 - name: Read VM config
-  command: "qm config {{ template.id }}"
+  ansible.builtin.command: "qm config {{ template.id }}"
   register: vm_config
   changed_when: false
 
 - name: Import disk if missing
-  command: >
+  ansible.builtin.command: >
     qm importdisk {{ template.id }}
     {{ template.img_path }}
     {{ template.storage }}
   when: "'scsi0:' not in vm_config.stdout"
+  changed_when: true
 
 - name: Attach disk
-  command: >
+  ansible.builtin.command: >
     qm set {{ template.id }}
     --scsi0 {{ template.storage }}:vm-{{ template.id }}-disk-0
   when: "'scsi0:' not in vm_config.stdout"
+  changed_when: true
 
 # Enable Cloud-Init
 - name: Attach cloud-init drive
-  command: >
+  ansible.builtin.command: >
     qm set {{ template.id }} --ide2 {{ template.storage }}:cloudinit
   when: "'ide2:' not in vm_config.stdout"
+  changed_when: true
 
 # Enable guest agent + serial
 - name: Enable QEMU Guest Agent
-  command: "qm set {{ template.id }} --agent 1"
+  ansible.builtin.command: "qm set {{ template.id }} --agent 1"
   when: "'agent: 1' not in vm_config.stdout"
+  changed_when: true
 
 - name: Ensure serial console
-  command: "qm set {{ template.id }} --serial0 socket --vga serial0"
+  ansible.builtin.command: "qm set {{ template.id }} --serial0 socket --vga serial0"
+  changed_when: true
 
 # Set boot order
 - name: Ensure boot order
-  command: "qm set {{ template.id }} --boot order=scsi0"
+  ansible.builtin.command: "qm set {{ template.id }} --boot order=scsi0"
+  changed_when: true
 
 # Convert to template
 - name: Convert VM to template
-  command: "qm template {{ template.id }}"
+  ansible.builtin.command: "qm template {{ template.id }}"
   when: "'template:' not in vm_config.stdout"
+  changed_when: true

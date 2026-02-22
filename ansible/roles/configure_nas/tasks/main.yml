@@ -1,5 +1,5 @@
 - name: Install needed packages
-  apt:
+  ansible.builtin.apt:
     name:
       - samba
       - samba-client
@@ -7,17 +7,16 @@
       - acl
       - python3-pexpect
     state: present
-    update_cache: yes
 
 
 # Group creation
 - name: Create admin group
-  group:
+  ansible.builtin.group:
     name: "{{ nas_admin_group }}"
     state: present
 
 - name: Create domain groups
-  group:
+  ansible.builtin.group:
     name: "{{ item }}"
     state: present
   loop: "{{ nas_domain_groups }}"
@@ -25,7 +24,7 @@
 
 # Share folders creation
 - name: Create NAS mountpoint
-  file:
+  ansible.builtin.file:
     path: "{{ nas_root }}"
     state: directory
     owner: root
@@ -34,7 +33,7 @@
 
 # Mounts even after reboot
 - name: Mount storage disk
-  mount:
+  ansible.posix.mount:
     path: "{{ nas_root }}"
     src: UUID={{ storage_uuid }}
     fstype: ext4
@@ -42,18 +41,17 @@
     state: mounted
 
 - name: Create share directories
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     owner: root
     group: "{{ nas_admin_group }}"
     mode: "2770"
   loop: "{{ nas_shares }}"
-
  
 # Users creation
 - name: Create admin user
-  user:
+  ansible.builtin.user:
     name: "{{ nas_admin_user }}"
     group: "{{ nas_admin_group }}"
     shell: /bin/bash
@@ -67,11 +65,11 @@
   no_log: true
 
 - name: Create service users
-  user:
+  ansible.builtin.user:
     name: "{{ item.name }}"
     group: "{{ item.domain_group }}"
     shell: /usr/sbin/nologin
-    create_home: no
+    create_home: false
   loop: "{{ nas_services }}"
 
 - name: Set service users samba passwords
@@ -91,7 +89,7 @@
     entity: "{{ nas_admin_group }}"
     etype: group
     permissions: rwx
-    recursive: yes
+    recursive: true
     state: present
 
 - name: Default admin ACL
@@ -100,8 +98,8 @@
     entity: "{{ nas_admin_group }}"
     etype: group
     permissions: rwx
-    default: yes
-    recursive: yes
+    default: true
+    recursive: true
     state: present
 
 - name: Allow domain groups to traverse NAS root
@@ -129,7 +127,7 @@
     entity: "{{ item.domain_group }}"
     etype: group
     permissions: r-x
-    default: yes
+    default: true
     state: present
   loop: "{{ nas_shares }}"
   when: item.domain_group is defined
@@ -143,7 +141,8 @@
     state: started
 
 - name: Deploy Samba config
-  template:
+  ansible.builtin.template:
     src: smb.conf.j2
     dest: /etc/samba/smb.conf
+    mode: '0644'
   notify: restart samba

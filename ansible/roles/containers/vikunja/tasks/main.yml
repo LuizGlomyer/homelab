@@ -42,4 +42,3 @@
     env:
       VIKUNJA_SERVICE_PUBLICURL: "https://vikunja.glomyer.dev"
       VIKUNJA_CORS_ENABLE: "false"
-
