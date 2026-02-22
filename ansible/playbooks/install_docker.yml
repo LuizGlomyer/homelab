@@ -1,9 +1,0 @@
-- name: Install Docker
-  hosts: [ServicesHost]
-  become: true
-  roles:
-    - role: extract_metadata
-      tags: extract_metadata
-
-    - role: services/docker
-      tags: docker

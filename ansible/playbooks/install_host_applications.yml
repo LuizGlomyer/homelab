@@ -5,6 +5,9 @@
   roles:
     - role: extract_metadata
       tags: extract_metadata
+    
+    - role: services/docker
+      tags: docker
 
     - role: services/golang
       tags: golang
@@ -23,6 +26,9 @@
   roles:
     - role: extract_metadata
       tags: extract_metadata
+
+    - role: services/docker
+      tags: docker
 
     - role: services/golang
       tags: golang
