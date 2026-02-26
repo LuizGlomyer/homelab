@@ -52,6 +52,7 @@ ansible-playbook playbooks/main.yml \
 --vault-password-file group_vars/all/vault_pass.txt \
 --tags navidrome \ 
 --skip-tags apt,docker
+--limit RaspberryPi
 
 # Just copy your ssh key to the host, it's easier this way
 ssh-copy-id -i ~/.ssh/id_ed25519.pub root@192.168.0.99

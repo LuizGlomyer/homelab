@@ -4,7 +4,7 @@ One of my VMs is a dedicated NAS that exposes shares to the network via the SMB 
 
 ## New disk configuration
 
-A good approach would be to make a raw disk passthrough from Proxmox to the NAS VM. However, no Proxmox Terraform providers support this feature yet. Therefore, it needs to be done manually inside the Proxmox host, ssh into it and run the following commands:
+A good approach would be to make a raw disk passthrough from Proxmox to the NAS VM. However, no Proxmox Terraform providers support this feature yet. Therefore, it needs to be done manually inside the Proxmox host; ssh into it and run the following commands:
 
 ```bash
 # Useful to see all disks and their partitions in a organized way
@@ -59,4 +59,14 @@ sudo pdbedit -x glomyer
 sudo pdbedit -L
 # Check user groups
 id glomyer
+```
+
+### Connection logs on clients
+
+```bash
+sudo journalctl -b | grep -i cifs
+sudo journalctl -u remote-fs.target
+# Make your share (/mnt/music) follow this pattern in order to inspect it
+sudo systemctl status mnt-music.mount
+cat /etc/fstab
 ```

@@ -1,13 +1,13 @@
-- name: Set up containerized services
-  hosts: [ServicesHost]
+- name: Extract system metadata
+  hosts: [ServicesHost, RaspberryPi]
+  become: true
   roles:
     - role: extract_metadata
       tags: extract_metadata
-    
-    - role: smb_mounts
-      tags: smb_mounts
-      become: true
 
+- name: Set up containerized services
+  hosts: [ServicesHost]
+  roles:
     - role: containers/dashy
       tags: dashy
 
@@ -35,13 +35,9 @@
     - role: containers/vikunja
       tags: vikunja
 
-
 - name: Set up containerized services
   hosts: [RaspberryPi]
   roles:
-    - role: extract_metadata
-      tags: extract_metadata
-
     - role: containers/adguard_home
       tags: adguard_home
     

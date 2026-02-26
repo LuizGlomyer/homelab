@@ -4,3 +4,10 @@
   roles:
     - role: configure_nas
       tags: configure_nas
+
+- name: Configure SMB Share mounts
+  hosts: [ServicesHost]
+  become: true
+  roles:
+    - role: smb_mounts
+      tags: smb_mounts

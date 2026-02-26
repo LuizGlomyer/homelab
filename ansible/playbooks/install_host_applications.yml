@@ -1,11 +1,14 @@
-- name: Install host applications
-  hosts: [RaspberryPi]
-  tags: RaspberryPi
+- name: Extract system metadata
+  hosts: [RaspberryPi, ServicesHost]
   become: true
   roles:
     - role: extract_metadata
       tags: extract_metadata
-    
+
+- name: Install host applications
+  hosts: [RaspberryPi]
+  become: true
+  roles:    
     - role: services/docker
       tags: docker
 
@@ -21,12 +24,8 @@
 
 - name: Install host applications
   hosts: [ServicesHost]
-  tags: ServicesHost
   become: true
   roles:
-    - role: extract_metadata
-      tags: extract_metadata
-
     - role: services/docker
       tags: docker
 

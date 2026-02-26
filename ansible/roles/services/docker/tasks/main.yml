@@ -62,6 +62,22 @@
     state: present
     update_cache: true
 
+- name: Create Docker systemd override directory
+  ansible.builtin.file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+    mode: '0755'
+
+- name: Ensure Docker waits for remote filesystems
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/docker.service.d/override.conf
+    mode: '0644'
+    content: |
+      [Unit]
+      After=network-online.target remote-fs.target
+      Wants=network-online.target
+  notify: Restart Docker
+
 - name: Ensure Docker service is enabled and started
   ansible.builtin.service:
     name: docker
