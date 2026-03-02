@@ -10,24 +10,17 @@ nas_domain_groups:
   - media_music_ro
   - media_videos_ro
 
-nas_services:
-  - name: navidrome
-    password: "{{ vault_nas_navidrome_password }}"
-    share: music
-    domain_group: media_music_ro
-
-  - name: jellyfin
-    password: "{{ vault_nas_jellyfin_password }}"
-    share: videos
-    domain_group: media_videos_ro
-
 nas_shares:
   - name: music
     path: "{{ nas_root }}/music"
+    service_user: navidrome
+    service_password: "{{ vault_nas_navidrome_password }}"
     domain_group: media_music_ro
     read_only: true
 
   - name: videos
     path: "{{ nas_root }}/videos"
+    service_user: jellyfin
+    service_password: "{{ vault_nas_jellyfin_password }}"
     domain_group: media_videos_ro
     read_only: true

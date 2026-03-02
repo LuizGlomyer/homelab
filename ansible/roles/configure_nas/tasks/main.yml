@@ -66,19 +66,19 @@
 
 - name: Create service users
   ansible.builtin.user:
-    name: "{{ item.name }}"
+    name: "{{ item.service_user }}"
     group: "{{ item.domain_group }}"
     shell: /usr/sbin/nologin
     create_home: false
-  loop: "{{ nas_services }}"
+  loop: "{{ nas_shares }}"
 
 - name: Set service users samba passwords
   ansible.builtin.expect:
-    command: smbpasswd -a {{ item.name }}
+    command: smbpasswd -a {{ item.service_user }}
     responses:
-      New SMB password: "{{ item.password }}"
-      Retype new SMB password: "{{ item.password }}"
-  loop: "{{ nas_services }}"
+      New SMB password: "{{ item.service_password }}"
+      Retype new SMB password: "{{ item.service_password }}"
+  loop: "{{ nas_shares }}"
   no_log: true
 
 
@@ -145,4 +145,4 @@
     src: smb.conf.j2
     dest: /etc/samba/smb.conf
     mode: '0644'
-  notify: restart samba
+  notify: Restart samba
