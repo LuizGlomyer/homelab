@@ -41,6 +41,10 @@ Now we can run the [configure_nas](/ansible/roles/configure_nas/tasks/main.yml) 
 ```bash
 # Test your connection with a valid user
 smbclient -U glomyer //192.168.0.201/storage
+# See logs from the client connection
+sudo tail -f /var/log/samba/log.b550m
+# Debug filesystem traversal permissions
+sudo -u metube namei -l /mnt/storage/shared/metube
 
 # Also, the disk structure is something like this:
 ansible@nas-01:~$ sudo tree /mnt/storage/ -d -L 1

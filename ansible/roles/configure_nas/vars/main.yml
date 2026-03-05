@@ -6,9 +6,7 @@ nas_admin_group: nas_admins
 nas_storage_share: storage
 
 # Domain groups
-nas_domain_groups:
-  - media_music_ro
-  - media_videos_ro
+nas_domain_groups: "{{ nas_shares | map(attribute='domain_group') | list | unique }}"
 
 nas_shares:
   - name: music
@@ -24,3 +22,10 @@ nas_shares:
     service_password: "{{ vault_nas_jellyfin_password }}"
     domain_group: media_videos_ro
     read_only: true
+  
+  - name: metube
+    path: "{{ nas_root }}/shared/metube"
+    service_user: metube
+    service_password: "{{ vault_nas_metube_password }}"
+    domain_group: media_shared_metube_rw
+    read_only: false

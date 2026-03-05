@@ -2,6 +2,7 @@
 vault_nas_admin_password: "your_credentials"
 vault_nas_navidrome_password: "your_credentials"
 vault_nas_jellyfin_password: "your_credentials"
+vault_nas_metube_password: "your_credentials"
 
 
 # Services credentials and secrets

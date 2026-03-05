@@ -44,8 +44,8 @@
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
-    owner: root
-    group: "{{ nas_admin_group }}"
+    owner: "{{ item.service_user }}"
+    group: "{{ item.domain_group | default(nas_admin_group) }}"
     mode: "2770"
   loop: "{{ nas_shares }}"
  
@@ -68,6 +68,8 @@
   ansible.builtin.user:
     name: "{{ item.service_user }}"
     group: "{{ item.domain_group }}"
+    groups: "{{ item.domain_group }}"
+    append: true
     shell: /usr/sbin/nologin
     create_home: false
   loop: "{{ nas_shares }}"
@@ -102,21 +104,31 @@
     recursive: true
     state: present
 
-- name: Allow domain groups to traverse NAS root
+# - name: Allow domain groups to traverse NAS root
+#   ansible.posix.acl:
+#     path: "{{ nas_root }}"
+#     entity: "{{ item }}"
+#     etype: group
+#     permissions: --x
+#     state: present
+#   loop: "{{ nas_domain_groups }}"
+
+- name: Allow domain groups to traverse shared directories
   ansible.posix.acl:
-    path: "{{ nas_root }}"
-    entity: "{{ item }}"
+    path: "{{ item.path | dirname }}"
+    entity: "{{ item.domain_group }}"
     etype: group
     permissions: --x
     state: present
-  loop: "{{ nas_domain_groups }}"
+  loop: "{{ nas_shares }}"
+  when: item.domain_group is defined
 
-- name: Grant domain group read access
+- name: Grant domain group access
   ansible.posix.acl:
     path: "{{ item.path }}"
     entity: "{{ item.domain_group }}"
     etype: group
-    permissions: r-x
+    permissions: "{{ 'r-x' if item.read_only else 'rwx' }}"
     state: present
   loop: "{{ nas_shares }}"
   when: item.domain_group is defined
@@ -126,7 +138,7 @@
     path: "{{ item.path }}"
     entity: "{{ item.domain_group }}"
     etype: group
-    permissions: r-x
+    permissions: "{{ 'r-x' if item.read_only else 'rwx' }}"
     default: true
     state: present
   loop: "{{ nas_shares }}"

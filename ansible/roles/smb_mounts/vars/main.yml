@@ -12,3 +12,9 @@ smb_mounts:
     mount_point: /mnt/videos
     username: jellyfin
     password: "{{ vault_nas_jellyfin_password }}"
+  
+  - name: metube
+    remote_share: metube
+    mount_point: /mnt/shared/metube
+    username: metube
+    password: "{{ vault_nas_metube_password }}"
