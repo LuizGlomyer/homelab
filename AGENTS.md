@@ -4,31 +4,80 @@ This document provides context rules and patterns for working with this homelab 
 
 ## Repository Overview
 
-This is an Ansible-based homelab setup for a Raspberry Pi 4 server running Raspberry Pi OS (Debian-based, ARM64). The repository manages both containerized services and host-level services using Infrastructure as Code principles.
+This is an Infrastructure as Code homelab setup managing a multi-host environment using Terraform for VM provisioning and Ansible for configuration management. The infrastructure includes:
+- **Raspberry Pi 4**: Running Raspberry Pi OS (Debian-based, ARM64) for host applications
+- **Proxmox Host**: Physical i5-based server running Proxmox virtualization platform
+- **Debian VMs**: Multiple Debian 12 (Bookworm) virtual machines provisioned via Terraform for containerized services and NAS functionality
+
+The repository manages both containerized services and host-level services using Infrastructure as Code principles.
 
 ## Directory Structure and Organization Patterns
 
 ### Standard Directory Layout
 ```
 homelab/
-├── ansible.cfg                    # Ansible configuration
-├── inventory.ini                  # Host inventory (single host: raspberrypi.local)
-├── group_vars/all/                # Global variables and secrets
-│   ├── main.yml                   # Non-sensitive global variables
-│   ├── vault.yml.example          # Vault secrets template
-│   └── vault_pass.txt.example     # Vault password template
-├── playbooks/                     # Ansible playbooks
-│   └── main.yml                   # Main playbook orchestrating all roles
-├── roles/                         # Service-specific Ansible roles
-│   ├── common/                    # Base system setup (Docker, packages)
-│   ├── {service_name}/            # Individual service roles
-│   │   ├── tasks/main.yml         # Main task file
-│   │   ├── vars/main.yml          # Service-specific variables
-│   │   ├── templates/             # Jinja2 templates (optional)
-│   │   └── files/                 # Static files (optional)
+├── AGENTS.md                      # Context rules and patterns for this repository
+├── README.md                      # Main documentation and service overview
+├── ansible/                       # Ansible automation
+│   ├── ansible.cfg                # Ansible configuration
+│   ├── inventory.ini              # Host inventory (RaspberryPi, ProxmoxHost, VMs, ServicesHost, NasHost groups)
+│   ├── group_vars/all/            # Global variables and secrets
+│   │   ├── main.yml               # Global variables (ports, host IPs, vault references)
+│   │   ├── vault.yml              # Encrypted secrets (vault references)
+│   │   ├── vault.yml.example      # Vault secrets template
+│   │   └── vault_pass.txt         # Vault password (gitignored)
+│   ├── playbooks/                 # Ansible playbooks (focused, task-specific)
+│   │   ├── install_host_applications.yml  # Install services on RaspberryPi and ProxmoxHost
+│   │   ├── start_containers.yml           # Deploy containerized services on ServicesHost
+│   │   ├── configure_nas.yml              # Configure NasHost Samba setup
+│   │   ├── create_proxmox_templates.yml   # Create VM templates for Terraform
+│   │   ├── update_packages.yml            # Update packages across hosts
+│   │   └── smb_mounts.yml                 # Mount SMB shares on hosts
+│   └── roles/                     # Service-specific Ansible roles
+│       ├── services/              # System services (installed on host)
+│       │   ├── caddy/             # Reverse proxy and CA
+│       │   ├── docker/            # Docker installation
+│       │   ├── golang/            # Go compiler (for Caddy builds)
+│       │   └── olivetin/          # Shell command GUI
+│       ├── containers/            # Containerized services (run in Docker)
+│       │   ├── adguard_home/
+│       │   ├── dashy/
+│       │   ├── file_browser/
+│       │   ├── glances/
+│       │   ├── metube/
+│       │   ├── navidrome/
+│       │   ├── pihole/
+│       │   ├── portainer/
+│       │   ├── stirling_pdf/
+│       │   ├── uptime_kuma/
+│       │   ├── vaultwarden/
+│       │   └── vikunja/
+│       ├── configure_nas/         # NAS-specific configuration (Samba)
+│       ├── extract_metadata/      # Extract system facts for use in playbooks
+│       ├── proxmox_template/      # Create Proxmox templates for VMs
+│       ├── smb_mounts/            # Mount SMB shares on hosts
+│       └── update_packages/       # Package update automation
+├── terraform/                     # Infrastructure provisioning
+│   ├── cloud-init/
+│   │   └── debian.yaml.tpl        # Cloud-init template for VM initialization (hostname, user, SSH key)
+│   └── environments/homelab/      # Terraform configuration for homelab VMs
+│       ├── main.tf                # VM definitions (centralized map for scalable deployments)
+│       ├── providers.tf           # Provider configuration (Proxmox API)
+│       ├── variables.tf           # Variable definitions
+│       └── terraform.tfvars       # Terraform variable values
 └── docs/                          # Service documentation
-    ├── {service-name}.md          # Per-service documentation
-    └── images/                    # Documentation images
+    ├── ansible.md                 # Ansible setup and usage
+    ├── terraform.md               # Terraform setup and usage
+    ├── proxmox.md                 # Proxmox configuration
+    ├── containers/                # Container service documentation
+    │   ├── adguard-home.md
+    │   ├── dashy.md
+    │   ├── ... (other containers)
+    └── services/                  # Host service documentation
+        ├── caddy.md
+        ├── docker.md
+        ├── olivetin.md
+        └── samba.md
 ```
 
 ### Role Structure Pattern
@@ -41,10 +90,16 @@ Each service follows a consistent role structure:
 ## Ansible Patterns and Conventions
 
 ### Playbook Organization
-- **Two-phase deployment**: System setup (common, caddy, olivetin) vs containerized services
+- **Multiple playbooks**: Task-specific playbooks organized by purpose rather than a monolithic main.yml
+  - **install_host_applications.yml**: System-level services (Docker, Caddy, OliveTin, Golang) on RaspberryPi and ServicesHost
+  - **start_containers.yml**: Containerized services deployment on ServicesHost
+  - **configure_nas.yml**: NAS-specific configuration (Samba) on NasHost
+  - **create_proxmox_templates.yml**: VM template creation on ProxmoxHost
+  - **update_packages.yml**: Package updates across all hosts
+- **Multi-host targeting**: Playbooks target specific host groups (RaspberryPi, ServicesHost, NasHost, ProxmoxHost)
 - **Role tagging**: Each role tagged with its own name for selective execution
-- **Host targeting**: All roles target the `servers` group
 - **Privilege escalation**: System roles use `become: true`, container roles rely on Docker group membership
+- **Metadata extraction**: `extract_metadata` role runs on all hosts to gather system facts
 
 ### Task Naming and Structure
 - Descriptive task names following the pattern: "Action + Object + Context"
@@ -53,8 +108,7 @@ Each service follows a consistent role structure:
 
 ### Variable Management Patterns
 - **Global variables**: Defined in `group_vars/all/main.yml`
-- **Service ports**: Centrally managed with pattern `{service}_web_port`
-- **Secrets**: Referenced via vault variables with pattern `vault_{secret_name}`
+- **Service ports**: Centrally managed with pattern `{service}_web_port`- **Host IPs**: Defined as variables (e.g., `raspberry_host_ip`, `services_host_ip`, `nas_host_ip`)- **Secrets**: Referenced via vault variables with pattern `vault_{secret_name}`
 - **Service-specific vars**: Defined in each role's `vars/main.yml`
 
 ### Common Variable Patterns
@@ -188,14 +242,26 @@ All other services run in Docker containers with consistent patterns:
 
 ### Ansible Execution Patterns
 ```bash
-# Full deployment
-ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt
+# Install host applications (Caddy, Docker, OliveTin on RaspberryPi and ServicesHost)
+ansible-playbook playbooks/install_host_applications.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt
 
-# Service-specific deployment
-ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt --tags {service_name}
+# Deploy containerized services (on ServicesHost)
+ansible-playbook playbooks/start_containers.yml --user ansible --ask-pass --vault-password-file group_vars/all/vault_pass.txt
 
-# Skip common dependencies
-ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt --tags {service_name} --skip-tags apt,docker
+# Configure NAS (on NasHost)
+ansible-playbook playbooks/configure_nas.yml --user ansible --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt
+
+# Create Proxmox templates (on ProxmoxHost)
+ansible-playbook playbooks/create_proxmox_templates.yml --user root --ask-pass --vault-password-file group_vars/all/vault_pass.txt
+
+# Update packages across all hosts
+ansible-playbook playbooks/update_packages.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt
+
+# Service-specific deployment (single service across relevant hosts)
+ansible-playbook playbooks/start_containers.yml --user ansible --ask-pass --vault-password-file group_vars/all/vault_pass.txt --tags {service_name}
+
+# Skip common dependencies (Docker, packages)
+ansible-playbook playbooks/start_containers.yml --user ansible --ask-pass --vault-password-file group_vars/all/vault_pass.txt --tags {service_name} --skip-tags docker
 ```
 
 ### Tag Strategy
@@ -209,11 +275,16 @@ ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vau
 - **Architecture detection**: Common role detects and maps architecture
 - **ARM-specific binaries**: URLs and packages selected for ARM64
 - **Debian-based utilities**: APT package management, systemd services
+- **Resource constraints**: Limited CPU and memory for host services
 
-### Resource Constraints
-- **Single-host deployment**: All services on one Raspberry Pi 4
-- **Port management**: Careful allocation to avoid conflicts
-- **Volume optimization**: Efficient use of SD card storage
+### Multi-Host Architecture
+- **Distributed deployment**: Services split across multiple hosts based on resource needs
+  - **RaspberryPi**: Host services (Caddy, OliveTin) and metadata extraction; lightweight, low-power always-on
+  - **ServicesHost VM**: Containerized services (Dashy, Navidrome, media services, etc.); higher resource allocation
+  - **NasHost VM**: NAS functionality with Samba; dedicated for file storage and sharing
+  - **ProxmoxHost**: Host-level only; manages the hypervisor and VM templates
+- **Network integration**: All hosts communicate over 192.168.x.x network; centralized reverse proxy on RaspberryPi
+- **Inventory-driven**: Ansible groups define which services run on which hosts
 
 ## Best Practices Established
 
@@ -237,15 +308,21 @@ ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vau
 When adding new services to this homelab:
 
 1. **Follow role structure**: Create standard directories (tasks, vars, optionally templates/files)
-2. **Add port allocation**: Define `{service}_web_port` in `group_vars/all/main.yml`
-3. **Update main playbook**: Add role with appropriate tags to `playbooks/main.yml`
-4. **Configure reverse proxy**: Add service to `caddy_services` list in Caddy vars
-5. **Create documentation**: Add `docs/{service-name}.md` with service details
-6. **Update README**: Add service entry to the main services table
-7. **Update Dashy homepage**: Add service entries to both HTTPS and local HTTP sections in `roles/dashy/files/dashy_conf.yml`
-8. **Redeploy Caddy and Dashy**: After adding a new service, redeploy Caddy and Dashy to update their configurations:
+2. **Determine service category**: 
+   - Container services go in `roles/containers/{service_name}/`
+   - Host-level services go in `roles/services/{service_name}/`
+3. **Add port allocation**: Define `{service}_web_port` in `group_vars/all/main.yml`
+4. **Add to appropriate playbook**: 
+   - Container services: Add role to `playbooks/start_containers.yml`
+   - Host services: Add role to `playbooks/install_host_applications.yml`
+5. **Configure reverse proxy**: Add service to `caddy_services` list in Caddy vars (if exposing via domain)
+6. **Create documentation**: Add `docs/{service-name}.md` with service details
+7. **Update README**: Add service entry to the main services table
+8. **Update Dashy homepage**: Add service entries to both HTTPS and local HTTP sections in `roles/dashy/files/dashy_conf.yml`
+9. **Redeploy Caddy and Dashy**: After adding a new service, redeploy Caddy and Dashy to update their configurations:
    ```bash
-   ansible-playbook playbooks/main.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt --tags caddy,dashy
+   ansible-playbook playbooks/install_host_applications.yml --user pi --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt --tags caddy
+   ansible-playbook playbooks/start_containers.yml --user ansible --ask-pass --vault-password-file group_vars/all/vault_pass.txt --tags dashy
    ```
 
 This ensures consistency with established patterns and maintains the cohesive architecture of the homelab setup.
