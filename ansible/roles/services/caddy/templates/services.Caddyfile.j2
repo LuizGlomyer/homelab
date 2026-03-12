@@ -21,6 +21,11 @@ glances.internal.glomyer.dev {
   reverse_proxy localhost:{{ glances_web_port }}
 }
 
+jellyfin.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ jellyfin_web_port }}
+}
+
 navidrome.internal.glomyer.dev {
   import tls-mtls
   reverse_proxy localhost:{{ navidrome_web_port }}

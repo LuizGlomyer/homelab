@@ -1,0 +1,6 @@
+jellyfin_image: jellyfin/jellyfin:latest
+jellyfin_container_name: jellyfin
+
+jellyfin_data_dir: /opt/jellyfin/data
+jellyfin_cache_dir: /opt/jellyfin/cache
+jellyfin_media_dir: /mnt/videos

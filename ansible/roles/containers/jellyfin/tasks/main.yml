@@ -1,0 +1,35 @@
+- name: Ensure Jellyfin data directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ jellyfin_data_dir }}"
+    state: directory
+    owner: "{{ user_uid }}"
+    group: "{{ user_gid }}"
+    mode: '0755'
+
+- name: Ensure Jellyfin cache directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ jellyfin_cache_dir }}"
+    state: directory
+    owner: "{{ user_uid }}"
+    group: "{{ user_gid }}"
+    mode: '0755'
+
+- name: Run Jellyfin container
+  community.docker.docker_container:
+    name: "{{ jellyfin_container_name }}"
+    image: "{{ jellyfin_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    published_ports:
+      - "{{ jellyfin_web_port }}:8096"
+    user: "{{ user_uid }}:{{ user_gid }}"
+    volumes:
+      - "{{ jellyfin_data_dir }}:/config"
+      - "{{ jellyfin_cache_dir }}:/cache"
+      - "{{ jellyfin_media_dir }}:/media:ro"
+    env:
+      TZ: "UTC"
+      JELLYFIN_PublishedServerUrl: "https://jellyfin.glomyer.dev"

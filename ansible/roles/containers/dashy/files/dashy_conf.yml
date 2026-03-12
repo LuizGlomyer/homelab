@@ -117,33 +117,40 @@ sections:
         target: newtab
         id: 6_1392_dashy
       - &ref_7
+        title: Jellyfin
+        description: free media server
+        icon: hl-jellyfin
+        url: https://jellyfin.glomyer.dev
+        target: newtab
+        id: 7_1392_jellyfin
+      - &ref_8
         title: Navidrome
         description: music server
         icon: hl-navidrome
         url: https://navidrome.glomyer.dev
         target: newtab
-        id: 7_1392_navidrome
-      - &ref_8
+        id: 8_1392_navidrome
+      - &ref_9
         title: AdGuard Home
         description: ad blocker and DNS server
         icon: hl-adguard-home
         url: https://adguard.glomyer.dev
         target: newtab
-        id: 8_1392_adguardhome
-      - &ref_9
+        id: 9_1392_adguardhome
+      - &ref_10
         title: File Browser
         description: upload and download
         icon: hl-filebrowser
         url: https://file-browser.glomyer.dev
         target: newtab
-        id: 9_1392_filebrowser
-      - &ref_10
+        id: 10_1392_filebrowser
+      - &ref_11
         title: Vikunja
         description: to-do list and project management
         icon: hl-vikunja
         url: https://vikunja.glomyer.dev
         target: newtab
-        id: 10_1392_vikunja
+        id: 11_1392_vikunja
     filteredItems:
       - *ref_0
       - *ref_1
@@ -156,6 +163,7 @@ sections:
       - *ref_8
       - *ref_9
       - *ref_10
+      - *ref_11
   - name: Local certificate
     icon: fas fa-certificate
     displayData:
@@ -165,7 +173,7 @@ sections:
       collapsed: false
       hideForGuests: false
     items:
-      - &ref_11
+      - &ref_12
         title: Caddy certificate
         description: install to enable HTTPS
         icon: hl-caddy
@@ -173,7 +181,7 @@ sections:
         target: sametab
         id: 0_1678_caddycertificate
     filteredItems:
-      - *ref_11
+      - *ref_12
   - name: Apps (local HTTP)
     icon: fas fa-network-wired
     displayData:
@@ -183,28 +191,28 @@ sections:
       collapsed: true
       hideForGuests: false
     items:
-      - &ref_12
+      - &ref_13
         title: File Browser
         description: upload and download
         icon: hl-filebrowser
         url: http://raspberrypi.local:4000
         target: newtab
         id: 0_1649_filebrowser
-      - &ref_13
+      - &ref_14
         title: MeTube
         description: download videos with yt-dlp
         icon: hl-metube
         url: http://raspberrypi.local:8081
         target: newtab
         id: 1_1649_metube
-      - &ref_14
+      - &ref_15
         title: OliveTin
         description: run shell commands
         icon: hl-olivetin
         url: http://raspberrypi.local:1337
         target: newtab
         id: 2_1649_olivetin
-      - &ref_15
+      - &ref_16
         title: Portainer
         description: container manager
         icon: hl-portainer
@@ -213,7 +221,7 @@ sections:
         tags:
           - network
         id: 3_1649_portainer
-      - &ref_16
+      - &ref_17
         title: Uptime Kuma
         description: services monitor
         icon: hl-uptime-kuma
@@ -222,50 +230,56 @@ sections:
         tags:
           - network
         id: 4_1649_uptimekuma
-      - &ref_17
+      - &ref_18
         title: Glances
         description: system processes & device status
         icon: hl-glances
         url: http://raspberrypi.local:61208
         target: newtab
         id: 5_1649_glances
-      - &ref_18
+      - &ref_19
         title: Stirling PDF
         description: pdf operations
         icon: hl-stirling-pdf
         url: http://raspberrypi.local:7000
         target: newtab
         id: 6_1649_stirlingpdf
-      - &ref_19
+      - &ref_20
         title: Dashy
         description: homepage
         icon: hl-dashy
         url: http://raspberrypi.local:9080
         target: newtab
         id: 7_1649_dashy
-      - &ref_20
+      - &ref_21
+        title: Jellyfin
+        description: free media server
+        icon: hl-jellyfin
+        url: http://raspberrypi.local:8096
+        target: newtab
+        id: 8_1649_jellyfin
+      - &ref_22
         title: Navidrome
         description: music server
         icon: hl-navidrome
         url: http://raspberrypi.local:9700
         target: newtab
-        id: 8_1649_navidrome
-      - &ref_21
+        id: 9_1649_navidrome
+      - &ref_23
         title: AdGuard Home
         description: ad blocker and DNS server
         icon: hl-adguard-home
         url: http://raspberrypi.local:3000
         target: newtab
-        id: 9_1649_adguardhome
-      - &ref_22
+        id: 10_1649_adguardhome
+      - &ref_24
         title: Vikunja
         description: to-do list and project management
         icon: hl-vikunja
         url: http://raspberrypi.local:3456
         target: newtab
-        id: 10_1649_vikunja
+        id: 11_1649_vikunja
     filteredItems:
-      - *ref_12
       - *ref_13
       - *ref_14
       - *ref_15
@@ -276,3 +290,5 @@ sections:
       - *ref_20
       - *ref_21
       - *ref_22
+      - *ref_23
+      - *ref_24

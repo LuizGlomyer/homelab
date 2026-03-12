@@ -14,6 +14,9 @@
     - role: containers/glances
       tags: glances
 
+    - role: containers/jellyfin
+      tags: jellyfin
+
     - role: containers/metube
       tags: metube
 

@@ -6,6 +6,7 @@ adguard_home_web_port: 3000
 dashy_web_port: 9080
 file_browser_web_port: 4000
 glances_web_port: 61208
+jellyfin_web_port: 8096
 metube_web_port: 8081
 navidrome_web_port: 9700
 olivetin_port: 1337 # This port is fixed/non-dynamic

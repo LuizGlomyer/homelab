@@ -30,6 +30,7 @@ The dashboard is automatically deployed via Ansible and includes links to all co
 | [Dashy](/docs/containers/dashy.md)                | Webpage for quick access to the network services  | Container |
 | [File Browser](/docs/containers/file-browser.md)  | Storage access from the browser                   | Container |
 | [Glances](/docs/containers/glances.md)            | System processes & device status monitor          | Container |
+| [Jellyfin](/docs/containers/jellyfin.md)          | Free entertainment system and media server        | Container |
 | [Navidrome](/docs/containers/navidrome.md)        | Powerful music stream server                      | Container |
 | [MeTube](/docs/containers/metube.md)              | GUI for downloading videos with yt-dlp            | Container |
 | [OliveTin](/docs/services/olivetin.md)            | GUI for running shell commands                    | Host      |
