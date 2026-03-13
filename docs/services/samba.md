@@ -39,14 +39,17 @@ sudo blkid /dev/sdb1
 Now we can run the [configure_nas](/ansible/roles/configure_nas/tasks/main.yml) Ansible role to continue. First, we need to set the variables, specially `storage_uuid`, which is the ID that comes from blkid. Passwords for the Samba users should be on the Ansible Vault as well. All shares are folders that have its own permissions, the exception being storage which is a share of the root of the disk accessible only to an admin user.
 
 ```bash
-# Test your connection with a valid user
+# [Client] Test your connection with a valid user
 smbclient -U glomyer //192.168.0.201/storage
-# See logs from the client connection
+# [Client] See mounted drives on the client
+sudo mount -t cifs | grep mnt
+# [NAS] See logs from the client connection
 sudo tail -f /var/log/samba/log.b550m
-# Debug filesystem traversal permissions
+# [NAS] Debug filesystem traversal permissions
 sudo -u metube namei -l /mnt/storage/shared/metube
-
-# Also, the disk structure is something like this:
+# [NAS] Debug ACL permissions
+sudo getfacl /mnt/storage/videos/
+# [NAS] Also, the disk structure is something like this:
 ansible@nas-01:~$ sudo tree /mnt/storage/ -d -L 1
 /mnt/storage/
 ├── music
