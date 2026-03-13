@@ -76,7 +76,7 @@
     owner: root
     group: root
     mode: '0644'
-  
+
 - name: Validate Caddy configuration
   ansible.builtin.command: caddy validate --config /etc/caddy/Caddyfile
   register: caddy_validate

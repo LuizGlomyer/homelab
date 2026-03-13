@@ -14,7 +14,7 @@ You might need some other software on your controller node (your machine):
 - [Ansible-lint](https://ansible.readthedocs.io/projects/lint/installing/#installing-the-latest-version)
 
 
-# Ansible vault
+## Ansible vault
 
 Secrets are managed by Ansible vault. Here's how to set it up:
 
@@ -33,7 +33,7 @@ ansible-vault decrypt group_vars/all/vault.yml \
 ``` 
 
 
-# Running the playbooks
+## Running the playbooks
 
 There are multiple Ansible roles, one for each service or specific configuration. One of them is named [extract_metadata](/roles/extract_metadata/tasks/main.yml), it lays the groundwork for setting up some needed variables, thus helping other roles. For simplicity containerized roles don't depend on Docker in their task files, so you must run the docker role at least once to ensure that Docker is properly installed. Generally, each role can be ran individually by using tags (configured as their own name).
 
@@ -65,6 +65,21 @@ Some playbooks may set up things that are later used by other playbooks. Therefo
 - start_containers
 - Any other playbooks
 
+## Ansible-lint
+
+[Ansible-lint](https://ansible.readthedocs.io/projects/lint/) is a command-line tool that checks Ansible playbooks and roles for best practices and potential errors. It analyzes YAML syntax, playbook structure, and enforces coding standards to improve code quality and maintainability.
+
+This repository includes an [.ansible-lint](/.ansible-lint) configuration file that customizes which linting rules are enforced. Some rules are intentionally disabled to accommodate the patterns and conventions used in this homelab:
+
+- **role-name**: Allows roles to use paths when importing (e.g., `services/docker`, `containers/navidrome`) rather than requiring flat role names
+- **var-naming[no-role-prefix]**: Disables the requirement for all variables within roles to have role-prefixed names. Some roles like Caddy use non-prefixed variables for clarity
+- **yaml[line-length]**: Ignores long lines (> 160 characters). Useful for commands that can't be split into multiple lines, such as [opts from ansible.posix.mount](/ansible/roles/smb_mounts/tasks/main.yml)
+
+To run Ansible-lint, go to the ansible folder and execute:
+
+```bash
+ansible-lint
+```
 
 # Useful links
 

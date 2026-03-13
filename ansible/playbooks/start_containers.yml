@@ -46,7 +46,7 @@
   roles:
     - role: containers/adguard_home
       tags: adguard_home
-    
+
     - role: containers/diun
       tags: diun
 

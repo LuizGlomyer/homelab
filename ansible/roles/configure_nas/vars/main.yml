@@ -22,7 +22,7 @@ nas_shares:
     service_password: "{{ vault_nas_jellyfin_password }}"
     domain_group: media_videos_ro
     read_only: true
-  
+
   - name: metube
     path: "{{ nas_root }}/shared/metube"
     service_user: metube

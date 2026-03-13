@@ -1,4 +1,4 @@
 skip_list:
   - role-name # Avoid using paths when importing roles. (services/docker)
   - var-naming[no-role-prefix] # Variables names from within roles should use caddy_ as a prefix
-  - yaml[trailing-spaces]
+  - yaml[line-length]

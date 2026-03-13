@@ -8,7 +8,7 @@
 - name: Install host applications
   hosts: [RaspberryPi]
   become: true
-  roles:    
+  roles:
     - role: services/docker
       tags: docker
 

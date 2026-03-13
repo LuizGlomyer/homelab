@@ -48,7 +48,7 @@
     group: "{{ item.domain_group | default(nas_admin_group) }}"
     mode: "2770"
   loop: "{{ nas_shares }}"
- 
+
 # Users creation
 - name: Create admin user
   ansible.builtin.user:
