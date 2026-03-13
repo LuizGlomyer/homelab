@@ -135,7 +135,7 @@ All containerized services follow this pattern:
     name: "{{ {service}_container_name }}"
     image: "{{ {service}_image }}"
     state: started
-    restart_policy: unless-stopped  # or 'always'
+    restart_policy: unless-stopped
     container_default_behavior: compatibility
     published_ports:
       - "{{ {service}_web_port }}:{internal_port}"

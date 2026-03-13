@@ -7,7 +7,7 @@
     name: "{{ uptime_kuma_container_name }}"
     image: "{{ uptime_kuma_image }}"
     state: started
-    restart_policy: always
+    restart_policy: unless-stopped
     ports:
       - "{{ uptime_kuma_web_port }}:3001"
     volumes:

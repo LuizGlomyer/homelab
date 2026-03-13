@@ -1,2 +1,2 @@
 glances_container_name: glances
-glances_image: nicolargo/glances:latest
+glances_image: nicolargo/glances:4.5.1

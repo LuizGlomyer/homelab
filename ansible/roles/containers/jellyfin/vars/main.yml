@@ -1,4 +1,4 @@
-jellyfin_image: jellyfin/jellyfin:latest
+jellyfin_image: jellyfin/jellyfin:2026030905
 jellyfin_container_name: jellyfin
 
 jellyfin_data_dir: /opt/jellyfin/data

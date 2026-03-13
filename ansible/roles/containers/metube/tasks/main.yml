@@ -10,7 +10,7 @@
     name: "{{ metube_container_name }}"
     image: "{{ metube_image }}"
     state: started
-    restart_policy: always
+    restart_policy: unless-stopped
     ports:
       - "{{ metube_web_port }}:8081"
     volumes:

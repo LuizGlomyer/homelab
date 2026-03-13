@@ -29,7 +29,7 @@
     image: "{{ dashy_image }}"
     state: started
     restart: true
-    restart_policy: always
+    restart_policy: unless-stopped
     ports:
       - "{{ dashy_web_port }}:8080"
     volumes:

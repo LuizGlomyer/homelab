@@ -3,7 +3,7 @@
     name: "{{ glances_container_name }}"
     image: "{{ glances_image }}"
     state: started
-    restart_policy: always
+    restart_policy: unless-stopped
     command: glances -w
     ports:
       - "{{ glances_web_port }}:61208"

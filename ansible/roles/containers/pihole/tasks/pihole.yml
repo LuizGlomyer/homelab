@@ -7,7 +7,7 @@
     name: "{{ pihole_container_name }}"
     image: "{{ pihole_image }}"
     state: stopped
-    restart_policy: always
+    restart_policy: unless-stopped
     container_default_behavior: compatibility
     network_mode: host
     # ports:

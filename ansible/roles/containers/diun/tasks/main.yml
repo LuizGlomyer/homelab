@@ -10,7 +10,7 @@
     name: "{{ diun_container_name }}"
     image: "{{ diun_image }}"
     state: started
-    restart_policy: always
+    restart_policy: unless-stopped
     command: serve
     container_default_behavior: compatibility
     volumes:
