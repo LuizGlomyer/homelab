@@ -1,0 +1,36 @@
+- name: Ensure Diun data directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ diun_data_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Run Diun container
+  community.docker.docker_container:
+    name: "{{ diun_container_name }}"
+    image: "{{ diun_image }}"
+    state: started
+    restart_policy: always
+    command: serve
+    container_default_behavior: compatibility
+    volumes:
+      - "{{ diun_data_dir }}:/data"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    env:
+      TZ: "UTC"
+      DIUN_WATCH_WORKERS: "20"
+      DIUN_WATCH_SCHEDULE: "0 */6 * * *"
+      DIUN_WATCH_JITTER: "30s"
+      DIUN_PROVIDERS_DOCKER: "true"
+      # Monitors all containers by default, set to false to only monitor those with label diun.watch=true
+      DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT: "true"
+      # Telegram notifications
+      DIUN_NOTIF_TELEGRAM_TOKEN: "{{ vault_diun_telegram_token }}"
+      DIUN_NOTIF_TELEGRAM_CHATIDS: "{{ vault_diun_telegram_chat_ids }}"
+      # Discord notifications
+      DIUN_NOTIF_DISCORD_WEBHOOKURL: "{{ vault_diun_discord_webhook_url }}"
+      DIUN_NOTIF_DISCORD_RENDEREMBEDS: "true"
+      DIUN_NOTIF_DISCORD_RENDERFIELDS: "true"
+      DIUN_LOG_LEVEL: "debug"
+    labels:
+      diun.enable: "true"

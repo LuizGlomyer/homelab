@@ -11,6 +11,9 @@
     - role: containers/dashy
       tags: dashy
 
+    - role: containers/diun
+      tags: diun
+
     - role: containers/glances
       tags: glances
 
@@ -44,6 +47,9 @@
     - role: containers/adguard_home
       tags: adguard_home
     
+    - role: containers/diun
+      tags: diun
+
     - role: containers/file_browser
       tags: file_browser
 

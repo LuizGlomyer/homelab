@@ -28,6 +28,7 @@ The dashboard is automatically deployed via Ansible and includes links to all co
 | [Adguard Home](/docs/containers/adguard-home.md)  | Ad blocker & DNS resolver                         | Container |
 | [Caddy](/docs/services/caddy.md)                  | Reverse proxy and Certificate Authority           | Host      |
 | [Dashy](/docs/containers/dashy.md)                | Webpage for quick access to the network services  | Container |
+| [Diun](/docs/containers/diun.md)                  | Docker image update notifier with notifications   | Container |
 | [File Browser](/docs/containers/file-browser.md)  | Storage access from the browser                   | Container |
 | [Glances](/docs/containers/glances.md)            | System processes & device status monitor          | Container |
 | [Jellyfin](/docs/containers/jellyfin.md)          | Free entertainment system and media server        | Container |
