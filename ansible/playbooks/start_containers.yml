@@ -61,3 +61,13 @@
 
     - role: containers/portainer
       tags: portainer
+
+- name: Remove unused resources
+  hosts: [ServicesHost, RaspberryPi]
+  tasks:
+    - name: Prune unused Docker images
+      community.docker.docker_prune:
+        images: true
+        images_filters:
+          dangling: false
+          until: 24h

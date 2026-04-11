@@ -14,6 +14,7 @@
 (mtls_backend) {
   reverse_proxy https://{{ services_host_ip }} {
     header_up Host {args[0]}.internal.glomyer.dev
+    header_up X-Original-Host {host}
     transport http {
       tls
       tls_server_name {args[0]}.internal.glomyer.dev

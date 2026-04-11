@@ -39,6 +39,8 @@ metube.internal.glomyer.dev {
 portainer.internal.glomyer.dev {
   import tls-mtls
   reverse_proxy https://localhost:{{ portainer_web_port }} {
+    header_up Host {header.X-Original-Host}    
+    
     transport http {
       tls_insecure_skip_verify
     }
