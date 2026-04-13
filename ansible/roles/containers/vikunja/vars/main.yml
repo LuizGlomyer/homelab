@@ -1,4 +1,4 @@
-vikunja_image: vikunja/vikunja:2.2.0
+vikunja_image: vikunja/vikunja:2.3.0
 vikunja_container_name: vikunja
 
 vikunja_data_dir: /opt/vikunja/data

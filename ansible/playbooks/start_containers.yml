@@ -1,9 +1,24 @@
 - name: Extract system metadata
   hosts: [ServicesHost, RaspberryPi]
   become: true
+  vars:
+    container_tags:
+      - adguard_home
+      - dashy
+      - diun
+      - file_browser
+      - glances
+      - jellyfin
+      - metube
+      - navidrome
+      - portainer
+      - stirling_pdf
+      - uptime_kuma
+      - vaultwarden
+      - vikunja
   roles:
     - role: extract_metadata
-      tags: extract_metadata
+      tags: "{{ container_tags }}"
 
 - name: Set up containerized services
   hosts: [ServicesHost]

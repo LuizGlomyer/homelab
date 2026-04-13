@@ -1,9 +1,15 @@
 - name: Extract system metadata
   hosts: [RaspberryPi, ServicesHost]
   become: true
+  vars:
+    application_tags:
+      - caddy
+      - docker
+      - golang
+      - olivetin
   roles:
     - role: extract_metadata
-      tags: extract_metadata
+      tags: "{{ application_tags }}"
 
 - name: Install host applications
   hosts: [RaspberryPi]
