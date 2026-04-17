@@ -74,8 +74,6 @@
     # - role: containers/pihole
     #   tags: pihole
 
-    - role: containers/portainer
-      tags: portainer
 
 - name: Remove unused resources
   hosts: [ServicesHost, RaspberryPi]

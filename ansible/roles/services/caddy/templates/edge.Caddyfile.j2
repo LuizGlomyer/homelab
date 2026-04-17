@@ -30,12 +30,6 @@
   }
 }
 
-#(duckdns-cert) {
-#  tls {
-#    dns duckdns {{ vault_caddy_duckdns_token }}
-#  }
-#}
-
 
 #################################
 # --- Raspberry Pi Services --- #
@@ -59,15 +53,6 @@ file-browser.edge.glomyer.dev {
 olivetin.edge.glomyer.dev {
   import cloudflare-cert
   reverse_proxy localhost:{{ olivetin_port }}
-}
-
-portainer.edge.glomyer.dev {
-  import cloudflare-cert
-  reverse_proxy https://localhost:{{ portainer_web_port }} {
-    transport http {
-      tls_insecure_skip_verify
-    }
-  }
 }
 
 

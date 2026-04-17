@@ -12,6 +12,7 @@ navidrome_web_port: 9700
 olivetin_port: 1337 # This port is fixed/non-dynamic
 pihole_web_port: 8070
 portainer_web_port: 9443
+portainer_edge_agent_port: 8000
 stirling_pdf_web_port: 7000
 uptime_kuma_web_port: 3001
 vaultwarden_web_port: 8222
