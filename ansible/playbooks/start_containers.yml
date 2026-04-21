@@ -22,58 +22,61 @@
       tags: "{{ container_tags }}"
 
 - name: Set up containerized services
-  hosts: [ServicesHost]
+  hosts: [ServicesHost, RaspberryPi]
   roles:
     - role: containers/dashy
       tags: dashy
+      when: "'ServicesHost' in group_names"
 
     - role: containers/diun
       tags: diun
 
     - role: containers/freshrss
       tags: freshrss
+      when: "'ServicesHost' in group_names"
 
     - role: containers/glances
       tags: glances
 
     - role: containers/jellyfin
       tags: jellyfin
+      when: "'ServicesHost' in group_names"
 
     - role: containers/metube
       tags: metube
+      when: "'ServicesHost' in group_names"
 
     - role: containers/navidrome
       tags: navidrome
+      when: "'ServicesHost' in group_names"
 
     - role: containers/portainer
       tags: portainer
+      when: "'ServicesHost' in group_names"
 
     - role: containers/stirling_pdf
       tags: stirling_pdf
+      when: "'ServicesHost' in group_names"
 
     - role: containers/uptime_kuma
       tags: uptime_kuma
+      when: "'ServicesHost' in group_names"
 
     - role: containers/vaultwarden
       tags: vaultwarden
+      when: "'ServicesHost' in group_names"
 
     - role: containers/vikunja
       tags: vikunja
+      when: "'ServicesHost' in group_names"
 
-- name: Set up containerized services
-  hosts: [RaspberryPi]
-  roles:
     - role: containers/adguard_home
       tags: adguard_home
-
-    - role: containers/diun
-      tags: diun
+      when: "'RaspberryPi' in group_names"
 
     - role: containers/file_browser
       tags: file_browser
-
-    - role: containers/glances
-      tags: glances
+      when: "'RaspberryPi' in group_names"
 
     # - role: containers/pihole
     #   tags: pihole

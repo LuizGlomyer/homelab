@@ -8,6 +8,7 @@
 - name: Run Diun container
   community.docker.docker_container:
     name: "{{ diun_container_name }}"
+    hostname: "{{ ansible_facts['hostname'] }}"
     image: "{{ diun_image }}"
     state: started
     restart_policy: unless-stopped
@@ -17,16 +18,26 @@
       - "{{ diun_data_dir }}:/data"
       - "/var/run/docker.sock:/var/run/docker.sock"
     env:
-      TZ: "UTC"
-      DIUN_WATCH_WORKERS: "20"
-      DIUN_WATCH_SCHEDULE: "0 */6 * * *"
-      DIUN_WATCH_JITTER: "30s"
+      TZ: "America/Manaus"
       DIUN_PROVIDERS_DOCKER: "true"
       # Monitors all containers by default, set to false to only monitor those with label diun.watch=true
       DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT: "true"
+      DIUN_WATCH_WORKERS: "20"
+      DIUN_WATCH_SCHEDULE: "0 */6 * * *"
+      # Run every Saturday at 10:00
+      # DIUN_WATCH_SCHEDULE: "0 10 * * 6"
+      DIUN_WATCH_JITTER: "30s"
+      DIUN_WATCH_RUNONSTARTUP: "false"
+      DIUN_DEFAULTS_EXCLUDETAGS: "(latest|pr-|dev|test|nightly)"
+      # This allows
+      # 1.35.4 (Vaultwarden style)
+      # 2026030905 (Jellyfin style)
+      # DIUN_DEFAULTS_INCLUDETAGS: "^([0-9]+\\.[0-9]+\\.[0-9]+|[0-9]{8})$"
+
       # Telegram notifications
       DIUN_NOTIF_TELEGRAM_TOKEN: "{{ vault_diun_telegram_token }}"
       DIUN_NOTIF_TELEGRAM_CHATIDS: "{{ vault_diun_telegram_chat_ids }}"
+
       # Discord notifications
       DIUN_NOTIF_DISCORD_WEBHOOKURL: "{{ vault_diun_discord_webhook_url }}"
       DIUN_NOTIF_DISCORD_RENDEREMBEDS: "true"

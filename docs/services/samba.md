@@ -12,7 +12,7 @@ lbslk
 # Grep the disk name from above to take its ID
 ls -l /dev/disk/by-id/ | grep sda
 # Use the disk reference to pass it to the VM
-qm set 201 --scsi1 /dev/disk/by-id/ata-WDC_WD80EFPX-68C4ZN0_WD-RD32H19G
+qm set 201 --scsi1 /dev/disk/by-id/ata-WDC_WD80EFPX-68C4ZN0_WD-RD32H19G,backup=0
 ```
 Now the VM has access to the disk, but we must first format it.
 

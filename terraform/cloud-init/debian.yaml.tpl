@@ -1,6 +1,7 @@
 #cloud-config
 hostname: ${hostname}
 manage_etc_hosts: true
+timezone: America/Manaus
 
 users:
   - name: ${user}
