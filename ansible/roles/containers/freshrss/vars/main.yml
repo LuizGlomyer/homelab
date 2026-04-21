@@ -1,0 +1,5 @@
+freshrss_image: freshrss/freshrss:1.28.1
+freshrss_container_name: freshrss
+
+freshrss_data_dir: /opt/freshrss/data
+freshrss_extensions_dir: /opt/freshrss/extensions

@@ -1,0 +1,28 @@
+- name: Ensure FreshRSS data directory exists
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ freshrss_data_dir }}"
+    - "{{ freshrss_extensions_dir }}"
+
+- name: Run FreshRSS container
+  community.docker.docker_container:
+    name: "{{ freshrss_container_name }}"
+    image: "{{ freshrss_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    ports:
+      - "{{ freshrss_web_port }}:80"
+    volumes:
+      - "{{ freshrss_data_dir }}:/var/www/FreshRSS/data"
+      - "{{ freshrss_extensions_dir }}:/var/www/FreshRSS/extensions"
+    env:
+      TZ: America/Manaus
+      CRON_MIN: "1,31"
+    log_driver: json-file
+    log_options:
+      max-size: 10m

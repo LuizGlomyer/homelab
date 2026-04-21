@@ -16,6 +16,11 @@ dashy.internal.glomyer.dev {
   reverse_proxy localhost:{{ dashy_web_port }}
 }
 
+freshrss.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ freshrss_web_port }}
+}
+
 glances.internal.glomyer.dev {
   import tls-mtls
   reverse_proxy localhost:{{ glances_web_port }}

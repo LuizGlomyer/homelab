@@ -151,6 +151,13 @@ sections:
         url: https://vikunja.glomyer.dev
         target: newtab
         id: 11_1392_vikunja
+      - &ref_25
+        title: FreshRSS
+        description: self-hosted RSS feed reader
+        icon: fas fa-rss
+        url: https://freshrss.glomyer.dev
+        target: newtab
+        id: 12_1392_freshrss
     filteredItems:
       - *ref_0
       - *ref_1
@@ -164,6 +171,7 @@ sections:
       - *ref_9
       - *ref_10
       - *ref_11
+      - *ref_25
   - name: Local certificate
     icon: fas fa-certificate
     displayData:
@@ -279,6 +287,13 @@ sections:
         url: http://raspberrypi.local:3456
         target: newtab
         id: 11_1649_vikunja
+      - &ref_26
+        title: FreshRSS
+        description: self-hosted RSS feed reader
+        icon: fas fa-rss
+        url: http://raspberrypi.local:8082
+        target: newtab
+        id: 12_1649_freshrss
     filteredItems:
       - *ref_13
       - *ref_14
@@ -292,3 +307,4 @@ sections:
       - *ref_22
       - *ref_23
       - *ref_24
+      - *ref_26

@@ -5,6 +5,7 @@ ansible_python_interpreter: /usr/bin/python3
 adguard_home_web_port: 3000
 dashy_web_port: 9080
 file_browser_web_port: 4000
+freshrss_web_port: 8082
 glances_web_port: 61208
 jellyfin_web_port: 8096
 metube_web_port: 8081

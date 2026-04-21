@@ -7,6 +7,7 @@
       - dashy
       - diun
       - file_browser
+      - freshrss
       - glances
       - jellyfin
       - metube
@@ -28,6 +29,9 @@
 
     - role: containers/diun
       tags: diun
+
+    - role: containers/freshrss
+      tags: freshrss
 
     - role: containers/glances
       tags: glances
