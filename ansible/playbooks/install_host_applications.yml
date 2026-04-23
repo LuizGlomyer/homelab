@@ -12,8 +12,12 @@
       tags: "{{ application_tags }}"
 
 - name: Install host applications
-  hosts: [RaspberryPi]
+  hosts: [RaspberryPi, ServicesHost]
   become: true
+  vars:
+    caddy_caddyfiles:
+      RaspberryPi: edge.Caddyfile.j2
+      ServicesHost: services.Caddyfile.j2
   roles:
     - role: services/docker
       tags: docker
@@ -23,21 +27,8 @@
 
     - role: services/caddy
       tags: caddy
-      caddyfile: edge.Caddyfile.j2
+      caddyfile: "{{ caddy_caddyfiles[group_names|first] }}"
 
     - role: services/olivetin
       tags: olivetin
-
-- name: Install host applications
-  hosts: [ServicesHost]
-  become: true
-  roles:
-    - role: services/docker
-      tags: docker
-
-    - role: services/golang
-      tags: golang
-
-    - role: services/caddy
-      tags: caddy
-      caddyfile: services.Caddyfile.j2
+      when: "'RaspberryPi' in group_names"

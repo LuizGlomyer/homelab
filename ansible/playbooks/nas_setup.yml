@@ -2,12 +2,12 @@
   hosts: [NasHost]
   become: true
   roles:
-    - role: configure_nas
-      tags: configure_nas
+    - role: configure_smb
+      tags: configure_smb
 
 - name: Configure SMB Share mounts
   hosts: [ServicesHost]
   become: true
   roles:
-    - role: smb_mounts
-      tags: smb_mounts
+    - role: client_smb_mounts
+      tags: client_smb_mounts

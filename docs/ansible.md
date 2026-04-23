@@ -73,7 +73,7 @@ This repository includes an [.ansible-lint](/.ansible-lint) configuration file t
 
 - **role-name**: Allows roles to use paths when importing (e.g., `services/docker`, `containers/navidrome`) rather than requiring flat role names
 - **var-naming[no-role-prefix]**: Disables the requirement for all variables within roles to have role-prefixed names. Some roles like Caddy use non-prefixed variables for clarity
-- **yaml[line-length]**: Ignores long lines (> 160 characters). Useful for commands that can't be split into multiple lines, such as [opts from ansible.posix.mount](/ansible/roles/smb_mounts/tasks/main.yml)
+- **yaml[line-length]**: Ignores long lines (> 160 characters). Useful for commands that can't be split into multiple lines, such as [opts from ansible.posix.mount](/ansible/roles/client_smb_mounts/tasks/main.yml)
 
 To run Ansible-lint, go to the ansible folder and execute:
 

@@ -34,9 +34,11 @@ sudo mkfs.ext4 /dev/sdb1
 sudo blkid /dev/sdb1
 ```
 
+Then mount the disk and apply Samba using the [configure_smb](/ansible/roles/configure_smb/tasks/main.yml) role.
+
 ## Samba setup
 
-Now we can run the [configure_nas](/ansible/roles/configure_nas/tasks/main.yml) Ansible role to continue. First, we need to set the variables, specially `storage_uuid`, which is the ID that comes from blkid. Passwords for the Samba users should be on the Ansible Vault as well. All shares are folders that have its own permissions, the exception being storage which is a share of the root of the disk accessible only to an admin user.
+Now we can run the [configure_smb](/ansible/roles/configure_smb/tasks/main.yml) Ansible role to continue. First, we need to set the variables, specially `storage_uuid`, which is the ID that comes from `blkid`. Passwords for the Samba users should be on the Ansible Vault as well. All shares are folders that have its own permissions, the exception being storage which is a share of the root of the disk accessible only to an admin user.
 
 ```bash
 # [Client] Test your connection with a valid user

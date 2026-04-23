@@ -29,10 +29,9 @@ homelab/
 │   ├── playbooks/                 # Ansible playbooks (focused, task-specific)
 │   │   ├── install_host_applications.yml  # Install services on RaspberryPi and ProxmoxHost
 │   │   ├── start_containers.yml           # Deploy containerized services on ServicesHost
-│   │   ├── configure_nas.yml              # Configure NasHost Samba setup
+│   │   ├── nas_setup.yml                  # SMB server (NasHost) and client mounts (ServicesHost)
 │   │   ├── create_proxmox_templates.yml   # Create VM templates for Terraform
-│   │   ├── update_packages.yml            # Update packages across hosts
-│   │   └── smb_mounts.yml                 # Mount SMB shares on hosts
+│   │   └── update_packages.yml            # Update packages across hosts
 │   └── roles/                     # Service-specific Ansible roles
 │       ├── services/              # System services (installed on host)
 │       │   ├── caddy/             # Reverse proxy and CA
@@ -52,10 +51,10 @@ homelab/
 │       │   ├── uptime_kuma/
 │       │   ├── vaultwarden/
 │       │   └── vikunja/
-│       ├── configure_nas/         # NAS-specific configuration (Samba)
+│       ├── configure_smb/         # Samba server configuration (NasHost)
+│       ├── client_smb_mounts/     # Mount SMB shares on client hosts
 │       ├── extract_metadata/      # Extract system facts for use in playbooks
 │       ├── proxmox_template/      # Create Proxmox templates for VMs
-│       ├── smb_mounts/            # Mount SMB shares on hosts
 │       └── update_packages/       # Package update automation
 ├── terraform/                     # Infrastructure provisioning
 │   ├── cloud-init/
@@ -93,7 +92,7 @@ Each service follows a consistent role structure:
 - **Multiple playbooks**: Task-specific playbooks organized by purpose rather than a monolithic main.yml
   - **install_host_applications.yml**: System-level services (Docker, Caddy, OliveTin, Golang) on RaspberryPi and ServicesHost
   - **start_containers.yml**: Containerized services deployment on ServicesHost
-  - **configure_nas.yml**: NAS-specific configuration (Samba) on NasHost
+  - **nas_setup.yml**: Samba on NasHost (`configure_smb`); SMB client mounts on ServicesHost (`client_smb_mounts`)
   - **create_proxmox_templates.yml**: VM template creation on ProxmoxHost
   - **update_packages.yml**: Package updates across all hosts
 - **Multi-host targeting**: Playbooks target specific host groups (RaspberryPi, ServicesHost, NasHost, ProxmoxHost)
@@ -292,8 +291,8 @@ ansible-playbook playbooks/install_host_applications.yml --user pi --ask-pass --
 # Deploy containerized services (on ServicesHost)
 ansible-playbook playbooks/start_containers.yml --user ansible --ask-pass --vault-password-file group_vars/all/vault_pass.txt
 
-# Configure NAS (on NasHost)
-ansible-playbook playbooks/configure_nas.yml --user ansible --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt
+# SMB server and client mounts (NasHost + ServicesHost)
+ansible-playbook playbooks/nas_setup.yml --user ansible --ask-pass --ask-become-pass --vault-password-file group_vars/all/vault_pass.txt
 
 # Create Proxmox templates (on ProxmoxHost)
 ansible-playbook playbooks/create_proxmox_templates.yml --user root --ask-pass --vault-password-file group_vars/all/vault_pass.txt
