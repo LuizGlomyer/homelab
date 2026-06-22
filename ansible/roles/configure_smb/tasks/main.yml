@@ -12,53 +12,57 @@
 # Group creation
 - name: Create admin group
   ansible.builtin.group:
-    name: "{{ nas_admin_group }}"
+    name: "{{ smb_admin_group }}"
     state: present
 
 - name: Create domain groups
   ansible.builtin.group:
     name: "{{ item }}"
     state: present
-  loop: "{{ nas_domain_groups }}"
+  loop: "{{ smb_domain_groups }}"
 
 
-# Share folders creation
-- name: Create NAS mountpoint
+- name: Initialize empty SMB unique users map
+  ansible.builtin.set_fact:
+    smb_unique_shares_by_user: {}
+
+- name: Merge service shares into unique SMB user map
+  ansible.builtin.set_fact:
+    smb_unique_shares_by_user: "{{ smb_unique_shares_by_user | combine({ item.service_user: item }) }}"
+  loop: "{{ smb_volumes | map(attribute='smb_shares') | list | flatten }}"
+  loop_control:
+    label: "{{ item.service_user }}"
+
+
+# Per-volume mountpoints and disks
+- name: Create SMB volume mountpoints
   ansible.builtin.file:
-    path: "{{ nas_root }}"
+    path: "{{ item.smb_volume_root_path }}"
     state: directory
     owner: root
-    group: "{{ nas_admin_group }}"
+    group: "{{ smb_admin_group }}"
     mode: "2770"
+  loop: "{{ smb_volumes }}"
 
-# Mounts even after reboot
-- name: Mount storage disk
+- name: Mount SMB volume disks
   ansible.posix.mount:
-    path: "{{ nas_root }}"
-    src: UUID={{ storage_uuid }}
+    path: "{{ item.smb_volume_root_path }}"
+    src: UUID={{ item.storage_uuid }}
     fstype: ext4
     opts: defaults,nofail
     state: mounted
-
-- name: Create share directories
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: directory
-    owner: "{{ item.service_user }}"
-    group: "{{ item.domain_group | default(nas_admin_group) }}"
-    mode: "2770"
-  loop: "{{ nas_shares }}"
+  loop: "{{ smb_volumes }}"
 
 # Users creation
 - name: Create admin user
   ansible.builtin.user:
-    name: "{{ nas_admin_user }}"
-    group: "{{ nas_admin_group }}"
+    name: "{{ smb_admin_user }}"
+    group: "{{ smb_admin_group }}"
     shell: /bin/bash
 
 - name: Set admin samba password
   ansible.builtin.expect:
-    command: smbpasswd -a {{ nas_admin_user }}
+    command: smbpasswd -a {{ smb_admin_user }}
     responses:
       New SMB password: "{{ vault_nas_admin_password }}"
       Retype new SMB password: "{{ vault_nas_admin_password }}"
@@ -72,7 +76,9 @@
     append: true
     shell: /usr/sbin/nologin
     create_home: false
-  loop: "{{ nas_shares }}"
+  loop: "{{ smb_unique_shares_by_user.values() | list }}"
+  loop_control:
+    label: "{{ item.service_user }}"
 
 - name: Set service users samba passwords
   ansible.builtin.expect:
@@ -80,69 +86,86 @@
     responses:
       New SMB password: "{{ item.service_password }}"
       Retype new SMB password: "{{ item.service_password }}"
-  loop: "{{ nas_shares }}"
+  loop: "{{ smb_unique_shares_by_user.values() | list }}"
+  loop_control:
+    label: "{{ item.service_user }}"
   no_log: true
 
 
-# Apply ACL to users
-- name: Admin ACL recursive
+
+# Create share directories (after users exist so chown succeeds)
+- name: Create share directories
+  ansible.builtin.file:
+    path: "{{ item.1.path }}"
+    state: directory
+    owner: "{{ item.1.service_user }}"
+    group: "{{ item.1.domain_group | default(smb_admin_group) }}"
+    mode: "2770"
+  loop: "{{ smb_volumes | subelements('smb_shares', skip_missing=True) }}"
+  loop_control:
+    label: "{{ item.1.path }}"
+
+
+
+# Apply ACL to volume roots
+- name: Admin ACL recursive on each volume root
   ansible.posix.acl:
-    path: "{{ nas_root }}"
-    entity: "{{ nas_admin_group }}"
+    path: "{{ item.smb_volume_root_path }}"
+    entity: "{{ smb_admin_group }}"
     etype: group
     permissions: rwx
     recursive: true
     state: present
+  loop: "{{ smb_volumes }}"
 
-- name: Default admin ACL
+- name: Default admin ACL on each volume root
   ansible.posix.acl:
-    path: "{{ nas_root }}"
-    entity: "{{ nas_admin_group }}"
+    path: "{{ item.smb_volume_root_path }}"
+    entity: "{{ smb_admin_group }}"
     etype: group
     permissions: rwx
     default: true
     recursive: true
     state: present
+  loop: "{{ smb_volumes }}"
 
-# - name: Allow domain groups to traverse NAS root
-#   ansible.posix.acl:
-#     path: "{{ nas_root }}"
-#     entity: "{{ item }}"
-#     etype: group
-#     permissions: --x
-#     state: present
-#   loop: "{{ nas_domain_groups }}"
 
 - name: Allow domain groups to traverse shared directories
   ansible.posix.acl:
-    path: "{{ item.path | dirname }}"
-    entity: "{{ item.domain_group }}"
+    path: "{{ item.1.path | dirname }}"
+    entity: "{{ item.1.domain_group }}"
     etype: group
     permissions: --x
     state: present
-  loop: "{{ nas_shares }}"
-  when: item.domain_group is defined
+  loop: "{{ smb_volumes | subelements('smb_shares', skip_missing=True) }}"
+  when: item.1.domain_group is defined
+  loop_control:
+    label: "{{ item.1.path }}"
 
 - name: Grant domain group access
   ansible.posix.acl:
-    path: "{{ item.path }}"
-    entity: "{{ item.domain_group }}"
+    path: "{{ item.1.path }}"
+    entity: "{{ item.1.domain_group }}"
     etype: group
-    permissions: "{{ 'r-x' if item.read_only else 'rwx' }}"
+    permissions: "{{ 'r-x' if item.1.read_only else 'rwx' }}"
     state: present
-  loop: "{{ nas_shares }}"
-  when: item.domain_group is defined
+  loop: "{{ smb_volumes | subelements('smb_shares', skip_missing=True) }}"
+  when: item.1.domain_group is defined
+  loop_control:
+    label: "{{ item.1.path }}"
 
 - name: Default domain group ACL
   ansible.posix.acl:
-    path: "{{ item.path }}"
-    entity: "{{ item.domain_group }}"
+    path: "{{ item.1.path }}"
+    entity: "{{ item.1.domain_group }}"
     etype: group
-    permissions: "{{ 'r-x' if item.read_only else 'rwx' }}"
+    permissions: "{{ 'r-x' if item.1.read_only else 'rwx' }}"
     default: true
     state: present
-  loop: "{{ nas_shares }}"
-  when: item.domain_group is defined
+  loop: "{{ smb_volumes | subelements('smb_shares', skip_missing=True) }}"
+  when: item.1.domain_group is defined
+  loop_control:
+    label: "{{ item.1.path }}"
 
 
 # Start services

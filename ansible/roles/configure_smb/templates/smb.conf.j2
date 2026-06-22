@@ -35,13 +35,17 @@
    recycle:touch = yes
    recycle:maxsize = 0
 
-[{{ nas_storage_share }}]
-   path = {{ nas_root }}
+{% for volume in smb_volumes %}
+[{{ volume.smb_volume_root_share }}]
+   path = {{ volume.smb_volume_root_path }}
    browseable = yes
    read only = no
-   valid users = {{ nas_admin_user }}
+   valid users = {{ smb_admin_user }}
 
-{% for share in nas_shares %}
+{% endfor %}
+
+{% for volume in smb_volumes %}
+{% for share in volume.smb_shares | default([]) %}
 [{{ share.name }}]
    path = {{ share.path }}
    browseable = yes
@@ -50,5 +54,6 @@
 
    create mask = 0660
    directory mask = 2770
-   valid users = @{{ share.domain_group }} {{ nas_admin_user }}
+   valid users = @{{ share.domain_group }} {{ smb_admin_user }}
+{% endfor %}
 {% endfor %}

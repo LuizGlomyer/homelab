@@ -1,31 +1,61 @@
-storage_uuid: "257d85bc-003d-46df-8405-0e6135a0c94f"
-nas_root: /mnt/storage
+smb_admin_user: glomyer
+smb_admin_group: nas_admins
 
-nas_admin_user: glomyer
-nas_admin_group: nas_admins
-nas_storage_share: storage
+# Unique domain groups across all volumes’ smb_shares
+smb_domain_groups: >-
+  {{
+    smb_volumes
+    | map(attribute='smb_shares')
+    | list
+    | flatten
+    | map(attribute='domain_group')
+    | list
+    | unique
+  }}
 
-# Domain groups
-nas_domain_groups: "{{ nas_shares | map(attribute='domain_group') | list | unique }}"
+smb_volumes:
+  - storage_uuid: "257d85bc-003d-46df-8405-0e6135a0c94f"
+    smb_volume_root_path: /mnt/storage
+    smb_volume_root_share: storage
+    smb_shares:
+      # For users
+      - name: files
+        path: /mnt/storage/shared/files
+        service_user: files
+        service_password: "{{ vault_nas_shared_files_password }}"
+        domain_group: media_shared_files_rw
+        read_only: false
 
-nas_shares:
-  - name: music
-    path: "{{ nas_root }}/music"
-    service_user: navidrome
-    service_password: "{{ vault_nas_navidrome_password }}"
-    domain_group: media_music_ro
-    read_only: true
+      # For applications
+      - name: music
+        path: /mnt/storage/music
+        service_user: navidrome
+        service_password: "{{ vault_nas_navidrome_password }}"
+        domain_group: media_music_ro
+        read_only: true
 
-  - name: videos
-    path: "{{ nas_root }}/videos"
-    service_user: jellyfin
-    service_password: "{{ vault_nas_jellyfin_password }}"
-    domain_group: media_videos_ro
-    read_only: true
+      - name: videos
+        path: /mnt/storage/videos
+        service_user: jellyfin
+        service_password: "{{ vault_nas_jellyfin_password }}"
+        domain_group: media_videos_ro
+        read_only: true
 
-  - name: metube
-    path: "{{ nas_root }}/shared/metube"
-    service_user: metube
-    service_password: "{{ vault_nas_metube_password }}"
-    domain_group: media_shared_metube_rw
-    read_only: false
+      - name: metube
+        path: /mnt/storage/shared/metube
+        service_user: metube
+        service_password: "{{ vault_nas_metube_password }}"
+        domain_group: media_shared_metube_rw
+        read_only: false
+
+
+  - storage_uuid: "c16635fb-1b15-4049-a24f-90e8eeaed060"
+    smb_volume_root_path: /mnt/backup
+    smb_volume_root_share: backup
+    smb_shares:
+      - name: proxmox
+        path: /mnt/backup/proxmox
+        service_user: proxmox
+        service_password: "{{ vault_smb_proxmox_password }}"
+        domain_group: media_shared_proxmox_rw
+        read_only: false

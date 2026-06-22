@@ -38,9 +38,11 @@ Then mount the disk and apply Samba using the [configure_smb](/ansible/roles/con
 
 ## Samba setup
 
-Now we can run the [configure_smb](/ansible/roles/configure_smb/tasks/main.yml) Ansible role to continue. First, we need to set the variables, specially `storage_uuid`, which is the ID that comes from `blkid`. Passwords for the Samba users should be on the Ansible Vault as well. All shares are folders that have its own permissions, the exception being storage which is a share of the root of the disk accessible only to an admin user.
+Now we can run the [configure_smb](/ansible/roles/configure_smb/tasks/main.yml) Ansible role to continue. Volumes are defined in [`vars/main.yml`](/ansible/roles/configure_smb/vars/main.yml) as `smb_volumes`: each entry has `storage_uuid` (from the disk's `blkid`), `smb_volume_root_path`, `smb_volume_root_share` (admin-only root share name), and `smb_shares`. Passwords for Samba users belong in Ansible Vault. Non-admin shares are folders with their own permissions; each volume also exposes a root share (e.g. `storage`, `backup`) valid only for the admin user.
 
 ```bash
+# See mounted partitions on SMB host
+df -h 
 # [Client] Test your connection with a valid user
 smbclient -U glomyer //192.168.0.201/storage
 # [Client] See mounted drives on the client
