@@ -22,3 +22,7 @@ vault_vaultwarden_admin_token: "your_credentials"
 vault_diun_telegram_token: "your_telegram_bot_token"
 vault_diun_telegram_chat_ids: "your_chat_id_1,your_chat_id_2"  # Can be multiple IDs separated by commas
 vault_diun_discord_webhook_url: "your_discord_webhook_url"
+
+# Docker Hub credentials for Diun registry auth (optional)
+vault_dockerhub_username: "your_dockerhub_username"
+vault_dockerhub_password: "your_dockerhub_password"

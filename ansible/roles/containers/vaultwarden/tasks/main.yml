@@ -27,6 +27,9 @@
       - "{{ vaultwarden_web_port }}:80"
     volumes:
       - "{{ vaultwarden_data_dir }}:/data"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
     env:
       DOMAIN: "{{ vaultwarden_domain }}"
       SIGNUPS_ALLOWED: "{{ vaultwarden_signups_allowed }}"

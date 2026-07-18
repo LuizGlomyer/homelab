@@ -20,6 +20,10 @@
     volumes:
       - "{{ navidrome_data_dir }}:/data"
       - "{{ navidrome_music_dir }}:/music:ro"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+      diun.sort_tags: "semver"
     env:
       ND_LASTFM_APIKEY: "{{ vault_navidrome_lastfm_api_key }}"
       ND_LASTFM_SECRET: "{{ vault_navidrome_lastfm_shared_secret }}"

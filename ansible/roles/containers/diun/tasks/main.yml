@@ -17,26 +17,38 @@
     volumes:
       - "{{ diun_data_dir }}:/data"
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/root/.docker:/root/.docker:ro"
     env:
       TZ: "America/Manaus"
       DIUN_PROVIDERS_DOCKER: "true"
       # Monitors all containers by default, set to false to only monitor those with label diun.watch=true
       DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT: "true"
       DIUN_WATCH_WORKERS: "20"
-      DIUN_WATCH_SCHEDULE: "0 */6 * * *"
+      
+      # Every 6 hours
+      # DIUN_WATCH_SCHEDULE: "0 */6 * * *"
+      # Every 10 minutes
+      # DIUN_WATCH_SCHEDULE: "*/10 * * * *"
       # Run every Saturday at 10:00
-      # DIUN_WATCH_SCHEDULE: "0 10 * * 6"
+      DIUN_WATCH_SCHEDULE: "0 10 * * 6"
+
       DIUN_WATCH_JITTER: "30s"
       DIUN_WATCH_RUNONSTARTUP: "false"
-      DIUN_DEFAULTS_EXCLUDETAGS: "(latest|pr-|dev|test|nightly)"
+      DIUN_DEFAULTS_EXCLUDETAGS: "(latest|dev|test|nightly|unstable|sha-|pr-)"
       # This allows
       # 1.35.4 (Vaultwarden style)
       # 2026030905 (Jellyfin style)
       # DIUN_DEFAULTS_INCLUDETAGS: "^([0-9]+\\.[0-9]+\\.[0-9]+|[0-9]{8})$"
+      
+      # Registry auth for Docker Hub using regopts (username/password)
+      DIUN_REGOPTS_1_NAME: "docker.io"
+      DIUN_REGOPTS_1_SELECTOR: "image"
+      DIUN_REGOPTS_1_USERNAME: "{{ vault_dockerhub_username | default('') }}"
+      DIUN_REGOPTS_1_PASSWORD: "{{ vault_dockerhub_password | default('') }}"
 
       # Telegram notifications
-      DIUN_NOTIF_TELEGRAM_TOKEN: "{{ vault_diun_telegram_token }}"
-      DIUN_NOTIF_TELEGRAM_CHATIDS: "{{ vault_diun_telegram_chat_ids }}"
+      # DIUN_NOTIF_TELEGRAM_TOKEN: "{{ vault_diun_telegram_token }}"
+      # DIUN_NOTIF_TELEGRAM_CHATIDS: "{{ vault_diun_telegram_chat_ids }}"
 
       # Discord notifications
       DIUN_NOTIF_DISCORD_WEBHOOKURL: "{{ vault_diun_discord_webhook_url }}"
