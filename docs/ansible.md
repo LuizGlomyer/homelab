@@ -4,14 +4,19 @@ All playbooks are fully functional on Debian 12 (Bookworm). Most playbooks execu
 
 ## Dependencies
 
-You might need some other software on your controller node (your machine):
+You will need the following on your controller node (your machine):
 
 - sshpass
-- Ansible collections (install with `ansible-galaxy collection install [collection]`)
-  - community.general
-  - community.docker
-  - ansible.posix
 - [Ansible-lint](https://ansible.readthedocs.io/projects/lint/installing/#installing-the-latest-version)
+- Ansible collections
+
+### Installing Ansible Collections
+
+A [`requirements.yml`](../ansible/requirements.yml) file documents all required collections. Install them using:
+
+```bash
+ansible-galaxy collection install -r requirements.yml --upgrade
+```
 
 
 ## Ansible vault

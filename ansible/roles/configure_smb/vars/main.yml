@@ -19,6 +19,13 @@ smb_volumes:
     smb_volume_root_share: storage
     smb_shares:
       # For users
+      - name: container
+        path: /mnt/container/
+        service_user: files
+        service_password: "{{ vault_nas_shared_files_password }}"
+        domain_group: media_container_rw
+        read_only: false
+
       - name: files
         path: /mnt/storage/shared/files
         service_user: files

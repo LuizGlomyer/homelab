@@ -43,6 +43,8 @@
     group: "{{ smb_admin_group }}"
     mode: "2770"
   loop: "{{ smb_volumes }}"
+  loop_control:
+    label: "{{ item.smb_volume_root_path }}"
 
 - name: Mount SMB volume disks
   ansible.posix.mount:
@@ -52,6 +54,8 @@
     opts: defaults,nofail
     state: mounted
   loop: "{{ smb_volumes }}"
+  loop_control:
+    label: "{{ item.smb_volume_root_path }}"
 
 # Users creation
 - name: Create admin user
@@ -117,6 +121,8 @@
     recursive: true
     state: present
   loop: "{{ smb_volumes }}"
+  loop_control:
+    label: "{{ item.smb_volume_root_path }}"
 
 - name: Default admin ACL on each volume root
   ansible.posix.acl:
@@ -128,6 +134,8 @@
     recursive: true
     state: present
   loop: "{{ smb_volumes }}"
+  loop_control:
+    label: "{{ item.smb_volume_root_path }}"
 
 
 - name: Allow domain groups to traverse shared directories
