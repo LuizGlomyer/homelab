@@ -30,6 +30,21 @@
   }
 }
 
+#################################
+# ---    Proxmox server     --- #
+#################################
+
+proxmox.glomyer.dev {
+    import cloudflare-cert
+
+    reverse_proxy https://192.168.0.99:8006 {
+        transport http {
+            tls
+            tls_insecure_skip_verify
+        }
+    }
+}
+
 
 #################################
 # --- Raspberry Pi Services --- #
