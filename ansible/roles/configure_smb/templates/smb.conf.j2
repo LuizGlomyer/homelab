@@ -27,13 +27,8 @@
    disable spoolss = yes
 
    # NTFS ACL support
-   vfs objects = acl_xattr recycle
+   vfs objects = acl_xattr
 
-   recycle:repository = .recycle/%U
-   recycle:keeptree = yes
-   recycle:versions = yes
-   recycle:touch = yes
-   recycle:maxsize = 0
 
 {% for volume in smb_volumes %}
 [{{ volume.smb_volume_root_share }}]
