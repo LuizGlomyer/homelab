@@ -15,6 +15,9 @@ pihole_web_port: 8070
 portainer_web_port: 9443
 portainer_edge_agent_port: 8000
 stirling_pdf_web_port: 7000
+tubearchivist_web_port: 8900
+redis_web_port: 6379
+elasticsearch_web_port: 9200
 uptime_kuma_web_port: 3001
 vaultwarden_web_port: 8222
 vikunja_web_port: 3456

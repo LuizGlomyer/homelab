@@ -1,0 +1,14 @@
+tubearchivist_image: bbilly1/tubearchivist:latest
+tubearchivist_container_name: tubearchivist
+
+# tubearchivist_data_dir: /opt/tubearchivist/data
+tubearchivist_media_dir: "/mnt/tubearchivist"
+tubearchivist_cache_dir: /opt/tubearchivist/cache
+tubearchivist_redis_dir: /opt/tubearchivist/redis
+tubearchivist_es_dir: /opt/tubearchivist/es
+
+tubearchivist_redis_image: redis:latest
+tubearchivist_redis_container_name: tubearchivist-redis
+
+tubearchivist_es_image: bbilly1/tubearchivist-es:latest
+tubearchivist_es_container_name: tubearchivist-es

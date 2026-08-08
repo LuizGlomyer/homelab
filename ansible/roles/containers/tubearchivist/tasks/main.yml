@@ -1,0 +1,77 @@
+- name: Ensure Tube Archivist directories exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ user_uid }}"
+    group: "{{ user_gid }}"
+    mode: '0755'
+  loop:
+    - "{{ tubearchivist_cache_dir }}"
+    - "{{ tubearchivist_redis_dir }}"
+    - "{{ tubearchivist_es_dir }}"
+
+- name: Create Tube Archivist network
+  community.docker.docker_network:
+    name: tubearchivist
+
+- name: Run Tube Archivist Redis container
+  community.docker.docker_container:
+    name: "{{ tubearchivist_redis_container_name }}"
+    image: "{{ tubearchivist_redis_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    volumes:
+      - "{{ tubearchivist_redis_dir }}:/data"
+    ports:
+      - "{{ redis_web_port }}:6379"
+    networks:
+      - name: tubearchivist
+
+- name: Run Tube Archivist Elasticsearch container
+  community.docker.docker_container:
+    name: "{{ tubearchivist_es_container_name }}"
+    image: "{{ tubearchivist_es_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    env:
+      ELASTIC_PASSWORD: "{{ vault_tubearchivist_elastic_password }}"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      xpack.security.enabled: "true"
+      discovery.type: "single-node"
+      path.repo: "/usr/share/elasticsearch/data/snapshot"
+    volumes:
+      - "{{ tubearchivist_es_dir }}:/usr/share/elasticsearch/data"
+    ports:
+      - "{{ elasticsearch_web_port }}:9200"
+    networks:
+      - name: tubearchivist
+
+- name: Run Tube Archivist container
+  community.docker.docker_container:
+    name: "{{ tubearchivist_container_name }}"
+    image: "{{ tubearchivist_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    ports:
+      - "{{ tubearchivist_web_port }}:8000"
+    networks:
+      - name: tubearchivist
+    volumes:
+      - "{{ tubearchivist_media_dir }}:/youtube"
+      - "{{ tubearchivist_cache_dir }}:/cache"
+    env:
+      ES_URL: "http://{{ tubearchivist_es_container_name }}:9200"
+      REDIS_CON: "redis://{{ tubearchivist_redis_container_name }}:6379"
+      HOST_UID: "{{ user_uid }}"
+      HOST_GID: "{{ user_gid }}"
+      TA_HOST: "https://tubearchivist.glomyer.dev https://tubearchivist.internal.glomyer.dev"
+      TA_USERNAME: "{{ vault_tubearchivist_username }}"
+      TA_PASSWORD: "{{ vault_tubearchivist_password }}"
+      ELASTIC_PASSWORD: "{{ vault_tubearchivist_elastic_password }}"
+      TZ: "{{ timezone | default('Etc/UTC') }}"
+      # DJANGO_DEBUG: "true"
+

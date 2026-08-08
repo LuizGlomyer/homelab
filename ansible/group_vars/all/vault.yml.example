@@ -5,6 +5,7 @@ vault_nas_navidrome_password: "your_credentials"
 vault_nas_jellyfin_password: "your_credentials"
 vault_nas_metube_password: "your_credentials"
 vault_smb_proxmox_password: "your_credentials"
+vault_nas_tubearchivist_password: "your_credentials"
 
 
 # Services credentials and secrets
@@ -16,6 +17,9 @@ vault_navidrome_lastfm_api_key: "your_credentials"
 vault_navidrome_lastfm_shared_secret: "your_credentials"
 
 vault_olivetin_user_password: "your_credentials"
+vault_tubearchivist_username: "your_credentials"
+vault_tubearchivist_password: "your_credentials"
+vault_tubearchivist_elastic_password: "your_credentials"
 vault_vaultwarden_admin_token: "your_credentials"
 
 # Diun notifications

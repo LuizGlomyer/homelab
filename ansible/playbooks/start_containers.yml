@@ -14,6 +14,7 @@
       - navidrome
       - portainer
       - stirling_pdf
+      # - tubearchivist
       - uptime_kuma
       - vaultwarden
       - vikunja
@@ -57,6 +58,10 @@
     - role: containers/stirling_pdf
       tags: stirling_pdf
       when: "'ServicesHost' in group_names"
+
+    # - role: containers/tubearchivist
+    #   tags: tubearchivist
+    #   when: "'ServicesHost' in group_names"
 
     - role: containers/uptime_kuma
       tags: uptime_kuma

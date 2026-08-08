@@ -57,6 +57,11 @@ stirling-pdf.internal.glomyer.dev {
   reverse_proxy localhost:{{ stirling_pdf_web_port }}
 }
 
+tubearchivist.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ tubearchivist_web_port }}
+}
+
 uptime-kuma.internal.glomyer.dev {
   import tls-mtls
   reverse_proxy localhost:{{ uptime_kuma_web_port }}

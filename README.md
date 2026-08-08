@@ -38,6 +38,7 @@ The dashboard is automatically deployed via Ansible and includes links to all co
 | [Pi-hole](/docs/containers/pihole.md)             | Ad blocker & DNS resolver                         | Container |
 | [Portainer](/docs/containers/portainer.md)        | Container management                              | Container |
 | [Stirling PDF](/docs/containers/stirling-pdf.md)  | Local operations on .pdf files                    | Container |
+| [Tube Archivist](/docs/containers/tubearchivist.md) | Self-hosted YouTube video archive               | Container |
 | [Uptime Kuma](/docs/containers/uptime-kuma.md)    | Online services monitor                           | Container |
 | [Vaultwarden](/docs/containers/vaultwarden.md)    | Self-hosted Bitwarden compatible password manager | Container |
 | [Vikunja](/docs/containers/vikunja.md)            | Self-hosted to-do list and project management     | Container |
