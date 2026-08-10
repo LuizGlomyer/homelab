@@ -36,6 +36,11 @@ navidrome.internal.glomyer.dev {
   reverse_proxy localhost:{{ navidrome_web_port }}
 }
 
+pinchflat.internal.glomyer.dev {
+  import tls-mtls
+  reverse_proxy localhost:{{ pinchflat_web_port }}
+}
+
 metube.internal.glomyer.dev {
   import tls-mtls
   reverse_proxy localhost:{{ metube_web_port }}
@@ -55,11 +60,6 @@ portainer.internal.glomyer.dev {
 stirling-pdf.internal.glomyer.dev {
   import tls-mtls
   reverse_proxy localhost:{{ stirling_pdf_web_port }}
-}
-
-tubearchivist.internal.glomyer.dev {
-  import tls-mtls
-  reverse_proxy localhost:{{ tubearchivist_web_port }}
 }
 
 uptime-kuma.internal.glomyer.dev {

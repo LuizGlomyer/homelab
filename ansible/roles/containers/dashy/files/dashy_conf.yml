@@ -130,6 +130,13 @@ sections:
         url: https://navidrome.glomyer.dev
         target: newtab
         id: 8_1392_navidrome
+      - &ref_27
+        title: Pinchflat
+        description: video subscription downloader
+        icon: fas fa-download
+        url: https://pinchflat.glomyer.dev
+        target: newtab
+        id: 13_1392_pinchflat
       - &ref_9
         title: AdGuard Home
         description: ad blocker and DNS server
@@ -168,6 +175,7 @@ sections:
       - *ref_6
       - *ref_7
       - *ref_8
+      - *ref_27
       - *ref_9
       - *ref_10
       - *ref_11
@@ -273,6 +281,13 @@ sections:
         url: http://raspberrypi.local:9700
         target: newtab
         id: 9_1649_navidrome
+      - &ref_28
+        title: Pinchflat
+        description: video subscription downloader
+        icon: fas fa-download
+        url: http://raspberrypi.local:8945
+        target: newtab
+        id: 13_1649_pinchflat
       - &ref_23
         title: AdGuard Home
         description: ad blocker and DNS server
@@ -305,6 +320,7 @@ sections:
       - *ref_20
       - *ref_21
       - *ref_22
+      - *ref_28
       - *ref_23
       - *ref_24
       - *ref_26

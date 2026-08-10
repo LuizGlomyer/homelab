@@ -1,0 +1,27 @@
+- name: Ensure Pinchflat directories exist
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ pinchflat_data_dir }}"
+    - "{{ pinchflat_download_dir }}"
+
+- name: Run Pinchflat container
+  community.docker.docker_container:
+    name: "{{ pinchflat_container_name }}"
+    image: "{{ pinchflat_image }}"
+    state: started
+    restart_policy: unless-stopped
+    container_default_behavior: compatibility
+    published_ports:
+      - "{{ pinchflat_web_port }}:8945"
+    volumes:
+      - "{{ pinchflat_data_dir }}:/config"
+      - "{{ pinchflat_download_dir }}:/downloads"
+    labels:
+      diun.enable: "true"
+      diun.watch_repo: "true"
+    env:
+      TZ: "{{ timezone | default('Etc/UTC') }}"

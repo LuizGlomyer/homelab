@@ -34,6 +34,7 @@ The dashboard is automatically deployed via Ansible and includes links to all co
 | [Jellyfin](/docs/containers/jellyfin.md)          | Free entertainment system and media server        | Container |
 | [Navidrome](/docs/containers/navidrome.md)        | Powerful music stream server                      | Container |
 | [MeTube](/docs/containers/metube.md)              | GUI for downloading videos with yt-dlp            | Container |
+| [Pinchflat](/docs/containers/pinchflat.md)         | Self-hosted video subscription downloader          | Container |
 | [OliveTin](/docs/services/olivetin.md)            | GUI for running shell commands                    | Host      |
 | [Pi-hole](/docs/containers/pihole.md)             | Ad blocker & DNS resolver                         | Container |
 | [Portainer](/docs/containers/portainer.md)        | Container management                              | Container |

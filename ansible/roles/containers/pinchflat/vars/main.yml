@@ -1,0 +1,5 @@
+pinchflat_image: ghcr.io/kieraneglin/pinchflat:latest
+pinchflat_container_name: pinchflat
+
+pinchflat_data_dir: /opt/pinchflat/config
+pinchflat_download_dir: /mnt/pinchflat

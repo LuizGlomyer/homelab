@@ -48,6 +48,13 @@ smb_volumes:
         domain_group: media_videos_ro
         read_only: true
 
+      - name: pinchflat
+        path: "/mnt/storage/videos/Pinchflat"
+        service_user: pinchflat
+        service_password: "{{ vault_nas_pinchflat_password }}"
+        domain_group: media_videos_rw
+        read_only: false
+
       - name: metube
         path: /mnt/storage/shared/metube
         service_user: metube
