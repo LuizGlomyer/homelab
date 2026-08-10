@@ -1,3 +1,4 @@
+---
 freshrss_image: freshrss/freshrss:1.28.1
 freshrss_container_name: freshrss
 

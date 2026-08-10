@@ -1,3 +1,4 @@
+---
 - name: Update apt cache
   ansible.builtin.apt:
     update_cache: true
@@ -11,16 +12,7 @@
 
 - name: Install required packages
   ansible.builtin.apt:
-    name: [
-      'apt-transport-https',
-      'ca-certificates',
-      'curl',
-      'gnupg',
-      'python3-docker',
-      'python3-pip',
-      'python3-setuptools',
-      'argon2',
-    ]
+    name: ["apt-transport-https", "ca-certificates", "curl", "gnupg", "python3-docker", "python3-pip", "python3-setuptools", "argon2"]
     state: present
 
 - name: Remove unused packages

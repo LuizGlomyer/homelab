@@ -1,3 +1,4 @@
+---
 pinchflat_image: ghcr.io/kieraneglin/pinchflat:latest
 pinchflat_container_name: pinchflat
 

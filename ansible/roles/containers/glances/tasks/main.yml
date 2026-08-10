@@ -1,3 +1,4 @@
+---
 - name: Run Glances container
   community.docker.docker_container:
     name: "{{ glances_container_name }}"

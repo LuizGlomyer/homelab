@@ -1,3 +1,4 @@
+---
 - name: Remove distro Go if present
   ansible.builtin.apt:
     name: golang-go

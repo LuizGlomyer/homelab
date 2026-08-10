@@ -1,3 +1,4 @@
+---
 templates:
   - id: 9000
     name: debian-12-cloudinit

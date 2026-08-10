@@ -1,14 +1,15 @@
+---
 - name: Create APT keyrings directory
   ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Download Docker GPG key
   ansible.builtin.get_url:
     url: "{{ docker_gpg_url }}"
     dest: /etc/apt/keyrings/docker.asc
-    mode: '0644'
+    mode: "0644"
 
 - name: Convert Docker GPG key to keyring format
   ansible.builtin.command:
@@ -21,8 +22,7 @@
 - name: Ensure Docker GPG key permissions
   ansible.builtin.file:
     path: /etc/apt/keyrings/docker.gpg
-    mode: '0644'
-
+    mode: "0644"
 
 - name: Add Docker repository
   ansible.builtin.apt_repository:
@@ -39,7 +39,7 @@
     dest: /etc/apt/preferences.d/docker
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
     content: |
       Package: docker-ce
       Pin: version 5:29.2.0-1~debian.12~bookworm
@@ -66,12 +66,12 @@
   ansible.builtin.file:
     path: /etc/systemd/system/docker.service.d
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Ensure Docker waits for remote filesystems
   ansible.builtin.copy:
     dest: /etc/systemd/system/docker.service.d/override.conf
-    mode: '0644'
+    mode: "0644"
     content: |
       [Unit]
       After=network-online.target remote-fs.target

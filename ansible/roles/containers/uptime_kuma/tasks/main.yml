@@ -1,3 +1,4 @@
+---
 - name: Create Uptime Kuma volume
   community.docker.docker_volume:
     name: "{{ uptime_kuma_volume_name }}"

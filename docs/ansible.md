@@ -29,7 +29,7 @@ Secrets are managed by Ansible vault. Here's how to set it up:
 - Encrypt your vault with the following command:
 
 ```bash
-ansible-vault encrypt group_vars/all/vault \
+ansible-vault encrypt group_vars/all/vault.yml \
 --vault-password-file group_vars/all/vault_pass.txt
 
 # Or decrypt later when needed
@@ -89,3 +89,5 @@ ansible-lint
 # Useful links
 
 - https://docs.ansible.com/projects/ansible/latest/playbook_guide/playbooks_intro.html#playbook-syntax
+- https://docs.ansible.com/projects/ansible/latest/reference_appendices/config.html
+- https://docs.ansible.com/projects/lint/autofix/

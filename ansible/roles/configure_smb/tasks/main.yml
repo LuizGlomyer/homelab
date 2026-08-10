@@ -1,3 +1,4 @@
+---
 - name: Install needed packages
   ansible.builtin.apt:
     name:
@@ -7,7 +8,6 @@
       - acl
       - python3-pexpect
     state: present
-
 
 # Group creation
 - name: Create admin group
@@ -21,18 +21,16 @@
     state: present
   loop: "{{ smb_domain_groups }}"
 
-
 - name: Initialize empty SMB unique users map
   ansible.builtin.set_fact:
     smb_unique_shares_by_user: {}
 
 - name: Merge service shares into unique SMB user map
   ansible.builtin.set_fact:
-    smb_unique_shares_by_user: "{{ smb_unique_shares_by_user | combine({ item.service_user: item }) }}"
+    smb_unique_shares_by_user: "{{ smb_unique_shares_by_user | combine({item.service_user: item}) }}"
   loop: "{{ smb_volumes | map(attribute='smb_shares') | list | flatten }}"
   loop_control:
     label: "{{ item.service_user }}"
-
 
 # Per-volume mountpoints and disks
 - name: Create SMB volume mountpoints
@@ -95,8 +93,6 @@
     label: "{{ item.service_user }}"
   no_log: true
 
-
-
 # Create share directories (after users exist so chown succeeds)
 - name: Create share directories
   ansible.builtin.file:
@@ -108,8 +104,6 @@
   loop: "{{ smb_volumes | subelements('smb_shares', skip_missing=True) }}"
   loop_control:
     label: "{{ item.1.path }}"
-
-
 
 # Apply ACL to volume roots
 - name: Admin ACL recursive on each volume root
@@ -136,7 +130,6 @@
   loop: "{{ smb_volumes }}"
   loop_control:
     label: "{{ item.smb_volume_root_path }}"
-
 
 - name: Allow domain groups to traverse shared directories
   ansible.posix.acl:
@@ -175,7 +168,6 @@
   loop_control:
     label: "{{ item.1.path }}"
 
-
 # Start services
 - name: Enable wsdd service
   ansible.builtin.service:
@@ -187,5 +179,5 @@
   ansible.builtin.template:
     src: smb.conf.j2
     dest: /etc/samba/smb.conf
-    mode: '0644'
+    mode: "0644"
   notify: Restart samba

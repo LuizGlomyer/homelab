@@ -1,3 +1,4 @@
+---
 - name: Extract system metadata
   hosts: [RaspberryPi, ServicesHost]
   become: true

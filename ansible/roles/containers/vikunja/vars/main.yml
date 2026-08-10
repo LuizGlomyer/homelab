@@ -1,3 +1,4 @@
+---
 vikunja_image: vikunja/vikunja:2.3.0
 vikunja_container_name: vikunja
 

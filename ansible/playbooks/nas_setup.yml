@@ -1,3 +1,4 @@
+---
 - name: Configure NAS
   hosts: [NasHost]
   become: true

@@ -1,9 +1,10 @@
+---
 - name: Ensure Diun data directory exists
   become: true
   ansible.builtin.file:
     path: "{{ diun_data_dir }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Run Diun container
   community.docker.docker_container:
@@ -24,7 +25,7 @@
       # Monitors all containers by default, set to false to only monitor those with label diun.watch=true
       DIUN_PROVIDERS_DOCKER_WATCHBYDEFAULT: "true"
       DIUN_WATCH_WORKERS: "20"
-      
+
       # Every 6 hours
       # DIUN_WATCH_SCHEDULE: "0 */6 * * *"
       # Every 10 minutes
@@ -39,7 +40,7 @@
       # 1.35.4 (Vaultwarden style)
       # 2026030905 (Jellyfin style)
       # DIUN_DEFAULTS_INCLUDETAGS: "^([0-9]+\\.[0-9]+\\.[0-9]+|[0-9]{8})$"
-      
+
       # Registry auth for Docker Hub using regopts (username/password)
       DIUN_REGOPTS_1_NAME: "docker.io"
       DIUN_REGOPTS_1_SELECTOR: "image"

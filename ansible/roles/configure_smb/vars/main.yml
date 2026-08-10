@@ -1,3 +1,4 @@
+---
 smb_admin_user: glomyer
 smb_admin_group: nas_admins
 
@@ -61,7 +62,6 @@ smb_volumes:
         service_password: "{{ vault_nas_metube_password }}"
         domain_group: media_shared_metube_rw
         read_only: false
-
 
   - storage_uuid: "c16635fb-1b15-4049-a24f-90e8eeaed060"
     smb_volume_root_path: /mnt/backup

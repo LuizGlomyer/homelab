@@ -1,3 +1,4 @@
+---
 - name: Create Docker volumes for File Browser
   community.docker.docker_volume:
     name: "{{ item }}"

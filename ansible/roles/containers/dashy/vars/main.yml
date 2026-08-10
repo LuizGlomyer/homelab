@@ -1,3 +1,4 @@
+---
 dashy_container_name: dashy
 dashy_image: lissy93/dashy:3.1.8
 dashy_config_dir: /opt/dashy

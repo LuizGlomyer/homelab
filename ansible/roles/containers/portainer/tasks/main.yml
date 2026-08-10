@@ -1,3 +1,4 @@
+---
 - name: Create Portainer volume
   community.docker.docker_volume:
     name: "{{ portainer_volume_name }}"

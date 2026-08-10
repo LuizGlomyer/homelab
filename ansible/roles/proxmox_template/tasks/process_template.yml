@@ -1,3 +1,4 @@
+---
 # Download cloud image
 - name: Check if cloud image exists
   ansible.builtin.stat:

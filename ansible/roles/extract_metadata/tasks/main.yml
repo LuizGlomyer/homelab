@@ -1,3 +1,4 @@
+---
 - name: Get system architecture
   ansible.builtin.command: uname -m
   register: arch_output

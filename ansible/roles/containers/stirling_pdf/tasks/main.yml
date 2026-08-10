@@ -1,9 +1,10 @@
+---
 - name: Ensure Stirling PDF data directories exist
   become: true
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
   loop:
     - "{{ stirling_pdf_data_dir }}/trainingData"
     - "{{ stirling_pdf_data_dir }}/extraConfigs"

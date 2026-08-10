@@ -1,3 +1,4 @@
+---
 smb_server: "{{ nas_host_ip }}"
 
 smb_mounts:
@@ -18,7 +19,7 @@ smb_mounts:
     mount_point: /mnt/shared/metube
     username: metube
     password: "{{ vault_nas_metube_password }}"
-  
+
   - name: pinchflat
     remote_share: pinchflat
     mount_point: /mnt/pinchflat

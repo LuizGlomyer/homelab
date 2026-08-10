@@ -1,9 +1,10 @@
+---
 - name: Ensure MeTube download directory exists
   become: true
   ansible.builtin.file:
     path: "{{ metube_download_path }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Run MeTube container
   community.docker.docker_container:

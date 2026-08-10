@@ -1,3 +1,4 @@
+---
 # 1. Ensure directories
 - name: Ensure snippets directory exists
   ansible.builtin.file:

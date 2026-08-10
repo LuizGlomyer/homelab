@@ -1,9 +1,10 @@
+---
 - name: Ensure Vaultwarden data directory exists
   become: true
   ansible.builtin.file:
     path: "{{ vaultwarden_data_dir }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Generate Argon2 hash for admin token
   ansible.builtin.shell: |

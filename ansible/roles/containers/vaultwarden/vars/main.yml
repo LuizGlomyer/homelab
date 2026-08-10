@@ -1,3 +1,4 @@
+---
 vaultwarden_image: vaultwarden/server:1.35.4
 vaultwarden_container_name: vaultwarden
 vaultwarden_data_dir: /opt/vaultwarden/data

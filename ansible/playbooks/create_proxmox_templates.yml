@@ -1,3 +1,4 @@
+---
 - name: Create Proxmox cloud-init template
   hosts: [ProxmoxHost]
   gather_facts: false

@@ -1,16 +1,17 @@
+---
 - name: Create config directory for AdGuard Home
   become: true
   ansible.builtin.file:
     path: "{{ adguard_home_conf_dir }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Create work directory for AdGuard Home
   become: true
   ansible.builtin.file:
     path: "{{ adguard_home_work_dir }}"
     state: directory
-    mode: '0755'
+    mode: "0755"
 
 - name: Run AdGuard Home container
   community.docker.docker_container:
