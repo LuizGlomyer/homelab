@@ -2,6 +2,7 @@
 
 All playbooks are fully functional on Debian 12 (Bookworm). Most playbooks execute normally on Debian 13 (Trixie), but some fails. APIs get deprecated, so there are no guarantees.
 
+
 ## Dependencies
 
 You will need the following on your controller node (your machine):
@@ -9,6 +10,7 @@ You will need the following on your controller node (your machine):
 - sshpass
 - [Ansible-lint](https://ansible.readthedocs.io/projects/lint/installing/#installing-the-latest-version)
 - Ansible collections
+
 
 ### Installing Ansible Collections
 
@@ -70,6 +72,7 @@ Some playbooks may set up things that are later used by other playbooks. Therefo
 - start_containers
 - Any other playbooks
 
+
 ## Ansible-lint
 
 [Ansible-lint](https://ansible.readthedocs.io/projects/lint/) is a command-line tool that checks Ansible playbooks and roles for best practices and potential errors. It analyzes YAML syntax, playbook structure, and enforces coding standards to improve code quality and maintainability.
@@ -85,6 +88,16 @@ To run Ansible-lint, go to the ansible folder and execute:
 ```bash
 ansible-lint
 ```
+
+
+## Makefile usage
+
+The Ansible Makefile provides shortcuts for deploying individual applications. Run commands from the `ansible/` directory, for example `make caddy` for a host application or `make jellyfin` for a container application. The generic `make host tag=<application>` and `make container tag=<application>` commands are also available. It is also possible to use `limit=<hostname>` to limit the playbook target to a single machine. Example command:
+
+```bash
+make jellyfin limit=ServicesHost
+```
+
 
 # Useful links
 
