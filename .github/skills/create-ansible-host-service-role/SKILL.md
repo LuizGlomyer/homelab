@@ -53,11 +53,15 @@ disable-model-invocation: false
    - Add the service name to `.PHONY` and create a target in `ansible/Makefile` that invokes the existing `host` target with `tag=<service_name>`.
    - Follow the existing `caddy` and `olivetin` targets.
 
-7. Add integrations only when appropriate.
-   - If the application should be proxied, add the relevant Caddy route following the existing host-specific edge or services configuration.
-   - Add Dashy entries and service documentation when the application should be discoverable or documented. Do not expose a service or add homepage links without sufficient user intent and connection details.
+7. Add service documentation.
+   - Create `docs/services/<service-name>.md` describing the application's configuration in this repository, including its role, target hosts, managed files or units, relevant paths, and operational details useful for maintainers.
+   - Keep the documentation specific to the implementation; do not document secrets or invent configuration that is not present.
 
-8. Validate the result.
+8. Add integrations only when appropriate.
+   - If the application should be proxied, add the relevant Caddy route following the existing host-specific edge or services configuration.
+   - Add Dashy entries when the application should be discoverable. Do not expose a service or add homepage links without sufficient user intent and connection details.
+
+9. Validate the result.
    - Confirm the role directory, tasks, variables, and optional handlers/configuration files are present.
    - Verify the new play uses the requested hosts, or `[VMs]` when none were supplied, and includes the matching role and tag.
    - Run `ansible-playbook playbooks/install_host_applications.yml --syntax-check` from `ansible/` when available. Review task idempotency and check the Makefile target.
@@ -100,5 +104,6 @@ disable-model-invocation: false
 - User-provided installation commands are represented in order, with any unavoidable command tasks made idempotent.
 - The role is registered in `install_host_applications.yml` for the user-specified hosts, or `[VMs]` by default, with a matching tag.
 - A matching `ansible/Makefile` target is available.
+- Service documentation exists in `docs/services/<service-name>.md` and describes the repository-specific configuration.
 - Required secrets are represented as Vault references with example placeholders, and any requested integrations or documentation are updated.
 - The host application playbook passes syntax validation when dependencies and inventory are available.

@@ -33,3 +33,10 @@
     - role: services/olivetin
       tags: olivetin
       when: "'RaspberryPi' in group_names"
+
+- name: Install Restic backup on NAS host
+  hosts: [NasHost]
+  become: true
+  roles:
+    - role: services/restic
+      tags: restic

@@ -1,0 +1,10 @@
+[Unit]
+Description=Restic backup of Obsidian files
+RequiresMountsFor={{ restic_source }} {{ restic_backup_mount }}
+After=local-fs.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart={{ restic_backup_script }}
+UMask=0077

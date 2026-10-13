@@ -1,0 +1,111 @@
+---
+- name: Install Restic
+  ansible.builtin.apt:
+    name: "{{ restic_package }}"
+    state: present
+    update_cache: true
+
+- name: Ensure Restic password directory exists
+  ansible.builtin.file:
+    path: "{{ restic_password_file | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Install Restic repository password
+  ansible.builtin.copy:
+    content: "{{ vault_restic_password }}\n"
+    dest: "{{ restic_password_file }}"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+
+- name: Check UUID of the mounted Restic backup filesystem
+  ansible.builtin.command:
+    cmd: "findmnt -n -o UUID -T {{ restic_backup_mount }}"
+  register: restic_backup_mount_uuid
+  changed_when: false
+
+- name: Require the expected Restic backup filesystem
+  ansible.builtin.assert:
+    that:
+      - restic_backup_mount_uuid.stdout == restic_backup_uuid
+    fail_msg: "Unexpected filesystem mounted at {{ restic_backup_mount }}; refusing to create or initialize the repository."
+
+- name: Ensure Restic repository directory exists
+  ansible.builtin.file:
+    path: "{{ restic_repository }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: Check whether Restic repository is initialized
+  ansible.builtin.stat:
+    path: "{{ restic_repository }}/config"
+  register: restic_repository_config
+
+- name: Inspect uninitialized Restic repository directory
+  ansible.builtin.find:
+    paths: "{{ restic_repository }}"
+    recurse: false
+    file_type: any
+    hidden: true
+  register: restic_repository_contents
+  when: not restic_repository_config.stat.exists
+
+- name: Refuse to initialize a non-empty Restic repository directory
+  ansible.builtin.fail:
+    msg: >-
+      {{ restic_repository }} is non-empty but has no Restic config file;
+      refusing to initialize it automatically.
+  when:
+    - not restic_repository_config.stat.exists
+    - restic_repository_contents.matched | int > 0
+
+- name: Initialize empty Restic repository
+  ansible.builtin.command:
+    cmd: restic init
+  environment:
+    RESTIC_REPOSITORY: "{{ restic_repository }}"
+    RESTIC_PASSWORD_FILE: "{{ restic_password_file }}"
+  when:
+    - not restic_repository_config.stat.exists
+    - restic_repository_contents.matched | int == 0
+
+- name: Install Obsidian backup script
+  ansible.builtin.template:
+    src: backup-obsidian.j2
+    dest: "{{ restic_backup_script }}"
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Install Obsidian backup systemd service
+  ansible.builtin.template:
+    src: backup-obsidian.service.j2
+    dest: /etc/systemd/system/backup-obsidian.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd
+
+- name: Install Obsidian backup systemd timer
+  ansible.builtin.template:
+    src: backup-obsidian.timer.j2
+    dest: /etc/systemd/system/backup-obsidian.timer
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd
+
+- name: Apply systemd unit changes
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure daily Obsidian backup timer is enabled and started
+  ansible.builtin.systemd:
+    name: backup-obsidian.timer
+    enabled: true
+    state: started

@@ -1,4 +1,4 @@
-.PHONY: encrypt decrypt lint host caddy olivetin container adguard_home dashy diun file_browser glances jellyfin metube navidrome pinchflat pihole portainer stirling_pdf tubearchivist uptime_kuma vaultwarden vikunja nas nas-client
+.PHONY: encrypt decrypt lint host caddy olivetin restic container adguard_home dashy diun file_browser glances jellyfin metube navidrome pinchflat pihole portainer stirling_pdf tubearchivist uptime_kuma vaultwarden vikunja nas nas-client
 
 # Ansible commands
 
@@ -21,6 +21,9 @@ caddy:
 
 olivetin:
 	$(MAKE) host tag=olivetin
+
+restic:
+	$(MAKE) host tag=restic
 
 
 # Run host containers

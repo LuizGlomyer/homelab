@@ -30,3 +30,5 @@ vault_diun_discord_webhook_url: "your_discord_webhook_url"
 # Docker Hub credentials for Diun registry auth (optional)
 vault_dockerhub_username: "your_dockerhub_username"
 vault_dockerhub_password: "your_dockerhub_password"
+
+vault_restic_password: "your_restic_password"

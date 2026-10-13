@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+SOURCE="{{ restic_source }}"
+REPOSITORY="{{ restic_repository }}"
+PASSWORD_FILE="{{ restic_password_file }}"
+
+STORAGE_UUID="{{ restic_storage_uuid }}"
+BACKUP_UUID="{{ restic_backup_uuid }}"
+
+actual_storage_uuid="$(findmnt -n -o UUID -T "$SOURCE")"
+actual_backup_uuid="$(findmnt -n -o UUID -T "{{ restic_backup_mount }}")"
+
+if [[ "$actual_storage_uuid" != "$STORAGE_UUID" ]]; then
+    echo "ERROR: Unexpected filesystem at $SOURCE" >&2
+    exit 1
+fi
+
+if [[ "$actual_backup_uuid" != "$BACKUP_UUID" ]]; then
+    echo "ERROR: Unexpected filesystem at {{ restic_backup_mount }}" >&2
+    exit 1
+fi
+
+if [[ ! -d "$SOURCE" ]]; then
+    echo "ERROR: Source directory does not exist: $SOURCE" >&2
+    exit 1
+fi
+
+if [[ ! -d "$REPOSITORY" ]]; then
+    echo "ERROR: Repository directory does not exist: $REPOSITORY" >&2
+    exit 1
+fi
+
+if [[ ! -r "$PASSWORD_FILE" ]]; then
+    echo "ERROR: Restic password file is not readable" >&2
+    exit 1
+fi
+
+export RESTIC_REPOSITORY="$REPOSITORY"
+export RESTIC_PASSWORD_FILE="$PASSWORD_FILE"
+
+restic backup "$SOURCE" --tag obsidian
+restic forget \
+    --tag obsidian \
+    --keep-daily 7 \
+    --keep-weekly 4 \
+    --keep-monthly 6 \
+    --prune
