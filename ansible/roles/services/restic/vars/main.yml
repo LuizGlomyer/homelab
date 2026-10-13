@@ -4,6 +4,8 @@ restic_source: /mnt/storage/Obsidian
 restic_repository: /mnt/backup/restic-storage
 restic_backup_mount: /mnt/backup
 restic_password_file: /root/.config/restic/storage-password
+restic_binary: /usr/bin/restic
+restic_command_wrapper: /usr/local/bin/restic
 restic_backup_script: /usr/local/sbin/backup-obsidian
 restic_storage_uuid: 257d85bc-003d-46df-8405-0e6135a0c94f
 restic_backup_uuid: c16635fb-1b15-4049-a24f-90e8eeaed060

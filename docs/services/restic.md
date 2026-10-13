@@ -2,6 +2,8 @@
 
 Restic is installed on `NasHost` by the `services/restic` Ansible role. The role is registered as a dedicated play in `ansible/playbooks/install_host_applications.yml` and can be applied selectively with `make restic` from `ansible/`.
 
+The role installs `/usr/local/bin/restic`, a wrapper that runs `/usr/bin/restic` through `sudo` and supplies the repository and password-file settings for each command. This is a persistent executable, not a shell environment change: `make restic` installs or updates it, and each `restic` invocation uses it without exporting variables in the SSH session. Restic commands run as root and may prompt for the user's sudo password.
+
 ## Repository and password
 
 The Restic repository is `/mnt/backup/restic-storage`. Its password is supplied by the Ansible Vault variable `vault_restic_password` and written to `/root/.config/restic/storage-password` with root-only permissions. The password is not stored in the role variables or backup script.
@@ -33,29 +35,20 @@ sudo systemctl start backup-obsidian.service
 To check the snapshots:
 
 ```bash
-sudo env \
-  RESTIC_REPOSITORY=/mnt/backup/restic-storage \
-  RESTIC_PASSWORD_FILE=/root/.config/restic/storage-password \
-  restic snapshots
+restic snapshots
 ```
 
 To remove a snapshot (`--prune` cleans data not referenced anywhere):
 
 ```bash
-sudo env \
-  RESTIC_REPOSITORY=/mnt/backup/restic-storage \
-  RESTIC_PASSWORD_FILE=/root/.config/restic/storage-password \
-  restic forget a2a801b8 --prune
+restic forget a2a801b8 --prune
 ```
 
 To restore a snapshot:
 
 ```bash
 sudo mkdir -p /tmp/restic-restore-test
-sudo env \
-  RESTIC_REPOSITORY=/mnt/backup/restic-storage \
-  RESTIC_PASSWORD_FILE=/root/.config/restic/storage-password \
-  restic restore a2a801b8 \
+restic restore a2a801b8 \
   --target / \
   --include /mnt/storage/Obsidian
 ```
@@ -72,10 +65,7 @@ sudo diff -qr \
 
 To check file integrity (heavy disk I/O):
 ```bash
-sudo env \
-  RESTIC_REPOSITORY=/mnt/backup/restic-storage \
-  RESTIC_PASSWORD_FILE=/root/.config/restic/storage-password \
-  restic check --read-data
+restic check --read-data
 ```
 
 

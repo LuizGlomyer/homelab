@@ -5,6 +5,14 @@
     state: present
     update_cache: true
 
+- name: Install Restic command wrapper
+  ansible.builtin.template:
+    src: restic-wrapper.j2
+    dest: "{{ restic_command_wrapper }}"
+    owner: root
+    group: root
+    mode: "0755"
+
 - name: Ensure Restic password directory exists
   ansible.builtin.file:
     path: "{{ restic_password_file | dirname }}"
@@ -40,7 +48,7 @@
     state: directory
     owner: root
     group: root
-    mode: "0700"
+    mode: "0750"
 
 - name: Check whether Restic repository is initialized
   ansible.builtin.stat:

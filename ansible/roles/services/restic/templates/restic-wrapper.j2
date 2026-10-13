@@ -1,0 +1,5 @@
+#!/bin/sh
+exec sudo env \
+  RESTIC_REPOSITORY="{{ restic_repository }}" \
+  RESTIC_PASSWORD_FILE="{{ restic_password_file }}" \
+  "{{ restic_binary }}" "$@"
